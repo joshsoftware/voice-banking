@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'action_page.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class AudioRecorderPage extends StatefulWidget {
   const AudioRecorderPage({super.key});
@@ -14,17 +15,21 @@ class AudioRecorderPage extends StatefulWidget {
 class AudioRecorderPageState extends State<AudioRecorderPage> {
   final FlutterSoundRecorder recorder = FlutterSoundRecorder();
   final FlutterSoundPlayer player = FlutterSoundPlayer();
+  final FlutterTts flutterTts = FlutterTts();
   bool isRecording = false;
   bool isPlaying = false;
   String selectedMode = 'Offline';
   String? recordedPath;
   ValueNotifier<int> totalBytes=ValueNotifier(1);
   ValueNotifier<int> sentBytes=ValueNotifier(0);
+  String? response;
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
     initRecorder();
+    checkBengaliSupport();
   }
 
   @override
@@ -38,26 +43,36 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Radio<String>(
-                  value: 'Online',
-                  groupValue: selectedMode,
-                  onChanged: (String? value) {
-                    setState(() {
-                      selectedMode = value!;
-                      recordedPath = null;
-                    });
+                ValueListenableBuilder(
+                  valueListenable: isLoading,
+                  builder: (BuildContext context, bool value, Widget? child) {
+                    return Radio<String>(
+                      value: 'Online',
+                      groupValue: selectedMode,
+                      onChanged:isLoading.value == true ? null :  (String? value) {
+                        setState(() {
+                          selectedMode = value!;
+                          recordedPath = null;
+                        });
+                      },
+                    );
                   },
                 ),
                 const Text('Online Mode'),
                 const SizedBox(width: 20),
-                Radio<String>(
-                  value: 'Offline',
-                  groupValue: selectedMode,
-                  onChanged: (String? value) {
-                    setState(() {
-                      selectedMode = value!;
-                      recordedPath = null;
-                    });
+                ValueListenableBuilder(
+                  valueListenable: isLoading,
+                  builder: (BuildContext context, bool value, Widget? child) {
+                    return Radio<String>(
+                      value: 'Offline',
+                      groupValue: selectedMode,
+                      onChanged: isLoading.value == true ? null : (String? value) {
+                        setState(() {
+                          selectedMode = value!;
+                          recordedPath = null;
+                        });
+                      },
+                    );
                   },
                 ),
                 const Text('Offline Mode'),
@@ -71,17 +86,36 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
 
             const SizedBox(height: 20),
             if (recordedPath != null)
-              ElevatedButton(
-                onPressed: () async{
-                  String response;
-                  if (selectedMode == 'Online') {
-                    response =  (await uploadFile(sentBytes, totalBytes));
-                  } else {
-                    response = await locallyProcessRecording();
-                  }
-                  navigateToActionPage(response);
+              ValueListenableBuilder(
+                valueListenable: isLoading,
+                builder: (context, value, child) {
+                  return ElevatedButton(
+                    onPressed: () async{
+                      response = null;
+                      if (selectedMode == 'Online') {
+                        isLoading.value = true;
+                        response =  (await uploadFile(sentBytes, totalBytes));
+                        Future.delayed(Duration(seconds: 3),() {
+                          isLoading.value = false;
+                        },);
+                      } else {
+                        isLoading.value = true;
+                        response = locallyProcessRecording();
+                        Future.delayed(Duration(seconds: 3),() {
+                          isLoading.value = false;
+                        },);
+                      }
+                      if(!(response == null)){
+                        Future.delayed(Duration(seconds: 3),() {
+                          navigateToActionPage(response ?? '');
+                        },);
+
+                      }
+
+                    },
+                    child: !(isLoading.value)?const Text('Submit'):const SizedBox(height: 20,width: 20,child: CircularProgressIndicator(),),
+                  );
                 },
-                child: const Text('Submit'),
               ),
           ],
         ),
@@ -158,7 +192,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
 
   Future<String> uploadFile(ValueNotifier<int> sentBytes,
       ValueNotifier<int> totalBytes) async{
-    return 'hi hello';
+    return 'Show last transaction';
     final FormData requestBody = FormData.fromMap({
       // 'attachmentType': attachmentType,
       'files': await getMultiPartFiles(recordedPath),
@@ -181,12 +215,22 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
 
   String locallyProcessRecording(){
     print(recordedPath);
-    return 'hello';
+    return 'Check account balance';
   }
 
   void navigateToActionPage(String response){
     Navigator.push(context, MaterialPageRoute(builder: (context) => ActionPage(response: response)));
   }
+
+  void checkBengaliSupport() async {
+    List<dynamic> languages = await flutterTts.getLanguages;
+    if (languages.contains("bn")) {
+      print("Bengali is supported.");
+    } else {
+      print("Bengali is not supported on this device.");
+    }
+  }
+
   @override
   void dispose() {
     recorder.closeRecorder();

@@ -39,6 +39,8 @@ dependencies:
   permission_handler: ^10.2.0
   file_picker: ^8.1.4
   dio: ^5.7.0
+  english_words: ^4.0.0
+  flutter_tts: ^4.2.0
 
 dev_dependencies:
   flutter_test:
