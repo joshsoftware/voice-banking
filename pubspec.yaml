@@ -41,6 +41,10 @@ dependencies:
   dio: ^5.7.0
   english_words: ^4.0.0
   flutter_tts: ^4.2.0
+  intl: ^0.20.1
+
+  # For pulse animation while recording
+  pulsator: ^1.0.0
 
 dev_dependencies:
   flutter_test:

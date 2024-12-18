@@ -1,16 +1,18 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'action_page.dart';
+import 'package:tts/util/helper.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:tts/view/action_result.dart';
 
-enum RecordingState { idle, recording, recorded }
-
-enum PlayingState { idle, playing, played }
+import '../util/action.dart';
+import 'component/recorder_actions.dart';
 
 class AudioRecorderPage extends StatefulWidget {
   const AudioRecorderPage({super.key});
@@ -31,8 +33,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   String? response;
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   ValueNotifier<int?> recordingLengthNotifier = ValueNotifier(null);
-  ValueNotifier<RecordingState> recordingStateNotifier =
-      ValueNotifier(RecordingState.idle);
+  ValueNotifier<ViewState> viewStateNotifier = ValueNotifier(ViewState.idle);
   ValueNotifier<PlayingState> playingStateNotifier =
       ValueNotifier(PlayingState.idle);
   Timer? recordingTimer;
@@ -53,8 +54,8 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       ),
       body: Center(
         child: ValueListenableBuilder(
-            valueListenable: recordingStateNotifier,
-            builder: (context, recordingState, _) {
+            valueListenable: viewStateNotifier,
+            builder: (context, viewState, _) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -106,33 +107,34 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
                               ValueListenableBuilder(
                                 valueListenable: playingStateNotifier,
                                 builder: (context, playingState, _) {
-                                  if (recordingState !=
-                                      RecordingState.recorded) {
-                                    return const SizedBox();
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: IconButton(
-                                      onPressed: () => togglePlayback(
-                                          recordingState, playingState),
-                                      padding: EdgeInsets.zero,
-                                      icon: Icon(
-                                        playButtonIcon(playingState),
-                                        size: 24.0,
-                                        color: Colors.grey,
+                                  return Visibility(
+                                    visible: viewState == ViewState.recorded,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: IconButton(
+                                        onPressed: () => togglePlayback(
+                                            viewState, playingState),
+                                        visualDensity: VisualDensity.compact,
+                                        padding: EdgeInsets.zero,
+                                        icon: Icon(
+                                          playButtonIcon(playingState),
+                                          size: 36.0,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   );
                                 },
                               ),
-                          
+
                               // Label
                               ValueListenableBuilder(
                                 valueListenable: recordingLengthNotifier,
                                 builder: (context, recordingLength, _) {
                                   return Text(
                                     getRecordingLabel(
-                                        recordingState, recordingLength),
+                                        viewState, recordingLength),
                                     style: const TextStyle(fontSize: 24.0),
                                   );
                                 },
@@ -142,93 +144,25 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
                         ),
 
                         // Recording controls (start, stop, retry and submit)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Start and stop button
-                            if (recordingState != RecordingState.recorded)
-                              IconButton(
-                                onPressed: () =>
-                                    toggleRecording(recordingState),
-                                icon: Icon(
-                                  recordingButtonIcon(recordingState),
-                                  size: 96.0,
-                                  color: Colors.red,
-                                ),
-                              ),
-
-                            // Retry button
-                            if (recordingState == RecordingState.recorded)
-                              IconButton(
-                                onPressed: discardRecording,
-                                icon: const Icon(
-                                  Icons.restart_alt_rounded,
-                                  color: Colors.grey,
-                                  size: 96.0,
-                                ),
-                              ),
-
-                            // Submit button
-                            if (recordingState == RecordingState.recorded)
-                              IconButton(
-                                onPressed: submitRecording,
-                                icon: const Icon(
-                                  Icons.check,
-                                  color: Colors.green,
-                                  size: 96.0,
-                                ),
-                              ),
-                          ],
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 200.0),
+                          child: AudioRecorderControls(
+                            viewState: viewState,
+                            audioRecordingPath: recordedPath,
+                            toggleRecording: (viewState) => toggleRecording(
+                              viewState: viewState,
+                              context: context,
+                            ),
+                            discardRecording: discardRecording,
+                            submitRecording: (path) => submitRecording(
+                              recordedPath: path,
+                              context: context,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  // const SizedBox(height: 20),
-                  // if (recordedPath != null)
-                  //   ValueListenableBuilder(
-                  //     valueListenable: isLoading,
-                  //     builder: (context, value, child) {
-                  //       return ElevatedButton(
-                  //         onPressed: () async {
-                  //           response = null;
-                  //           if (selectedMode == 'Online') {
-                  //             isLoading.value = true;
-                  //             response = (await uploadFile(sentBytes, totalBytes));
-                  //             Future.delayed(
-                  //               Duration(seconds: 3),
-                  //               () {
-                  //                 isLoading.value = false;
-                  //               },
-                  //             );
-                  //           } else {
-                  //             isLoading.value = true;
-                  //             response = locallyProcessRecording();
-                  //             Future.delayed(
-                  //               Duration(seconds: 3),
-                  //               () {
-                  //                 isLoading.value = false;
-                  //               },
-                  //             );
-                  //           }
-                  //           if (!(response == null)) {
-                  //             Future.delayed(
-                  //               Duration(seconds: 3),
-                  //               () {
-                  //                 navigateToActionPage(response ?? '');
-                  //               },
-                  //             );
-                  //           }
-                  //         },
-                  //         child: !(isLoading.value)
-                  //             ? const Text('Submit')
-                  //             : const SizedBox(
-                  //                 height: 20,
-                  //                 width: 20,
-                  //                 child: CircularProgressIndicator(),
-                  //               ),
-                  //       );
-                  //     },
-                  //   ),
                 ],
               );
             }),
@@ -236,19 +170,22 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     );
   }
 
-  String getRecordingLabel(RecordingState state, int? recordingLength) {
+  String getRecordingLabel(ViewState state, int? recordingLength) {
     switch (state) {
-      case RecordingState.idle:
+      case ViewState.idle:
         return 'Start Recording';
 
-      case RecordingState.recording:
+      case ViewState.recording:
         if (recordingLength == null) {
           return 'N/A';
         }
         return getFormattedTimeFromSeconds(recordingLength);
 
-      case RecordingState.recorded:
+      case ViewState.recorded:
         return 'Submit?';
+
+      case ViewState.processingAudio:
+        return 'Hold on';
     }
   }
 
@@ -280,27 +217,74 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
         : Icons.play_arrow;
   }
 
-  IconData recordingButtonIcon(RecordingState recordingState) {
-    return recordingState == RecordingState.recording
-        ? Icons.stop
-        : Icons.circle;
+  Future<void> submitRecording({
+    required final String recordedPath,
+    required final BuildContext context,
+  }) async {
+    viewStateNotifier.value = ViewState.processingAudio;
+    try {
+      final BankingActionable? action = await getActionFromAudio(recordedPath);
+      if (action == null) {
+        //TODO: handle this
+      }
+      performBankingAction(action!);
+    } catch (e) {
+      //TODO: Handle this
+      dev.log("Error while mapping action: ${e.toString()}");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Couldn't get you, try again."),
+      ));
+    }
+    viewStateNotifier.value = ViewState.idle;
   }
 
-  Future<void> submitRecording() async {
-    throw UnimplementedError();
+  Future<BankingActionable?> getActionFromAudio(
+      final String recordedPath) async {
+    final response = await postAudioToGetAction(recordedPath);
+    if (response != null) {
+      final BankingActionable action =
+          BankingActionable.fromMap(response["result"]);
+      if (action.action == BankingAction.unsupported) {
+        dev.log("Action matched: Unsupported");
+        //TODO: Handle this
+        return null;
+      }
+      dev.log("Action matched: ${action.toMap().toString()}");
+      return action;
+    }
+    return null;
+  }
+
+  Future<void> performBankingAction(final BankingActionable action) async {
+    //TODO: Perform action and navigate to resultant screen
+
+    final BankingActionable verifiedAction = BankingActionable(
+      action: action.action,
+      amount: action.amount ?? (Random().nextInt(10000) + 100),
+      recipient: action.recipient,
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ActionResultView(actionable: verifiedAction),
+      ),
+    );
   }
 
   Future<void> discardRecording() async {
     setState(() {
       playingStateNotifier.value = PlayingState.idle;
-      recordingStateNotifier.value = RecordingState.idle;
+      viewStateNotifier.value = ViewState.idle;
       recordedPath = null;
     });
   }
 
-  Future<void> toggleRecording(RecordingState recordingState) async {
-    if (recordingState == RecordingState.recording) {
-      await _stopRecording();
+  Future<void> toggleRecording({
+    required final ViewState viewState,
+    required final BuildContext context,
+  }) async {
+    if (viewState == ViewState.recording) {
+      await _stopRecording(context);
     } else {
       await _startRecording();
     }
@@ -314,14 +298,16 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     });
     setState(() {
       playingStateNotifier.value = PlayingState.idle;
-      recordingStateNotifier.value = RecordingState.recording;
+      viewStateNotifier.value = ViewState.recording;
       recordedPath = null;
     });
   }
 
-  Future<void> _stopRecording() async {
+  Future<void> _stopRecording(
+    final BuildContext context,
+  ) async {
     final path = await recorder.stopRecorder();
-    
+
     recordingTimer?.cancel();
     recordingTimer = null;
     recordingLengthNotifier.value = null;
@@ -330,15 +316,21 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       //TODO: Handle recording failure
     }
     setState(() {
-      recordingStateNotifier.value = RecordingState.recorded;
+      viewStateNotifier.value = ViewState.recorded;
       recordedPath = path;
     });
-    log('Recorded audio saved at: $path');
+    dev.log('Recorded audio saved at: $path');
+    if (path != null) {
+      submitRecording(
+        recordedPath: path,
+        context: context,
+      );
+    }
   }
 
   Future<void> togglePlayback(
-      RecordingState recordingState, PlayingState playingState) async {
-    if (recordingState == RecordingState.recorded) {
+      ViewState viewState, PlayingState playingState) async {
+    if (viewState == ViewState.recorded) {
       if (playingState == PlayingState.playing) {
         playingStateNotifier.value = PlayingState.played;
         await player.pausePlayer();
@@ -356,23 +348,22 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     }
   }
 
-  Future<MultipartFile> getMultiPartFiles(String? filePath) async {
-    MultipartFile? multiPartFile;
+  Future<MultipartFile?> getMultiPartFile(final String filePath) async {
     try {
-      final MultipartFile file = await MultipartFile.fromFile(filePath!);
-      multiPartFile = file;
-    } catch (e) {}
-    return multiPartFile!;
+      return await MultipartFile.fromFile(filePath);
+    } catch (e) {
+      dev.log(
+          "Error while creating multipart file from file path ${e.toString()}");
+      rethrow;
+    }
   }
 
-  // String uploadAttachmentsUrl = ApiUrls.baseUrl + ApiUrls.upload;
-
-  Future<String> uploadFile(
-      ValueNotifier<int> sentBytes, ValueNotifier<int> totalBytes) async {
-    return 'Show last transaction';
+  Future<Map<String, dynamic>?> postAudioToGetAction(
+      final String recordingPath) async {
+    final file = await getMultiPartFile(recordingPath);
+    //TODO: Above call can throw error, handle it
     final FormData requestBody = FormData.fromMap({
-      // 'attachmentType': attachmentType,
-      'files': await getMultiPartFiles(recordedPath),
+      'file': file,
     });
     final Dio dio = Dio(
       BaseOptions(
@@ -380,33 +371,26 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
         contentType: Headers.jsonContentType,
       ),
     );
-    Response response = await dio.post('', data: requestBody,
-        onSendProgress: (int sent, int total) {
+    final Response response = await dio.post(
+        'https://a3bc-202-149-221-42.ngrok-free.app/get-action-from-transcription',
+        data: requestBody, onSendProgress: (int sent, int total) {
       sentBytes.value = sent;
       totalBytes.value = total;
-      print('Upload Progress:$sent/$total');
+      dev.log("Audio File Upload Progress:$sent/$total");
     });
-    // return response as String;
-  }
-
-  String locallyProcessRecording() {
-    print(recordedPath);
-    return 'Check account balance';
-  }
-
-  void navigateToActionPage(String response) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ActionPage(response: response)));
+    dev.log("Response from audio file upload: ${response.data.toString()}");
+    if (response.statusCode == HttpStatus.ok) {
+      return response.data;
+    }
+    return null;
   }
 
   void checkBengaliSupport() async {
     List<dynamic> languages = await flutterTts.getLanguages;
     if (languages.contains("bn")) {
-      print("Bengali is supported.");
+      dev.log("Bengali is supported.");
     } else {
-      print("Bengali is not supported on this device.");
+      dev.log("Bengali is not supported on this device.");
     }
   }
 
