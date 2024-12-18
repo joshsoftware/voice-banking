@@ -45,6 +45,9 @@ dependencies:
 
   # For pulse animation while recording
   pulsator: ^1.0.0
+  
+  # For wave animation while processing
+  loading_animation_widget: ^1.3.0
 
 dev_dependencies:
   flutter_test:

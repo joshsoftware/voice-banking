@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pulsator/pulsator.dart';
 import 'package:tts/util/helper.dart';
 
@@ -89,13 +90,17 @@ class AudioRecorderControls extends StatelessWidget {
         );
 
       case ViewState.processingAudio:
-        return const Center(
+        return Center(
           child: SizedBox.square(
             dimension: 64.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 4.0,
-              color: Colors.grey,
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: Colors.teal,
+              size: 64,
             ),
+            // child: CircularProgressIndicator(
+            //   strokeWidth: 2.0,
+            //   color: Colors.teal,
+            // ),
           ),
         );
     }

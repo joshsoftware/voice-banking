@@ -30,7 +30,7 @@ class BankingActionable {
   factory BankingActionable.fromMap(final Map<String, dynamic> data) {
     return BankingActionable(
       action: getBankingActionFromString(data["action"]),
-      amount: data["data"]?["amount"] ?? -1,
+      amount: data["data"]?["amount"],
       recipient: data["data"]?["recipient"],
     );
   }
