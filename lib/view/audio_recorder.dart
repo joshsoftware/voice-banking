@@ -9,7 +9,10 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tts/util/helper.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:tts/value/asset.dart';
+import 'package:tts/value/network.dart';
 import 'package:tts/view/action_result.dart';
+import 'package:tts/view/component/footer.dart';
 
 import '../util/action.dart';
 import 'component/recorder_actions.dart';
@@ -49,119 +52,132 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Audio Banking'),
+        title: const Text(
+          'Audio Banking',
+          style: TextStyle(
+            fontSize: 18.0,
+            color: Colors.white70,
+          ),
+        ),
         centerTitle: true,
+        bottom: PreferredSize(
+            preferredSize: const Size(double.maxFinite, 1.0),
+            child: Container(
+              height: 1.0,
+              color: Colors.white10,
+            )),
       ),
-      body: Center(
-        child: ValueListenableBuilder(
-            valueListenable: viewStateNotifier,
-            builder: (context, viewState, _) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Recording widgets set
-                  Column(
-                    children: [
-                      // Recording label (CTA and duration)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Playback Action
-                            ValueListenableBuilder(
-                              valueListenable: playingStateNotifier,
-                              builder: (context, playingState, _) {
-                                return Visibility(
-                                  visible: viewState == ViewState.recorded,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: IconButton(
-                                      onPressed: () => togglePlayback(
-                                          viewState, playingState),
-                                      visualDensity: VisualDensity.compact,
-                                      padding: EdgeInsets.zero,
-                                      icon: Icon(
-                                        playButtonIcon(playingState),
-                                        size: 36.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+      body: ValueListenableBuilder(
+          valueListenable: viewStateNotifier,
+          builder: (context, viewState, _) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const SizedBox.shrink(),
 
-                            // Label
-                            ValueListenableBuilder(
-                              valueListenable: recordingLengthNotifier,
-                              builder: (context, recordingLength, _) {
-                                return Text(
-                                  getRecordingLabel(viewState, recordingLength),
-                                  style: const TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.white70,
-                                  ),
-                                );
-                              },
+                const Spacer(),
+                    
+                // Recording widgets set
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Playback Action
+                      ValueListenableBuilder(
+                        valueListenable: playingStateNotifier,
+                        builder: (context, playingState, _) {
+                          return Visibility(
+                            visible: viewState == ViewState.recorded,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: IconButton(
+                                onPressed: () =>
+                                    togglePlayback(viewState, playingState),
+                                visualDensity: VisualDensity.compact,
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  playButtonIcon(playingState),
+                                  size: 36.0,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
 
-                      // Recording controls (start, stop, retry and submit)
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(minHeight: 200.0),
-                        child: AudioRecorderControls(
-                          viewState: viewState,
-                          audioRecordingPath: recordedPath,
-                          toggleRecording: (viewState) => toggleRecording(
-                            viewState: viewState,
-                            context: context,
-                          ),
-                          discardRecording: discardRecording,
-                          submitRecording: (path) => submitRecording(
-                            recordedPath: path,
-                            context: context,
-                          ),
-                        ),
+                      // Label
+                      ValueListenableBuilder(
+                        valueListenable: recordingLengthNotifier,
+                        builder: (context, recordingLength, _) {
+                          return Text(
+                            getRecordingLabel(viewState, recordingLength),
+                            style: const TextStyle(
+                              fontSize: 22.0,
+                              color: Colors.white70,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
+                ),
 
-                  // Offline mode switch
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8.0),
-                        child: Text(
-                          'On-Device AI',
-                          style: TextStyle(color: Colors.white38),
-                        ),
-                      ),
-                      //TODO: Enable following once offline mode is ready
-                      Switch(
-                        value: selectedMode == 'online',
-                        onChanged: true
-                            ? null
-                            // ignore: dead_code
-                            : (set) {
-                                setState(() {
-                                  if (set) {
-                                    selectedMode = 'online';
-                                  } else {
-                                    selectedMode = 'offline';
-                                  }
-                                });
-                              },
-                      )
-                    ],
+                // Recording controls (start, stop, retry and submit)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 200.0),
+                  child: AudioRecorderControls(
+                    viewState: viewState,
+                    audioRecordingPath: recordedPath,
+                    toggleRecording: (viewState) => toggleRecording(
+                      viewState: viewState,
+                      context: context,
+                    ),
+                    discardRecording: discardRecording,
+                    submitRecording: (path) => submitRecording(
+                      recordedPath: path,
+                      context: context,
+                    ),
                   ),
-                ],
-              );
-            }),
-      ),
+                ),
+
+                // Offline mode switch
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        'On-Device AI',
+                        style: TextStyle(color: Colors.white38),
+                      ),
+                    ),
+                    //TODO: Enable following once offline mode is ready
+                    Switch(
+                      value: selectedMode == 'online',
+                      onChanged: true
+                          ? null
+                          // ignore: dead_code
+                          : (set) {
+                              setState(() {
+                                if (set) {
+                                  selectedMode = 'online';
+                                } else {
+                                  selectedMode = 'offline';
+                                }
+                              });
+                            },
+                    )
+                  ],
+                ),
+
+                const Spacer(),
+
+                const Footer(),
+              ],
+            );
+          }),
     );
   }
 
@@ -367,7 +383,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       ),
     );
     final Response response = await dio.post(
-        'https://a3bc-202-149-221-42.ngrok-free.app/get-action-from-audio',
+        AppNetwork.getActionFromAudio,
         data: requestBody, onSendProgress: (int sent, int total) {
       sentBytes.value = sent;
       totalBytes.value = total;
