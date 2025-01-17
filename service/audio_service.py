@@ -3,16 +3,27 @@ import tempfile
 import torch
 import torchaudio
 import logging
-import nemo.collections.asr as nemo_asr
+
+from model_loader import load_model
 
 logging.basicConfig(level=logging.INFO)  # Set the logging level
 logger = logging.getLogger(__name__)
 
 logger.info("Loading model...")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = nemo_asr.models.EncDecCTCModel.restore_from(restore_path="model/ai4b_indicConformer_bn.nemo")
-model.eval() # inference mode
-model = model.to(device) # transfer model to device
+
+
+model_bengali = load_model(device, "bn")
+model_hindi = load_model(device, "hi")
+model_tamil = load_model(device, "ta")
+model_marathi = load_model(device, "mr")
+
+language_models = {
+    "bn": model_bengali,
+    "hi": model_hindi,
+    "ta": model_tamil,
+    "mr": model_marathi
+}
 
 def load_and_resample_audio(file_path, target_sampling_rate=16000):
     # Load the audio file using torchaudio
@@ -28,6 +39,8 @@ def load_and_resample_audio(file_path, target_sampling_rate=16000):
 
 def transcribe_with_indic(audio_path, language):
     logger.info("transcription started")
+
+    model = language_models[language]
     
     model.cur_decoder = "ctc"    
     file_path = ""

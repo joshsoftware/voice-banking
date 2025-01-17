@@ -21,16 +21,17 @@ def root_route():
     return 'Hello, this is the root route for voice banking server'
 
 class Body(BaseModel):
-    audio_file_link: str
+    file: UploadFile
     language: str
 
 @app.post("/get-action-from-audio")
-async def get_action_from_transcription(file: UploadFile):
+async def get_action_from_transcription(request: BaseModel):
+    print(f"Request received: {request}")
     try:
         # Transcribe
         # transcription = transcribe_audio(audio=file.file, translate=True)
         
-        translation = transcribe_with_indic(file.file, 'bn')
+        translation = transcribe_with_indic(request.file.file, request.language)
         print(f"Transcript (IndicConformer): {translation}")
         
         # Get action
