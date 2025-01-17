@@ -1,4 +1,14 @@
 class AppMessages {
+  static const String appTitle = "Audio Banking";
+
+  static const String appStateLabelIdle = "Say Something like";
+  static const String appStateLabelRecorded = "Submit?";
+  static const String appStateLabelProcessing = "Hold on";
+
+  static const String actionExtractionFailed = "Couldn't get you, try again.";
+  static const String permissionMicNotGranted =
+      "Microphone permission not granted";
+
   static const String moneyTransferTitle = "Transfer";
   static const String moneyTransferSubtitleSuffix = "to";
   static const String moneyTransferCTALabel = "Confirm";

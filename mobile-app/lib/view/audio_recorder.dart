@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tts/util/helper.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:tts/value/language.dart';
+import 'package:tts/value/message.dart';
 import 'package:tts/value/network.dart';
 import 'package:tts/view/action_result.dart';
 import 'package:tts/view/component/footer.dart';
@@ -25,12 +25,9 @@ class AudioRecorderPage extends StatefulWidget {
 }
 
 class AudioRecorderPageState extends State<AudioRecorderPage> {
+  
   final FlutterSoundRecorder recorder = FlutterSoundRecorder();
   final FlutterSoundPlayer player = FlutterSoundPlayer();
-  final FlutterTts flutterTts = FlutterTts();
-  bool isPlaying = false;
-  String selectedMode = 'Online';
-  String? recordedPath;
   final ValueNotifier<int> totalBytes = ValueNotifier(1);
   final ValueNotifier<int> sentBytes = ValueNotifier(0);
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
@@ -41,13 +38,16 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       ValueNotifier(PlayingState.idle);
   final ValueNotifier<VoiceBankingLanguage> selectedVoiceBankingLanguage =
       ValueNotifier(VoiceBankingLanguage.hindi);
+  
+  bool isPlaying = false;
+  String selectedMode = 'Online';
+  String? recordedPath;
   Timer? recordingTimer;
 
   @override
   void initState() {
     super.initState();
     initRecorder();
-    checkBengaliSupport();
   }
 
   @override
@@ -55,7 +55,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Audio Banking',
+          AppMessages.appTitle,
           style: TextStyle(
             fontSize: 18.0,
             color: Colors.white70,
@@ -64,32 +64,35 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
         centerTitle: false,
         actions: [
           // Language selection
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8.0,
-            children: [
-              const Icon(Icons.language_outlined, color: Colors.white38),
-              ValueListenableBuilder(
-                valueListenable: selectedVoiceBankingLanguage,
-                builder: (context, language, _) {
-                  return DropdownButton<VoiceBankingLanguage>(
-                    value: language,
-                    onChanged: (selectedLanguage) {
-                      selectedVoiceBankingLanguage.value =
-                          selectedLanguage ?? VoiceBankingLanguage.hindi;
-                    },
-                    items: VoiceBankingLanguage.values
-                        .map(
-                          (language) => DropdownMenuItem(
-                            value: language,
-                            child: Text(language.label),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ValueListenableBuilder(
+              valueListenable: selectedVoiceBankingLanguage,
+              builder: (context, language, _) {
+                return DropdownButton<VoiceBankingLanguage>(
+                  value: language,
+                  onChanged: (selectedLanguage) {
+                    selectedVoiceBankingLanguage.value =
+                        selectedLanguage ?? VoiceBankingLanguage.hindi;
+                  },
+                  items: VoiceBankingLanguage.values
+                      .map(
+                        (language) => DropdownMenuItem(
+                          value: language,
+                          child: Row(
+                            spacing: 8.0,
+                            children: [
+                              const Icon(Icons.translate_outlined,
+                                  color: Colors.white38),
+                              Text(language.label),
+                            ],
                           ),
-                        )
-                        .toList(),
-                  );
-                },
-              ),
-            ],
+                        ),
+                      )
+                      .toList(),
+                );
+              },
+            ),
           ),
         ],
         bottom: PreferredSize(
@@ -259,19 +262,19 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   String getRecordingLabel(ViewState state, int? recordingLength) {
     switch (state) {
       case ViewState.idle:
-        return 'Say Something like';
+        return AppMessages.appStateLabelIdle;
 
       case ViewState.recording:
         if (recordingLength == null) {
-          return 'N/A';
+          return '';
         }
         return getFormattedTimeFromSeconds(recordingLength);
 
       case ViewState.recorded:
-        return 'Submit?';
+        return AppMessages.appStateLabelRecorded;
 
       case ViewState.processingAudio:
-        return 'Hold on';
+        return AppMessages.appStateLabelProcessing;
     }
   }
 
@@ -293,7 +296,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       await recorder.openRecorder();
       await player.openPlayer();
     } else {
-      throw 'Microphone permission not granted';
+      throw AppMessages.permissionMicNotGranted;
     }
   }
 
@@ -320,7 +323,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       //TODO: Handle this
       dev.log("Error while mapping action: ${e.toString()}");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Couldn't get you, try again."),
+        content: Text(AppMessages.actionExtractionFailed),
       ));
     }
     viewStateNotifier.value = ViewState.idle;
@@ -477,15 +480,6 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
       return response.data;
     }
     return null;
-  }
-
-  void checkBengaliSupport() async {
-    List<dynamic> languages = await flutterTts.getLanguages;
-    if (languages.contains("bn")) {
-      dev.log("Bengali is supported.");
-    } else {
-      dev.log("Bengali is not supported on this device.");
-    }
   }
 
   @override
