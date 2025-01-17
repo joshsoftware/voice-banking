@@ -140,7 +140,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
                       ),
 
                       // Label
-                      ValueListenableBuilder(
+                      ValueListenableBuilder<int?>(
                         valueListenable: recordingLengthNotifier,
                         builder: (context, recordingLength, _) {
                           return Text(
@@ -155,6 +155,48 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
                     ],
                   ),
                 ),
+
+                // Sample Commands
+                ValueListenableBuilder<ViewState>(
+                    valueListenable: viewStateNotifier,
+                    builder: (context, viewState, _) {
+                      return Opacity(
+                        opacity: viewState == ViewState.idle ? 1.0 : 0.25,
+                        child: ValueListenableBuilder<VoiceBankingLanguage>(
+                          valueListenable: selectedVoiceBankingLanguage,
+                          builder: (context, selectedLanguage, _) {
+                            return Column(
+                              spacing: 8.0,
+                              children: selectedLanguage.sampleCommands
+                                  .map(
+                                    (command) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0,
+                                        horizontal: 8.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.white10,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      child: Text(
+                                        command,
+                                        style: const TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.white38,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          },
+                        ),
+                      );
+                    }),
 
                 // Recording controls (start, stop, retry and submit)
                 ConstrainedBox(
@@ -217,7 +259,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   String getRecordingLabel(ViewState state, int? recordingLength) {
     switch (state) {
       case ViewState.idle:
-        return 'Say Something';
+        return 'Say Something like';
 
       case ViewState.recording:
         if (recordingLength == null) {
@@ -411,7 +453,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     final String recordingPath,
     final String language,
   ) async {
-    final file = await getMultiPartFile(recordingPath);
+    final MultipartFile? file = await getMultiPartFile(recordingPath);
     //TODO: Above call can throw error, handle it
     final FormData requestBody = FormData.fromMap({
       'file': file,

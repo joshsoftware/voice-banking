@@ -1,3 +1,5 @@
+import 'package:tts/value/message.dart';
+
 enum VoiceBankingLanguage { bengali, tamil, hindi, marathi }
 
 extension VoiceBankingLanguageExt on VoiceBankingLanguage {
@@ -24,6 +26,19 @@ extension VoiceBankingLanguageExt on VoiceBankingLanguage {
         return 'hi';
       case VoiceBankingLanguage.marathi:
         return 'mr';
+    }
+  }
+
+  List<String> get sampleCommands {
+    switch (this) {
+      case VoiceBankingLanguage.bengali:
+        return AppMessages.voiceCommandSamplesBengali;
+      case VoiceBankingLanguage.tamil:
+        return AppMessages.voiceCommandSamplesTamil;
+      case VoiceBankingLanguage.hindi:
+        return AppMessages.voiceCommandSamplesHindi;
+      case VoiceBankingLanguage.marathi:
+        return AppMessages.voiceCommandSamplesMarathi;
     }
   }
 }
