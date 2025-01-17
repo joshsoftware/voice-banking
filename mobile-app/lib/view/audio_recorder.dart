@@ -9,7 +9,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tts/util/helper.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:tts/value/asset.dart';
+import 'package:tts/value/language.dart';
 import 'package:tts/value/network.dart';
 import 'package:tts/view/action_result.dart';
 import 'package:tts/view/component/footer.dart';
@@ -31,14 +31,16 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   bool isPlaying = false;
   String selectedMode = 'Online';
   String? recordedPath;
-  ValueNotifier<int> totalBytes = ValueNotifier(1);
-  ValueNotifier<int> sentBytes = ValueNotifier(0);
-  String? response;
-  ValueNotifier<bool> isLoading = ValueNotifier(false);
-  ValueNotifier<int?> recordingLengthNotifier = ValueNotifier(null);
-  ValueNotifier<ViewState> viewStateNotifier = ValueNotifier(ViewState.idle);
-  ValueNotifier<PlayingState> playingStateNotifier =
+  final ValueNotifier<int> totalBytes = ValueNotifier(1);
+  final ValueNotifier<int> sentBytes = ValueNotifier(0);
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
+  final ValueNotifier<int?> recordingLengthNotifier = ValueNotifier(null);
+  final ValueNotifier<ViewState> viewStateNotifier =
+      ValueNotifier(ViewState.idle);
+  final ValueNotifier<PlayingState> playingStateNotifier =
       ValueNotifier(PlayingState.idle);
+  final ValueNotifier<VoiceBankingLanguage> selectedVoiceBankingLanguage =
+      ValueNotifier(VoiceBankingLanguage.hindi);
   Timer? recordingTimer;
 
   @override
@@ -59,7 +61,37 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
             color: Colors.white70,
           ),
         ),
-        centerTitle: true,
+        centerTitle: false,
+        actions: [
+          // Language selection
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 8.0,
+            children: [
+              const Icon(Icons.language_outlined, color: Colors.white38),
+              ValueListenableBuilder(
+                valueListenable: selectedVoiceBankingLanguage,
+                builder: (context, language, _) {
+                  return DropdownButton<VoiceBankingLanguage>(
+                    value: language,
+                    onChanged: (selectedLanguage) {
+                      selectedVoiceBankingLanguage.value =
+                          selectedLanguage ?? VoiceBankingLanguage.hindi;
+                    },
+                    items: VoiceBankingLanguage.values
+                        .map(
+                          (language) => DropdownMenuItem(
+                            value: language,
+                            child: Text(language.label),
+                          ),
+                        )
+                        .toList(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
         bottom: PreferredSize(
             preferredSize: const Size(double.maxFinite, 1.0),
             child: Container(
@@ -137,6 +169,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
                     discardRecording: discardRecording,
                     submitRecording: (path) => submitRecording(
                       recordedPath: path,
+                      language: selectedVoiceBankingLanguage.value.id,
                       context: context,
                     ),
                   ),
@@ -230,11 +263,13 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
 
   Future<void> submitRecording({
     required final String recordedPath,
+    required final String language,
     required final BuildContext context,
   }) async {
     viewStateNotifier.value = ViewState.processingAudio;
     try {
-      final BankingActionable? action = await getActionFromAudio(recordedPath);
+      final BankingActionable? action =
+          await getActionFromAudio(recordedPath, language);
       if (action == null) {
         //TODO: handle this
       }
@@ -250,8 +285,10 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   }
 
   Future<BankingActionable?> getActionFromAudio(
-      final String recordedPath) async {
-    final response = await postAudioToGetAction(recordedPath);
+    final String recordedPath,
+    final String language,
+  ) async {
+    final response = await postAudioToGetAction(recordedPath, language);
     if (response != null) {
       final BankingActionable action =
           BankingActionable.fromMap(response["result"]);
@@ -334,6 +371,7 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
     if (path != null) {
       submitRecording(
         recordedPath: path,
+        language: selectedVoiceBankingLanguage.value.id,
         context: context,
       );
     }
@@ -370,11 +408,14 @@ class AudioRecorderPageState extends State<AudioRecorderPage> {
   }
 
   Future<Map<String, dynamic>?> postAudioToGetAction(
-      final String recordingPath) async {
+    final String recordingPath,
+    final String language,
+  ) async {
     final file = await getMultiPartFile(recordingPath);
     //TODO: Above call can throw error, handle it
     final FormData requestBody = FormData.fromMap({
       'file': file,
+      'language': language,
     });
     final Dio dio = Dio(
       BaseOptions(
