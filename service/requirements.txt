@@ -1,7 +1,6 @@
 fastapi
 ollama
 uvicorn
-# logging
 python-multipart
 
 # Required by AI4Bharat

@@ -20,6 +20,27 @@ Voice Banking is a cutting-edge application designed to simplify everyday bankin
 
 ## Setup
 
+# Python App Setup Guide
+
+## Prerequisites
+1. **Python (Recomeded Version: 3.10.16)**
+2. **Llama 3**
+
+### 1. Go to service dir
+```bash
+cd service
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the app
+```bash
+uvicorn main:app --host localhost --port 8000 --reload
+```
+
 # Flutter App Setup Guide
 
 ## Prerequisites
