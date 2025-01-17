@@ -1,7 +1,5 @@
 import os
 import tempfile
-import openai
-from dotenv import load_dotenv
 import torch
 import torchaudio
 import logging
@@ -46,9 +44,8 @@ def transcribe_with_indic(audio_path, language):
 
     try:
         audio_input = load_and_resample_audio(file_path)
-        audio_input = audio_input.unsqueeze(0).to(device)
-        
-        transcription = model.transcribe([audio_input], batch_size=1,logprobs=False, language_id=language)[0]
+        # audio_input = audio_input.unsqueeze(0).to(device)
+        transcription = model.transcribe([audio_input], batch_size=1,logprobs=False, language_id=language)[0][0]
     finally:
         # Clean up the temporary file
         if not isinstance(audio_path, str):

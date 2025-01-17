@@ -1,4 +1,4 @@
-from fastapi import FastAPI, BackgroundTasks, UploadFile
+from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from action_extrator import extract_action_from_transcription
