@@ -1,0 +1,75 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'models.dart';
+import 'voice_repository.dart';
+import 'banking_api.dart';
+import 'tts_service.dart';
+
+sealed class VoiceState {}
+class Idle extends VoiceState {}
+class Listening extends VoiceState {}
+class Transcribing extends VoiceState {}
+class Understood extends VoiceState { final Intent intent; Understood(this.intent); }
+class Executing extends VoiceState { final String message; Executing(this.message); }
+
+sealed class VoiceEvent {}
+class StartListening extends VoiceEvent {}
+class StopListening extends VoiceEvent {}
+class GotTranscript extends VoiceEvent { final Map<String, dynamic> data; GotTranscript(this.data); }
+
+
+class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
+  final VoiceRepository repo;
+  final BankingAPI bank = BankingAPI();
+  final TTSService tts = TTSService();
+
+  VoiceBloc(this.repo) : super(Idle()) {
+    on<StartListening>((e, emit) async {
+      await repo.start();
+      emit(Listening());
+    });
+
+    on<StopListening>((e, emit) async {
+      emit(Transcribing());
+      final data = await repo.stopAndTranscribe();
+      add(GotTranscript(data));
+    });
+
+    on<GotTranscript>((e, emit) async {
+    final intent = Intent(
+        name: e.data["intent"]["name"],
+        entities: e.data["intent"]["entities"],
+    );
+    final lang = e.data["lang"] ?? "en";
+    print(intent);
+    emit(Understood(intent));
+
+      String response;
+      switch (intent.name) {
+        case "get_balance":
+          final bal = await bank.getBalance();
+          response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
+          break;
+        case "pay_person":
+          final amt = (intent.entities["amount"] ?? 0).toDouble();
+          response = await bank.pay("Ananya", amt);
+          break;
+        case "search_txn":
+          final txns = await bank.searchTransactions(merchant: "Swiggy");
+          response = txns.isEmpty
+              ? "No transactions found."
+              : "Found ${txns.length} transactions for Swiggy.";
+          break;
+        case "recent_txn":
+          final txns = await bank.searchTransactions();
+          response = "Last ${txns.length} transactions. " +
+              txns.map((t) => "${t["merchant"]} rupees ${t["amount"].abs()}").join(", ");
+          break;
+        default:
+          response = "Sorry, I didn't catch that.";
+      }
+
+      await tts.speak(response, langCode: lang);   // 🔊 speak out response
+      emit(Executing(response));
+    });
+  }
+}
