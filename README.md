@@ -17,3 +17,13 @@ Voice Banking is a cutting-edge application designed to simplify everyday bankin
 - **LLama 3**: Language model for generating context-aware and natural conversations.
 - **Whisper & IndicWhisper**: High-performance voice recognition systems optimized for multilingual support.
 - **Prompt Engineering**: Fine-tuned prompts to improve interaction quality and contextual accuracy.
+
+##  Backend Steup
+cd stt_service
+pip install -r requirements.txt
+uvicorn app:app --reload --port 8000
+
+Test with curl(make sure you have the sample.wav file):
+curl -F "audio=@sample.wav" -F "session_id=test1" http://localhost:8000/voice/transcribe-intent
+
+
