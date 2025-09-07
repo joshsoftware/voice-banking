@@ -35,8 +35,11 @@ INTENTS = [
 async def transcribe_intent(audio: UploadFile = File(...), session_id: str = Form(...)):
     wav = await audio.read()
     segments, info = model.transcribe(io.BytesIO(wav), language=None, beam_size=5)
+    #lang = model.detect_language(wav,)
     text = " ".join([s.text for s in segments])
+    print(langid.classify(text)[0])
     lang = info.language or langid.classify(text)[0]
+    print(lang)
 
     # Extract amount
     amt = None
@@ -46,11 +49,13 @@ async def transcribe_intent(audio: UploadFile = File(...), session_id: str = For
     # Match intent
     best = (None, -1)
     for intent in INTENTS:
+        print(text)
         score = max([fuzz.partial_ratio(k, text) for k in intent["keys"]])
         if score > best[1]:
             best = (intent["name"], score)
 
     intent = {"name": best[0] or "unknown", "entities": {"amount": amt}}
+    print(intent)
     return {"transcript": text.strip(), "lang": lang, "intent": intent}
 
 if __name__ == "__main__":

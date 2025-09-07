@@ -7,6 +7,9 @@
   "transcribing": "Transcribing...",
   "executing": "Processing your request...",
   "otpSuccess": "OTP verified successfully!",
-  "balanceResponse": "Your current balance is {amount} rupees."
-  "failedIntent": "Sorry, I didn't catch that."
+  "balanceResponse": "Your current balance is {amount} rupees.",
+  "failedIntent": "Sorry, I didn't catch that.",
+  "recTxns": "Recent transactions",
+  "curBalance": "Available balance"
 }
+

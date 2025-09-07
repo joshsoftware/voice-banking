@@ -26,6 +26,34 @@ class LanguageToggleWidget extends StatelessWidget {
           value: Locale('ta'),
           child: Text("தமிழ்"),
         ),
+        PopupMenuItem(
+            value: const Locale('te'),
+            child: Text("తెలుగు"),
+        ),
+        PopupMenuItem(
+            value: const Locale('bn'),
+            child: Text("বাংলা"),
+        ),
+        PopupMenuItem(
+            value: const Locale('gu'),
+            child: Text("ગુજરાતી"),
+        ),
+        PopupMenuItem(
+            value: const Locale('ml'),
+            child: Text("മലയാളം"),
+        ),
+        PopupMenuItem(
+            value: const Locale('mr'),
+            child: Text("मराठी"),
+        ),
+        PopupMenuItem(
+            value: const Locale('kn'),
+            child: Text("ಕನ್ನಡ"),
+        ),
+        PopupMenuItem(
+            value: const Locale('pa'),
+            child: Text("ਪੰਜਾਬੀ"),
+        ),
       ],
     );
   }

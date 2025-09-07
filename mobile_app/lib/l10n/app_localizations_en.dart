@@ -38,5 +38,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get failedIntent => "Sorry, I didn't catch that.";
+  String get failedIntent => 'Sorry, I didn\'t catch that.';
+
+  @override
+  String get recTxns => 'Recent transactions';
+
+  @override
+  String get curBalance => 'Available balance';
 }

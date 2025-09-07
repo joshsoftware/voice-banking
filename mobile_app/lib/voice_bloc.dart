@@ -3,6 +3,7 @@ import 'models.dart';
 import 'voice_repository.dart';
 import 'banking_api.dart';
 import 'tts_service.dart';
+import 'voice_intent.dart';
 
 
 sealed class VoiceState {}
@@ -10,7 +11,7 @@ class Idle extends VoiceState {}
 class Listening extends VoiceState {}
 class Transcribing extends VoiceState {}
 class Understood extends VoiceState { final Intent intent; Understood(this.intent); }
-class Executing extends VoiceState { final String message; Executing(this.message); }
+class Executing extends VoiceState { final String message; final VoiceIntent intent; Executing(this.message,this.intent); }
 
 sealed class VoiceEvent {}
 class StartListening extends VoiceEvent {}
@@ -46,9 +47,11 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         entities: e.data["intent_data"]["intent_data"]["entities"],
     );
 
+    final voiceIntent = VoiceIntent.fromIntent(intent);
+    //emit(Understood(voiceIntent));
+
     final lang = e.data["lang"] ?? 'en';
     emit(Understood(intent));
-
       String response;
       switch (intent.name) {
         case "get_balance":
@@ -76,7 +79,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       }
       print(lang);
       await tts.speak(response, langCode: lang);   // 🔊 speak out response
-      emit(Executing(response));
+      emit(Executing(response,voiceIntent));
     });
   }
 }

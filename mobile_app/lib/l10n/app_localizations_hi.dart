@@ -38,5 +38,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get failedIntent => "क्षमा करें, मुझे यह समझ में नहीं आया।";
+  String get failedIntent => 'क्षमा करें, मुझे यह समझ में नहीं आया।';
+
+  @override
+  String get recTxns => 'हाल के लेन-देन';
+
+  @override
+  String get curBalance => 'वर्तमान शेष राशि';
 }

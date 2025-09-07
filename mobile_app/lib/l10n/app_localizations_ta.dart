@@ -38,5 +38,11 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get failedIntent => "மன்னிக்கவும், எனக்கு அது புரியவில்லை.";
+  String get failedIntent => 'மன்னிக்கவும், எனக்கு அது புரியவில்லை.';
+
+  @override
+  String get recTxns => 'சமீபத்திய பரிவர்த்தனைகள்';
+
+  @override
+  String get curBalance => 'நடப்பு இருப்பு';
 }

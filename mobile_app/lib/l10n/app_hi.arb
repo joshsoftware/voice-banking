@@ -7,6 +7,8 @@
   "transcribing": "लिख रहा हूँ...",
   "executing": "आपका अनुरोध संसाधित हो रहा है...",
   "otpSuccess": "OTP सफलतापूर्वक सत्यापित!",
-  "balanceResponse": "आपका मौजूदा बैलेंस {amount} रुपये है।"
-  "failedIntent": "क्षमा करें, मुझे यह समझ में नहीं आया।"
+  "balanceResponse": "आपका मौजूदा बैलेंस {amount} रुपये है।",
+  "failedIntent": "क्षमा करें, मुझे यह समझ में नहीं आया।",
+  "recTxns": "हाल के लेन-देन",
+  "curBalance": "वर्तमान शेष राशि"
 }
