@@ -1,0 +1,12 @@
+{
+  "appTitle": "Lingo Voice Banking",
+  "loginPrompt": "Enter your mobile number",
+  "otpPrompt": "Enter OTP",
+  "micHint": "Tap the mic to speak",
+  "listening": "Listening...",
+  "transcribing": "Transcribing...",
+  "executing": "Processing your request...",
+  "otpSuccess": "OTP verified successfully!",
+  "balanceResponse": "Your current balance is {amount} rupees."
+  "failedIntent": "Sorry, I didn't catch that."
+}

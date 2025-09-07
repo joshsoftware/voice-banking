@@ -1,46 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:voice_banking_poc/routes.dart';
 import 'voice_bloc.dart';
 import 'voice_repository.dart';
-import 'audio_upload.dart';
+import 'l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'language_toggle_widget.dart';
 
-final uploader = AudioUploader(backendUrl: "http://10.0.2.2:8000/transcribe");
 
 void main() {
-  print("🔥 Starting app..."); // Check if this appears
-  runApp(VoiceBankingApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  print("Starting app...");
+
+  final voiceRepo = VoiceRepository();
+
+  runApp(
+    BlocProvider(
+      create: (_) => VoiceBloc(voiceRepo),
+      child: VoiceBankingApp(),
+    ),
+  );
 }
 
-class VoiceBankingApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Voice Banking PoC',
-      home: BlocProvider(
-        create: (_) => VoiceBloc(VoiceRepository()),
-        child: VoiceBankHome(),
-      ),
-    );
+  class VoiceBankingApp extends StatefulWidget {
+    const VoiceBankingApp({super.key});
+
+    @override
+    State<VoiceBankingApp> createState() => _VoiceBankingAppState();
+
+    static void setLocale(BuildContext context, Locale newLocale) {
+      _VoiceBankingAppState? state =
+      context.findAncestorStateOfType<_VoiceBankingAppState>();
+      state?.setLocale(newLocale);
+    }
   }
-}
+
+  class _VoiceBankingAppState extends State<VoiceBankingApp> {
+    Locale _locale = const Locale('en'); // default
+
+    void setLocale(Locale locale) {
+      setState(() {
+        _locale = locale;
+      });
+    }
+
+
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+          title: "Lingo Voice Banking",
+          theme: ThemeData(primarySwatch: Colors.blue),
+          initialRoute: '/',
+          onGenerateRoute: MyRouter.generateRoute,
+          locale: _locale,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            AppLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'), // English
+            Locale('hi'), // Hindi
+            Locale('ta'), // Tamil
+            Locale('te'), // Telugu
+            Locale('bn'), // Bengali 
+            Locale('gu'),  // Gujarati
+            Locale('ml'),  // Malayalam
+            Locale('mr'),  // Marathi
+            Locale('kn'),  // Kannada
+            Locale('pa'),  // Punjabi
+          ],
+        );
+    }
+  }
+
 
 class VoiceBankHome extends StatelessWidget {
+  const VoiceBankHome({super.key});
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Voice Banking PoC')),
+      appBar: AppBar(title: const Text('Lingo Voice Banking'),actions: [LanguageToggleWidget()],),
       body: Center(
         child: BlocBuilder<VoiceBloc, VoiceState>(
-          builder: (ctx, st) {
+          builder: (context, st) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  st is Idle ? "Tap mic to speak" :
-                  st is Listening ? "Listening..." :
-                  st is Transcribing ? "Transcribing..." :
+                  st is Idle ? AppLocalizations.of(context)!.micHint :
+                  st is Listening ? AppLocalizations.of(context)!.listening :
+                  st is Transcribing ? AppLocalizations.of(context)!.transcribing :
                   st is Understood ? "Intent: ${st.intent.summary()}" :
-                  st is Executing ? st.message : "",
+                  st is Executing ? AppLocalizations.of(context)!.executing : "",
                   style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 24),
@@ -50,18 +105,12 @@ class VoiceBankHome extends StatelessWidget {
                     if (st is Idle) {
                       bloc.add(StartListening());
                     } else if (st is Listening) {
-                      bloc.add(StopListening());
+                      bloc.add(StopListening(locale: Localizations.localeOf(context).languageCode));
+                    }else {
+                      bloc.add(Reset());
                     }
-                  },
-                  child: const Icon(Icons.mic),
-                ),
-                // In your UI button
-                ElevatedButton(
-                onPressed: () async {
-                    final response = await uploader.pickAndUpload();
-                    print("STT Response: $response");
-                },
-                child: const Text("Record & Upload"),
+                    },
+                    child: const Icon(Icons.add),
                 ),
               ],
             );

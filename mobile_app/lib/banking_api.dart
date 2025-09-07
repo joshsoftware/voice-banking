@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 
 class BankingAPI {
-  final Dio dio = Dio(BaseOptions(baseUrl: "http://127.0.0.1:8000/bank/me"));
+  //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.93:8000/bank/me"));
+  final Dio dio = Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
 
   Future<double> getBalance() async {
     final res = await dio.get("/balance");

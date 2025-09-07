@@ -17,7 +17,7 @@ class TTSService {
   };
 
   TTSService() {
-    _tts.setSpeechRate(0.9);
+    _tts.setSpeechRate(0.5);
     _tts.setVolume(1.0);
     _tts.setPitch(1.0);
   }
@@ -27,7 +27,7 @@ class TTSService {
 
     // Pick mapped language if available, else fallback
     String? targetLang = _langMap[langCode];
-
+    print(targetLang);
     if (targetLang != null) {
       try {
         await _tts.setLanguage(targetLang);

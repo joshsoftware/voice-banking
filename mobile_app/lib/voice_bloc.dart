@@ -4,6 +4,7 @@ import 'voice_repository.dart';
 import 'banking_api.dart';
 import 'tts_service.dart';
 
+
 sealed class VoiceState {}
 class Idle extends VoiceState {}
 class Listening extends VoiceState {}
@@ -13,8 +14,9 @@ class Executing extends VoiceState { final String message; Executing(this.messag
 
 sealed class VoiceEvent {}
 class StartListening extends VoiceEvent {}
-class StopListening extends VoiceEvent {}
+class StopListening extends VoiceEvent { final String locale; StopListening({required this.locale}); }
 class GotTranscript extends VoiceEvent { final Map<String, dynamic> data; GotTranscript(this.data); }
+class Reset extends VoiceEvent {}
 
 
 class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
@@ -30,24 +32,29 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
 
     on<StopListening>((e, emit) async {
       emit(Transcribing());
-      final data = await repo.stopAndTranscribe();
+      final data = await repo.stopAndTranscribe(locale: e.locale);
       add(GotTranscript(data));
+    });
+
+    on<Reset>((e, emit) {
+      emit(Idle());
     });
 
     on<GotTranscript>((e, emit) async {
     final intent = Intent(
-        name: e.data["intent"]["name"],
-        entities: e.data["intent"]["entities"],
+        name: e.data["intent_data"]["intent_data"]["intent"],
+        entities: e.data["intent_data"]["intent_data"]["entities"],
     );
-    final lang = e.data["lang"] ?? "en";
-    print(intent);
+
+    final lang = e.data["lang"] ?? 'en';
     emit(Understood(intent));
 
       String response;
       switch (intent.name) {
         case "get_balance":
           final bal = await bank.getBalance();
-          response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
+          response = lang.balanceResponse(bal.toStringAsFixed(2));
+          //response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
           break;
         case "pay_person":
           final amt = (intent.entities["amount"] ?? 0).toDouble();
@@ -67,7 +74,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         default:
           response = "Sorry, I didn't catch that.";
       }
-
+      print(lang);
       await tts.speak(response, langCode: lang);   // 🔊 speak out response
       emit(Executing(response));
     });
