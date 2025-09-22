@@ -45,7 +45,7 @@ void _verifyOtp() {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text("Verify OTP (${widget.params.mobileNumber})"),actions: [LanguageToggleWidget()],),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitle),actions: [LanguageToggleWidget()],),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),

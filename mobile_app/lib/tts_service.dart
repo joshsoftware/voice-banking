@@ -34,7 +34,7 @@ class TTSService {
         await _tts.speak(text);
         return;
       } catch (e) {
-        print("⚠️ TTS failed for $targetLang, falling back to English.");
+        print("TTS failed for $targetLang, falling back to English.");
       }
     }
 

@@ -105,7 +105,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   bool _highlightBalance = false;
   final ScrollController _scrollController = ScrollController();
 
-  //Mock DB mapping with backent
+  //Mock DB mapping with backend
 
   final balance = "₹12500.50"; // mock data
   final contacts = {"Ananya": "ananya@upi", "Rajiv": "rajiv@upi"};

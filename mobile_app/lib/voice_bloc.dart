@@ -42,13 +42,16 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<GotTranscript>((e, emit) async {
+      //e.data["intent_data"] = {"intent":"spend_insights","entities":{'amount': 'None', 'currency': 'None', 'recipient': 'None', 'timeframe': 'this_month', 'date': 'None', 'category': 'None', 'merchant': 'amazon', 'count': 'None'}};
+      //e.data["intent_data"] = {"intent":"transfer_money","entities":{"recipient":"Ananya","amount":1000,"currency":"INR"},"language":"en"};
     final intent = Intent(
-        name: e.data["intent_data"]["intent_data"]["intent"],
-        entities: e.data["intent_data"]["intent_data"]["entities"],
+        name: e.data["intent_data"]["intent"],
+        entities: e.data["intent_data"]["entities"],
     );
-
+    print(intent.name);
+    print( intent.entities);
     final voiceIntent = VoiceIntent.fromIntent(intent);
-    //emit(Understood(voiceIntent));
+    //emit(Understood(voiceIntent as Intent));
 
     final lang = e.data["lang"] ?? 'en';
     emit(Understood(intent));
@@ -56,18 +59,20 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       switch (intent.name) {
         case "get_balance":
           final bal = await bank.getBalance();
-          response = lang.balanceResponse(bal.toStringAsFixed(2));
-          //response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
+          //response = bal.toStringAsFixed(2);
+          response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
           break;
-        case "pay_person":
+        case "transfer_money":
           final amt = (intent.entities["amount"] ?? 0).toDouble();
-          response = await bank.pay("Ananya", amt);
+          final payee = intent.entities["recipient"];
+          response = await bank.pay(payee, amt);
           break;
-        case "search_txn":
-          final txns = await bank.searchTransactions(merchant: "Swiggy");
+        case "spend_insights":
+          final merchant = intent.entities["merchant"] ?? intent.entities["category"];
+          final txns = await bank.searchTransactions(merchant: merchant);
           response = txns.isEmpty
               ? "No transactions found."
-              : "Found ${txns.length} transactions for Swiggy.";
+              : "Found ${txns.length} transactions for ${merchant}.";
           break;
         case "recent_txn":
           final txns = await bank.searchTransactions();
@@ -80,6 +85,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       print(lang);
       await tts.speak(response, langCode: lang);   // 🔊 speak out response
       emit(Executing(response,voiceIntent));
+      add(Reset());
     });
   }
 }
