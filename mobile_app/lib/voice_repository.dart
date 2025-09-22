@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 class VoiceRepository {
   final _rec = AudioRecorder();
   
-  //final Dio dio = Dio(BaseOptions(baseUrl: "http://172.16.19.28:8000"));
+  //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000"));
   final Dio dio = Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com"));
 
 

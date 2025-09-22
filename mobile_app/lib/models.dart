@@ -1,15 +1,16 @@
 class Intent {
   final String name;
   final Map<String, dynamic> entities;
-  Intent({required this.name, required this.entities});
+  final String action;
+  Intent({required this.name, required this.entities, required this.action});
 
   String summary() {
     switch (name) {
-      case "get_balance":
+      case "check_balance":
         return "Check balance";
-      case "pay_person":
+      case "transfer_money":
         return "Pay ${entities["amount"] ?? ""}";
-      case "search_txn":
+      case "txn_insights":
         return "Search transactions";
       case "recent_txn":
         return "Show recent transactions";

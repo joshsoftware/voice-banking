@@ -1,10 +1,10 @@
 import "models.dart";
-String checkBalance = "get_balance";
+String checkBalance = "check_balance";
 String recentTransactions = "recent_txn";
-String transferMoney = "pay_person";
-String searchTxn = "search_txn";
+String transferMoney = "transfer_money";
+String transactionInsights = "txn_insights";
 String unknown = "";
-enum VoiceIntentType { checkBalance, recentTransactions, transferMoney, searchTxn, unknown }
+enum VoiceIntentType { checkBalance, recentTransactions, transferMoney, transactionInsights, unknown }
 
 
 class VoiceIntent {

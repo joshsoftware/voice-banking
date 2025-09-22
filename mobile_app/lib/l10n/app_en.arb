@@ -10,6 +10,7 @@
   "balanceResponse": "Your current balance is {amount} rupees.",
   "failedIntent": "Sorry, I didn't catch that.",
   "recTxns": "Recent transactions",
-  "curBalance": "Available balance"
+  "curBalance": "Available balance",
+  "msgNoTransactionFound": "No transactions found",.
 }
 

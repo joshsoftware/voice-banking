@@ -42,15 +42,22 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<GotTranscript>((e, emit) async {
+      //e.data["intent_data"] = {"intent":"spend_insights","entities":{"timeframe":"last_week","merchant":"amazon"},"language":"en-IN"};
       //e.data["intent_data"] = {"intent":"spend_insights","entities":{'amount': 'None', 'currency': 'None', 'recipient': 'None', 'timeframe': 'this_month', 'date': 'None', 'category': 'None', 'merchant': 'amazon', 'count': 'None'}};
       //e.data["intent_data"] = {"intent":"transfer_money","entities":{"recipient":"Ananya","amount":1000,"currency":"INR"},"language":"en"};
     final intent = Intent(
         name: e.data["intent_data"]["intent"],
         entities: e.data["intent_data"]["entities"],
+        action: e.data["intent_data"]["action"]
     );
-    print(intent.name);
-    print( intent.entities);
     final voiceIntent = VoiceIntent.fromIntent(intent);
+    if(intent.action != "respond"){
+      await tts.speak(intent.action, langCode: e.data["intent_data"]["lang"]);
+      emit(Executing(intent.action,voiceIntent));
+      add(Reset());
+      return;
+    }
+
     //emit(Understood(voiceIntent as Intent));
 
     final lang = e.data["lang"] ?? 'en';
@@ -67,7 +74,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           final payee = intent.entities["recipient"];
           response = await bank.pay(payee, amt);
           break;
-        case "spend_insights":
+        case "txn_insights":
           final merchant = intent.entities["merchant"] ?? intent.entities["category"];
           final txns = await bank.searchTransactions(merchant: merchant);
           response = txns.isEmpty
@@ -80,10 +87,9 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               txns.map((t) => "${t["merchant"]} rupees ${t["amount"].abs()}").join(", ");
           break;
         default:
-          response = "Sorry, I didn't catch that.";
+          response = "Sorry, I didn't understand that.";
       }
-      print(lang);
-      await tts.speak(response, langCode: lang);   // 🔊 speak out response
+      await tts.speak(response, langCode: lang);
       emit(Executing(response,voiceIntent));
       add(Reset());
     });
