@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from faster_whisper import WhisperModel
 from rapidfuzz import fuzz
 import uvicorn, io, langid, re
-import core_banking_mock
+import banking_api
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(core_banking_mock.router)
+app.include_router(banking_api.router)
 
 @app.get("/")
 async def root():

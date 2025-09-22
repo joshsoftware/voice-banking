@@ -4,3 +4,5 @@ faster-whisper
 rapidfuzz
 python-multipart
 langid
+sqlalchemy
+psycopg2-binary

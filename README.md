@@ -21,6 +21,7 @@ Voice Banking is a cutting-edge application designed to simplify everyday bankin
 ##  Backend Steup
 cd stt_service
 pip install -r requirements.txt
+python -c "from database import Base, engine; import models; Base.metadata.create_all(bind=engine)"
 uvicorn app:app --reload --port 8000
 
 Test with curl(make sure you have the sample.wav file):
