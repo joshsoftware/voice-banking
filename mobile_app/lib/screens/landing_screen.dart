@@ -95,11 +95,11 @@ class _LandingScreenState extends State<LandingScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.blue[600]!,
-              Colors.blue[400]!,
-              Colors.grey[50]!,
+              Colors.blue[500]!,
+              Colors.blue[500]!,
+              Colors.grey[600]!,
             ],
-            stops: const [0.0, 0.3, 0.3],
+            stops: const [0.0, 0.5, 1.0],
           ),
         ),
         child: SafeArea(

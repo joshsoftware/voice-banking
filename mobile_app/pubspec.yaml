@@ -17,13 +17,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   http: ^1.1.0
+
 flutter: 
+  uses-material-design: true
   generate: true
+
 generate:
   l10n:
     arb-dir: lib/l10n
     template-arb-file: app_en.arb
     output-localization-file: app_localizations.dart
-  
-
-
