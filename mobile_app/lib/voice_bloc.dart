@@ -64,7 +64,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     emit(Understood(intent));
       String response;
       switch (intent.name) {
-        case "get_balance":
+        case "check_balance":
           final bal = await bank.getBalance();
           //response = bal.toStringAsFixed(2);
           response = "Your balance is rupees ${bal.toStringAsFixed(2)}";
