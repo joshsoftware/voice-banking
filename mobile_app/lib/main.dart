@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'models.dart';
+import 'models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voice_banking_poc/routes.dart';
-import 'voice_bloc.dart';
-import 'voice_repository.dart';
+import 'bloc/voice_bloc.dart';
+import 'services/voice_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'language_toggle_widget.dart';
-import 'voice_intent.dart';
-import 'speaking_indicator.dart';
+import 'widgets/language_toggle_widget.dart';
+import 'models/voice_intent.dart';
+import 'widgets/speaking_indicator.dart';
 
 
 

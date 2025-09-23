@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart'; // for VoiceBankingApp.setLocale
+import '../main.dart'; // for VoiceBankingApp.setLocale
 
 
 class LanguageToggleWidget extends StatelessWidget {

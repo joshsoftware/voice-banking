@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:voice_banking_poc/landing_screen.dart';
+import 'package:voice_banking_poc/screens/landing_screen.dart';
 import 'package:voice_banking_poc/main.dart';
-import 'package:voice_banking_poc/otp_screen.dart';
+import 'package:voice_banking_poc/screens/otp_screen.dart';
 
 class MyRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
