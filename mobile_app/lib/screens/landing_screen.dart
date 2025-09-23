@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'otp_screen.dart';
-import 'l10n/app_localizations.dart';
-import 'language_toggle_widget.dart';
+import '../l10n/app_localizations.dart';
+import '../widgets/language_toggle_widget.dart';
 
 
 class LandingScreen extends StatefulWidget {

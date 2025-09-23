@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'models.dart';
-import 'voice_repository.dart';
-import 'banking_api.dart';
-import 'tts_service.dart';
-import 'voice_intent.dart';
+import '../models/models.dart';
+import '../services/voice_repository.dart';
+import '../services/banking_api.dart';
+import '../services/tts_service.dart';
+import '../models/voice_intent.dart';
 
 
 sealed class VoiceState {}
