@@ -11,6 +11,9 @@
   "failedIntent": "Sorry, I didn't catch that.",
   "recTxns": "Recent transactions",
   "curBalance": "Available balance",
-  "msgNoTransactionFound": "No transactions found."
+  "msgNoTransactionFound": "No transactions found.",
+  "logout": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?",
+  "logoutSuccess": "Logged out successfully!"
 }
 

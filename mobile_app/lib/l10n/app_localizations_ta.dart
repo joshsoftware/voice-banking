@@ -45,4 +45,16 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get curBalance => 'நடப்பு இருப்பு';
+
+  @override
+  String get msgNoTransactionFound => 'No transactions found.';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to logout?';
+
+  @override
+  String get logoutSuccess => 'Logged out successfully!';
 }

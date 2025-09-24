@@ -45,4 +45,16 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get curBalance => 'वर्तमान शेष राशि';
+
+  @override
+  String get msgNoTransactionFound => 'No transactions found.';
+
+  @override
+  String get logout => 'लॉगआउट';
+
+  @override
+  String get logoutConfirm => 'क्या आप वाकई लॉगआउट करना चाहते हैं?';
+
+  @override
+  String get logoutSuccess => 'सफलतापूर्वक लॉगआउट हो गए!';
 }

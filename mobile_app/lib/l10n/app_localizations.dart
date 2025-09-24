@@ -182,6 +182,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available balance'**
   String get curBalance;
+
+  /// No description provided for @msgNoTransactionFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found.'**
+  String get msgNoTransactionFound;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirm;
+
+  /// No description provided for @logoutSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out successfully!'**
+  String get logoutSuccess;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

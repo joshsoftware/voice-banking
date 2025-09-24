@@ -45,4 +45,16 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get curBalance => 'ઉપલબ્ધ બેલન્સ';
+
+  @override
+  String get msgNoTransactionFound => 'No transactions found.';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to logout?';
+
+  @override
+  String get logoutSuccess => 'Logged out successfully!';
 }
