@@ -11,6 +11,6 @@
   "failedIntent": "Sorry, I didn't catch that.",
   "recTxns": "Recent transactions",
   "curBalance": "Available balance",
-  "msgNoTransactionFound": "No transactions found",.
+  "msgNoTransactionFound": "No transactions found."
 }
 
