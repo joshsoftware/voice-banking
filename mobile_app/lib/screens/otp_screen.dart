@@ -11,12 +11,6 @@ class OtpScreen extends StatefulWidget {
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
-
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _OtpScreenState? state =
-    context.findAncestorStateOfType<_OtpScreenState>();
-    state?.setLocale(newLocale);
-  }
 }
 
 class _OtpScreenState extends State<OtpScreen> {
@@ -51,10 +45,6 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-  void setLocale(Locale locale) {
-    setState(() {});
-  }
-
   void _verifyOtp() async {
     if (!_formKey.currentState!.validate()) return;
     
@@ -68,7 +58,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (_otpController.text.trim() == widget.params.otp.toString()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("✅ OTP verified successfully!"),
+          content: Text(AppLocalizations.of(context)!.otpVerifiedSuccessfully),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -79,7 +69,7 @@ class _OtpScreenState extends State<OtpScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("❌ Invalid OTP, please try again"),
+          content: Text(AppLocalizations.of(context)!.invalidOtp),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -119,10 +109,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
   String? _validateOtp(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter the OTP';
+      return AppLocalizations.of(context)!.pleaseEnterOtp;
     }
     if (value.length != 6) {
-      return 'OTP must be 6 digits';
+      return AppLocalizations.of(context)!.otpMustBeSixDigits;
     }
     return null;
   }
@@ -136,15 +126,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        // title: Text(
-        //   loc.appTitle,
-        //   style: const TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     color: Colors.white,
-        //   ),
-        // ),
         backgroundColor: const Color(0xFF667eea),
-        //elevation: 0,
         actions: [LanguageToggleWidget()],
       ),
       body: Container(
@@ -157,7 +139,6 @@ class _OtpScreenState extends State<OtpScreen> {
               const Color(0xFF667eea), // Soft blue-purple
               const Color(0xFF764ba2), // Purple
               const Color(0xFFf093fb), // Pink
-              //const Color(0xFFf5576c), // Coral
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
           ),),
@@ -165,8 +146,6 @@ class _OtpScreenState extends State<OtpScreen> {
             padding: EdgeInsets.all(isSmallScreen ? 16.0 : 24.0),            
             child: Column(
               children: [
-               // SizedBox(height: isSmallScreen ? 20 : 40),
-                
                 // Verification Icon
                 Container(
                   width: isSmallScreen ? 80 : 100,
@@ -193,7 +172,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 
                 // Title
                 Text(
-                  'Verify Your Phone',
+                  loc.verifyYourPhone,
                   style: TextStyle(
                     fontSize: isSmallScreen ? 22 : 28,
                     fontWeight: FontWeight.bold,
@@ -206,7 +185,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 
                 // Subtitle
                 Text(
-                  'We\'ve sent a 6-digit code to',
+                  loc.weHaveSentCode,
                   style: TextStyle(
                     fontSize: isSmallScreen ? 14 : 16,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -249,7 +228,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Enter Verification Code',
+                          loc.enterVerificationCode,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 18 : 20,
                             fontWeight: FontWeight.bold,
@@ -260,7 +239,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         const SizedBox(height: 8),
                         
                         Text(
-                          'Enter the 6-digit code sent to your phone',
+                          loc.enterSixDigitCode,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 12 : 14,
                             color: Colors.grey[600],
@@ -344,7 +323,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     ),
                                   )
                                 : Text(
-                                    'Verify OTP',
+                                    loc.verifyOtp,
                                     style: TextStyle(
                                       fontSize: isSmallScreen ? 14 : 16,
                                       fontWeight: FontWeight.bold,
@@ -360,7 +339,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Didn\'t receive the code? ',
+                              loc.didntReceiveCode,
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 12 : 14,
                                 color: Colors.grey[600],
@@ -368,7 +347,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                             if (_remainingTime > 0) ...[
                               Text(
-                                'Resend in ${_remainingTime}s',
+                                "Resend in ${_remainingTime}s",
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.grey[500],
@@ -387,7 +366,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                         ),
                                       )
                                     : Text(
-                                        'Resend OTP',
+                                        loc.resendOtp,
                                         style: TextStyle(
                                           fontSize: isSmallScreen ? 12 : 14,
                                           fontWeight: FontWeight.bold,
@@ -423,7 +402,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Your OTP is valid for 5 minutes and can only be used once.',
+                          loc.otpValidFor,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 11 : 13,
                             color: Colors.white.withValues(alpha: 0.9),
@@ -438,7 +417,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 
                 // Footer
                 Text(
-                  'Secure verification powered by AI',
+                  loc.secureVerification,
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.white.withValues(alpha: 0.7),

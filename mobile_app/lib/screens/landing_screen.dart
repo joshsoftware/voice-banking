@@ -8,22 +8,12 @@ class LandingScreen extends StatefulWidget {
 
   @override
   State<LandingScreen> createState() => _LandingScreenState();
-
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _LandingScreenState? state =
-    context.findAncestorStateOfType<_LandingScreenState>();
-    state?.setLocale(newLocale);
-  }
 }
 
 class _LandingScreenState extends State<LandingScreen> {
   final _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-
-  void setLocale(Locale locale) {
-    setState(() {});
-  }
 
   void _submitNumber() async {
     if (!_formKey.currentState!.validate()) return;
@@ -61,10 +51,10 @@ class _LandingScreenState extends State<LandingScreen> {
 
   String? _validateMobile(String? value) {
     if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context)!.loginPrompt;
+      return AppLocalizations.of(context)!.pleaseEnterValidMobile;
     }
     if (value.length < 10) {
-      return 'Please enter a valid 10-digit mobile number';
+      return AppLocalizations.of(context)!.pleaseEnterValidMobile;
     }
     return null;
   }
@@ -78,15 +68,7 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        // title: Text(
-        //   loc.appTitle,
-        //   style: const TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     color: Colors.white,
-        //   ),
-        // ),
         backgroundColor: const Color(0xFF667eea),
-        // elevation: 0,
         actions: [LanguageToggleWidget()],
       ),
       body: Container(
@@ -99,7 +81,6 @@ class _LandingScreenState extends State<LandingScreen> {
               const Color(0xFF667eea), // Soft blue-purple
               const Color(0xFF764ba2), // Purple
               const Color(0xFFf093fb), // Pink
-              //const Color(0xFFf5576c), // Coral
             ],
             stops: const [0.0, 0.3, 0.7, 1.0],
           ),
@@ -111,27 +92,34 @@ class _LandingScreenState extends State<LandingScreen> {
                 padding: EdgeInsets.all(isSmallScreen ? 16.0 : 24.0),
                 child: Column(
                   children: [
-                    //SizedBox(height: isSmallScreen ? 10 : 20),
-                    
                     // App Logo/Icon
-                    Container(
-                      width: isSmallScreen ? 70 : 100,
-                      height: isSmallScreen ? 70 : 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(isSmallScreen ? 35 : 50),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
+                    Center(
+                      child: Container(
+                        width: isSmallScreen ? 80 : 120,
+                        height: isSmallScreen ? 80 : 120,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(isSmallScreen ? 40 : 60),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.8),
+                              blurRadius: 1,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.account_balance,
+                            size: isSmallScreen ? 40 : 60,
+                            color: const Color(0xFF667eea),
                           ),
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.account_balance,
-                        size: isSmallScreen ? 35 : 50,
-                        color: Colors.blue,
+                        ),
                       ),
                     ),
                     
@@ -139,7 +127,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     
                     // Welcome Text
                     Text(
-                      'Welcome to',
+                      loc.welcomeTo,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 18 : 22,
                         fontWeight: FontWeight.w300,
@@ -150,7 +138,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     const SizedBox(height: 6),
                     
                     Text(
-                      'Lingo Voice Banking',
+                      loc.appTitle,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 22 : 28,
                         fontWeight: FontWeight.bold,
@@ -162,7 +150,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     const SizedBox(height: 12),
                     
                     Text(
-                      'Experience banking with the power of voice',
+                      loc.experienceBanking,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 13 : 15,
                         color: Colors.white.withValues(alpha: 0.9),
@@ -192,7 +180,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Enter Mobile Number',
+                              loc.enterMobileNumber,
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 16 : 18,
                                 fontWeight: FontWeight.bold,
@@ -203,7 +191,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             const SizedBox(height: 6),
                             
                             Text(
-                              'We\'ll send you an OTP to verify your number',
+                              loc.weWillSendOtp,
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 11 : 13,
                                 color: Colors.grey[600],
@@ -218,8 +206,8 @@ class _LandingScreenState extends State<LandingScreen> {
                               keyboardType: TextInputType.phone,
                               validator: _validateMobile,
                               decoration: InputDecoration(
-                                labelText: 'Mobile Number',
-                                hintText: 'Enter your 10-digit mobile number',
+                                labelText: loc.mobileNumber,
+                                hintText: loc.enterYourMobileNumber,
                                 prefixIcon: const Icon(Icons.phone, color: Colors.blue),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -273,7 +261,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                         ),
                                       )
                                     : Text(
-                                        'Send OTP',
+                                        loc.sendOtp,
                                         style: TextStyle(
                                           fontSize: isSmallScreen ? 13 : 15,
                                           fontWeight: FontWeight.bold,
@@ -300,7 +288,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         child: Column(
                           children: [
                             Text(
-                              'Why Choose Voice Banking?',
+                              loc.whyChooseVoiceBanking,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -315,15 +303,15 @@ class _LandingScreenState extends State<LandingScreen> {
                                 Expanded(
                                   child: _buildFeatureItem(
                                     Icons.mic,
-                                    'Voice Commands',
-                                    'Control with your voice',
+                                    loc.voiceCommands,
+                                    loc.controlWithVoice,
                                   ),
                                 ),
                                 Expanded(
                                   child: _buildFeatureItem(
                                     Icons.security,
-                                    'Secure',
-                                    'Bank-grade security',
+                                    loc.secure,
+                                    loc.bankGradeSecurity,
                                   ),
                                 ),
                               ],
@@ -336,15 +324,15 @@ class _LandingScreenState extends State<LandingScreen> {
                                 Expanded(
                                   child: _buildFeatureItem(
                                     Icons.language,
-                                    'Multi-language',
-                                    'Support for 10+ languages',
+                                    loc.multiLanguage,
+                                    loc.supportForLanguages,
                                   ),
                                 ),
                                 Expanded(
                                   child: _buildFeatureItem(
                                     Icons.speed,
-                                    'Fast',
-                                    'Quick transactions',
+                                    loc.fast,
+                                    loc.quickTransactions,
                                   ),
                                 ),
                               ],
@@ -358,7 +346,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     
                     // Footer
                     Text(
-                      'Powered by AI Technology',
+                      loc.poweredByAI,
                       style: TextStyle(
                         fontSize: 11,
                         color: Colors.white.withValues(alpha: 0.7),

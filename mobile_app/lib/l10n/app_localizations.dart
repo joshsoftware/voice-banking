@@ -206,6 +206,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logged out successfully!'**
   String get logoutSuccess;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back! 👋'**
+  String get welcomeBack;
+
+  /// No description provided for @voiceBankingDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Your voice banking dashboard'**
+  String get voiceBankingDashboard;
+
+  /// No description provided for @availableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Balance'**
+  String get availableBalance;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// No description provided for @voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get voice;
+
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stop;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @welcomeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to'**
+  String get welcomeTo;
+
+  /// No description provided for @experienceBanking.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience banking with the power of voice'**
+  String get experienceBanking;
+
+  /// No description provided for @enterMobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Mobile Number'**
+  String get enterMobileNumber;
+
+  /// No description provided for @weWillSendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll send you an OTP to verify your number'**
+  String get weWillSendOtp;
+
+  /// No description provided for @mobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Number'**
+  String get mobileNumber;
+
+  /// No description provided for @enterYourMobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your 10-digit mobile number'**
+  String get enterYourMobileNumber;
+
+  /// No description provided for @sendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get sendOtp;
+
+  /// No description provided for @pleaseEnterValidMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid 10-digit mobile number'**
+  String get pleaseEnterValidMobile;
+
+  /// No description provided for @verifyYourPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Your Phone'**
+  String get verifyYourPhone;
+
+  /// No description provided for @weHaveSentCode.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a 6-digit code to'**
+  String get weHaveSentCode;
+
+  /// No description provided for @enterVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Verification Code'**
+  String get enterVerificationCode;
+
+  /// No description provided for @enterSixDigitCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code sent to your phone'**
+  String get enterSixDigitCode;
+
+  /// No description provided for @verifyOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verifyOtp;
+
+  /// No description provided for @didntReceiveCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t receive the code? '**
+  String get didntReceiveCode;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String resendIn(Object seconds);
+
+  /// No description provided for @resendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP'**
+  String get resendOtp;
+
+  /// No description provided for @otpValidFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Your OTP is valid for 5 minutes and can only be used once.'**
+  String get otpValidFor;
+
+  /// No description provided for @secureVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure verification powered by AI'**
+  String get secureVerification;
+
+  /// No description provided for @otpVerifiedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ OTP verified successfully!'**
+  String get otpVerifiedSuccessfully;
+
+  /// No description provided for @invalidOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Invalid OTP, please try again'**
+  String get invalidOtp;
+
+  /// No description provided for @newOtpSent.
+  ///
+  /// In en, this message translates to:
+  /// **' New OTP sent to {mobileNumber}'**
+  String newOtpSent(Object mobileNumber);
+
+  /// No description provided for @pleaseEnterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the OTP'**
+  String get pleaseEnterOtp;
+
+  /// No description provided for @otpMustBeSixDigits.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP must be 6 digits'**
+  String get otpMustBeSixDigits;
+
+  /// No description provided for @whyChooseVoiceBanking.
+  ///
+  /// In en, this message translates to:
+  /// **'Why Choose Voice Banking?'**
+  String get whyChooseVoiceBanking;
+
+  /// No description provided for @voiceCommands.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Commands'**
+  String get voiceCommands;
+
+  /// No description provided for @controlWithVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Control with your voice'**
+  String get controlWithVoice;
+
+  /// No description provided for @secure.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure'**
+  String get secure;
+
+  /// No description provided for @bankGradeSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank-grade security'**
+  String get bankGradeSecurity;
+
+  /// No description provided for @multiLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-language'**
+  String get multiLanguage;
+
+  /// No description provided for @supportForLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Support for 10+ languages'**
+  String get supportForLanguages;
+
+  /// No description provided for @fast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get fast;
+
+  /// No description provided for @quickTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick transactions'**
+  String get quickTransactions;
+
+  /// No description provided for @poweredByAI.
+  ///
+  /// In en, this message translates to:
+  /// **'Powered by AI Technology'**
+  String get poweredByAI;
+
+  /// No description provided for @paymentInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment initiated 🚀'**
+  String get paymentInitiated;
+
+  /// No description provided for @viewAllTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'View all transactions'**
+  String get viewAllTransactions;
+
+  /// No description provided for @aiIsSpeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'AI is speaking…'**
+  String get aiIsSpeaking;
+
+  /// No description provided for @validationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get validationRequired;
+
+  /// No description provided for @validationEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get validationEmail;
+
+  /// No description provided for @validationPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get validationPhone;
+
+  /// No description provided for @validationOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid OTP'**
+  String get validationOtp;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
