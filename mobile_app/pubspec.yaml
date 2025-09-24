@@ -27,3 +27,6 @@ generate:
     arb-dir: lib/l10n
     template-arb-file: app_en.arb
     output-localization-file: app_localizations.dart
+
+# Version information for App Store
+version: 1.0.0+1
