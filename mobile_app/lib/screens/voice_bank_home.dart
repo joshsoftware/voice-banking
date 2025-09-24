@@ -60,7 +60,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     } else if (name == "pay_person") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Payment initiated 🚀"),
+          content: Text(AppLocalizations.of(context)!.paymentInitiated),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -122,7 +122,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
@@ -229,7 +229,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                     
                     // Welcome Message
                     Text(
-                      'Welcome back! 👋',
+                      AppLocalizations.of(context)!.welcomeBack,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 18 : 22,
                         fontWeight: FontWeight.w300,
@@ -240,7 +240,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                     const SizedBox(height: 8),
                     
                     Text(
-                      'Your voice banking dashboard',
+                      AppLocalizations.of(context)!.voiceBankingDashboard,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
                         color: Colors.white.withValues(alpha: 0.9),
@@ -317,7 +317,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Available Balance',
+                                AppLocalizations.of(context)!.availableBalance,
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.white.withValues(alpha: 0.8),
@@ -406,9 +406,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () => _showSnackBar('View all transactions'),
+                              onPressed: () => _showSnackBar(AppLocalizations.of(context)!.viewAllTransactions),
                               child: Text(
-                                'View All',
+                                AppLocalizations.of(context)!.viewAll,
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   fontWeight: FontWeight.bold,
@@ -469,7 +469,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Listening...',
+                          AppLocalizations.of(context)!.listening,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -487,7 +487,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Transcribing...',
+                          AppLocalizations.of(context)!.transcribing,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -517,7 +517,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                   color: Colors.white,
                 ),
                 label: Text(
-                  state is Listening ? 'Stop' : 'Voice',
+                  state is Listening ? AppLocalizations.of(context)!.stop : AppLocalizations.of(context)!.voice,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
