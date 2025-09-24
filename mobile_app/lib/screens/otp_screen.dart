@@ -136,36 +136,36 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text(
-          loc.appTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue[600],
-        elevation: 0,
+        // title: Text(
+        //   loc.appTitle,
+        //   style: const TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     color: Colors.white,
+        //   ),
+        // ),
+        backgroundColor: const Color(0xFF667eea),
+        //elevation: 0,
         actions: [LanguageToggleWidget()],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              Colors.blue[500]!,
-              Colors.blue[500]!,
-              Colors.grey[600]!,
+                   const Color(0xFF667eea),
+              const Color(0xFF667eea), // Soft blue-purple
+              const Color(0xFF764ba2), // Purple
+              const Color(0xFFf093fb), // Pink
+              //const Color(0xFFf5576c), // Coral
             ],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(isSmallScreen ? 16.0 : 24.0),
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),),
+        child: SingleChildScrollView(
+            padding: EdgeInsets.all(isSmallScreen ? 16.0 : 24.0),            
             child: Column(
               children: [
-                SizedBox(height: isSmallScreen ? 20 : 40),
+               // SizedBox(height: isSmallScreen ? 20 : 40),
                 
                 // Verification Icon
                 Container(
@@ -450,8 +450,7 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 

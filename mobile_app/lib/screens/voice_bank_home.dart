@@ -120,39 +120,46 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text(
-          loc.appTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue[600],
+        // title: Text(
+        //   loc.appTitle,
+        //   style: const TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     color: Colors.white,
+        //   ),
+        // ),
+        backgroundColor:const Color(0xFF667eea),
         elevation: 0,
         actions: [LanguageToggleWidget()],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              Colors.blue[600]!,
-              Colors.blue[400]!,
-              Colors.grey[50]!,
+              // const Color(0xFF667eea), // Soft blue-purple
+              // const Color(0xFF764ba2), // Purple
+              // const Color(0xFFf093fb), // Pink
+              // const Color(0xFFf5576c), // Coral
+              // const Color(0xFF4facfe), // Light blue
+                   const Color(0xFF667eea),
+                    const Color(0xFF667eea),
+              const Color(0xFF667eea), // Soft blue-purple
+              const Color(0xFF764ba2), // Purple
+              const Color(0xFFf093fb), // Pink
+              //const Color(0xFFf5576c), // Coral
             ],
-            stops: const [0.0, 0.2, 0.2],
+            stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
           ),
         ),
-        child: SafeArea(
-          child: Column(
+        child: SafeArea(          child: Column(
             children: [
               // Header Section
               Container(
-                padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                padding: isSmallScreen? EdgeInsets.fromLTRB(16, 0, 16, 16) : EdgeInsets.fromLTRB(24, 10, 24, 16),//EdgeInsets.all(isSmallScreen ? 16 : 20),
                 child: Column(
                   children: [
-                    SizedBox(height: isSmallScreen ? 10 : 20),
+                   // SizedBox(height: isSmallScreen ? 10 : 20),
                     
                     // Welcome Message
                     Text(
