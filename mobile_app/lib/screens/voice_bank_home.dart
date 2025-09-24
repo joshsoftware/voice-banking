@@ -261,71 +261,71 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                           ),
                         ),
                         
-                        SizedBox(height: isSmallScreen ? 20 : 24),
+                        SizedBox(height: isSmallScreen ? 10 : 14),
                         
                         // Quick Actions
-                        Text(
-                          'Quick Actions',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 18 : 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                          ),
-                        ),
+                        // Text(
+                        //   'Quick Actions',
+                        //   style: TextStyle(
+                        //     fontSize: isSmallScreen ? 18 : 20,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.grey[800],
+                        //   ),
+                        // ),
                         
-                        const SizedBox(height: 12),
+                       // const SizedBox(height: 12),
                         
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.send,
-                                'Send Money',
-                                Colors.blue,
-                                () => _showSnackBar('Send Money feature coming soon!'),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.qr_code_scanner,
-                                'Scan & Pay',
-                                Colors.purple,
-                                () => _showSnackBar('Scan & Pay feature coming soon!'),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.send,
+                        //         'Send Money',
+                        //         Colors.blue,
+                        //         () => _showSnackBar('Send Money feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 12),
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.qr_code_scanner,
+                        //         'Scan & Pay',
+                        //         Colors.purple,
+                        //         () => _showSnackBar('Scan & Pay feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         
-                        const SizedBox(height: 12),
+                        //const SizedBox(height: 12),
                         
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.account_balance,
-                                'Pay Bills',
-                                Colors.orange,
-                                () => _showSnackBar('Pay Bills feature coming soon!'),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.history,
-                                'Transaction History',
-                                Colors.teal,
-                                () => _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.account_balance,
+                        //         'Pay Bills',
+                        //         Colors.orange,
+                        //         () => _showSnackBar('Pay Bills feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 12),
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.history,
+                        //         'Transaction History',
+                        //         Colors.teal,
+                        //         () => _scrollController.animateTo(
+                        //           _scrollController.position.maxScrollExtent,
+                        //           duration: const Duration(seconds: 1),
+                        //           curve: Curves.easeInOut,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         
-                        SizedBox(height: isSmallScreen ? 24 : 30),
+                       // SizedBox(height: isSmallScreen ? 24 : 30),
                         
                         // Recent Transactions Header
                         Row(
