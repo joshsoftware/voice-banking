@@ -9,16 +9,16 @@ class AppLocalizationsMr extends AppLocalizations {
   AppLocalizationsMr([String locale = 'mr']) : super(locale);
 
   @override
-  String get appTitle => 'लिंगो व्हॉईस बँकिंग';
+  String get appTitle => 'लिंगो व्हॉइस बँकिंग';
 
   @override
-  String get loginPrompt => 'तुमचा मोबाइल क्रमांक टाका';
+  String get loginPrompt => 'आपला मोबाइल नंबर प्रविष्ट करा';
 
   @override
-  String get otpPrompt => 'OTP टाका';
+  String get otpPrompt => 'OTP प्रविष्ट करा';
 
   @override
-  String get micHint => 'बोलण्यासाठी माईक्रोफोनवर टॅप करा';
+  String get micHint => 'बोलण्यासाठी माइक टॅप करा';
 
   @override
   String get listening => 'ऐकत आहे...';
@@ -27,179 +27,179 @@ class AppLocalizationsMr extends AppLocalizations {
   String get transcribing => 'लिहित आहे...';
 
   @override
-  String get executing => 'तुमची विनंती प्रक्रिया केली जात आहे...';
+  String get executing => 'आपली विनंती प्रक्रिया करत आहे...';
 
   @override
-  String get otpSuccess => 'OTP यशस्वीरित्या तपासले!';
+  String get otpSuccess => 'OTP यशस्वीरित्या सत्यापित!';
 
   @override
   String balanceResponse(Object amount) {
-    return 'तुमचे चालू शिल्लक $amount रुपये आहे.';
+    return 'आपला सध्याचा बॅलन्स $amount रुपये आहे.';
   }
 
   @override
   String get failedIntent => 'माफ करा, मला ते समजले नाही.';
 
   @override
-  String get recTxns => 'अलीकडचे व्यवहार';
+  String get recTxns => 'अलीकडील व्यवहार';
 
   @override
-  String get curBalance => 'उपलब्ध शिल्लक';
+  String get curBalance => 'उपलब्ध बॅलन्स';
 
   @override
-  String get msgNoTransactionFound => 'No transactions found.';
+  String get msgNoTransactionFound => 'कोणतेही व्यवहार सापडले नाहीत.';
 
   @override
-  String get logout => 'Logout';
+  String get logout => 'लॉग आउट';
 
   @override
-  String get logoutConfirm => 'Are you sure you want to logout?';
+  String get logoutConfirm => 'तुम्हाला खरोखर लॉग आउट करायचे आहे?';
 
   @override
-  String get logoutSuccess => 'Logged out successfully!';
+  String get logoutSuccess => 'यशस्वीरित्या लॉग आउट झाले!';
 
   @override
-  String get welcomeBack => 'Welcome back! 👋';
+  String get welcomeBack => 'पुन्हा स्वागत! 👋';
 
   @override
-  String get voiceBankingDashboard => 'Your voice banking dashboard';
+  String get voiceBankingDashboard => 'तुमचे व्हॉइस बँकिंग डॅशबोर्ड';
 
   @override
-  String get availableBalance => 'Available Balance';
+  String get availableBalance => 'उपलब्ध बॅलन्स';
 
   @override
-  String get viewAll => 'View All';
+  String get viewAll => 'सर्व पहा';
 
   @override
-  String get voice => 'Voice';
+  String get voice => 'व्हॉइस';
 
   @override
-  String get stop => 'Stop';
+  String get stop => 'थांबवा';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'रद्द करा';
 
   @override
-  String get welcomeTo => 'Welcome to';
+  String get welcomeTo => 'स्वागत';
 
   @override
-  String get experienceBanking => 'Experience banking with the power of voice';
+  String get experienceBanking => 'व्हॉइसच्या शक्तीने बँकिंगचा अनुभव घ्या';
 
   @override
-  String get enterMobileNumber => 'Enter Mobile Number';
+  String get enterMobileNumber => 'मोबाइल नंबर प्रविष्ट करा';
 
   @override
-  String get weWillSendOtp => 'We\'ll send you an OTP to verify your number';
+  String get weWillSendOtp => 'तुमचा नंबर सत्यापित करण्यासाठी आम्ही तुम्हाला OTP पाठवू';
 
   @override
-  String get mobileNumber => 'Mobile Number';
+  String get mobileNumber => 'मोबाइल नंबर';
 
   @override
-  String get enterYourMobileNumber => 'Enter your 10-digit mobile number';
+  String get enterYourMobileNumber => 'तुमचा 10-अंकी मोबाइल नंबर प्रविष्ट करा';
 
   @override
-  String get sendOtp => 'Send OTP';
+  String get sendOtp => 'OTP पाठवा';
 
   @override
-  String get pleaseEnterValidMobile => 'Please enter a valid 10-digit mobile number';
+  String get pleaseEnterValidMobile => 'कृपया वैध 10-अंकी मोबाइल नंबर प्रविष्ट करा';
 
   @override
-  String get verifyYourPhone => 'Verify Your Phone';
+  String get verifyYourPhone => 'तुमचा फोन सत्यापित करा';
 
   @override
-  String get weHaveSentCode => 'We\'ve sent a 6-digit code to';
+  String get weHaveSentCode => 'आम्ही तुमच्या फोनवर 6-अंकी कोड पाठवला आहे';
 
   @override
-  String get enterVerificationCode => 'Enter Verification Code';
+  String get enterVerificationCode => 'सत्यापन कोड प्रविष्ट करा';
 
   @override
-  String get enterSixDigitCode => 'Enter the 6-digit code sent to your phone';
+  String get enterSixDigitCode => 'तुमच्या फोनवर पाठवलेला 6-अंकी कोड प्रविष्ट करा';
 
   @override
-  String get verifyOtp => 'Verify OTP';
+  String get verifyOtp => 'OTP सत्यापित करा';
 
   @override
-  String get didntReceiveCode => 'Didn\'t receive the code? ';
+  String get didntReceiveCode => 'कोड मिळाला नाही? ';
 
   @override
   String resendIn(Object seconds) {
-    return 'Resend in ${seconds}s';
+    return '$seconds सेकंदात पुन्हा पाठवा';
   }
 
   @override
-  String get resendOtp => 'Resend OTP';
+  String get resendOtp => 'OTP पुन्हा पाठवा';
 
   @override
-  String get otpValidFor => 'Your OTP is valid for 5 minutes and can only be used once.';
+  String get otpValidFor => 'तुमचा OTP 5 मिनिटांसाठी वैध आहे आणि फक्त एकदाच वापरला जाऊ शकतो.';
 
   @override
-  String get secureVerification => 'Secure verification powered by AI';
+  String get secureVerification => 'AI द्वारे चालविलेले सुरक्षित सत्यापन';
 
   @override
-  String get otpVerifiedSuccessfully => '✅ OTP verified successfully!';
+  String get otpVerifiedSuccessfully => '✅ OTP यशस्वीरित्या सत्यापित!';
 
   @override
-  String get invalidOtp => '❌ Invalid OTP, please try again';
+  String get invalidOtp => '❌ अवैध OTP, कृपया पुन्हा प्रयत्न करा';
 
   @override
   String newOtpSent(Object mobileNumber) {
-    return ' New OTP sent to $mobileNumber';
+    return ' नवीन OTP $mobileNumber वर पाठवला';
   }
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP';
+  String get pleaseEnterOtp => 'कृपया OTP प्रविष्ट करा';
 
   @override
-  String get otpMustBeSixDigits => 'OTP must be 6 digits';
+  String get otpMustBeSixDigits => 'OTP 6 अंकांचा असावा';
 
   @override
-  String get whyChooseVoiceBanking => 'Why Choose Voice Banking?';
+  String get whyChooseVoiceBanking => 'व्हॉइस बँकिंग का निवडा?';
 
   @override
-  String get voiceCommands => 'Voice Commands';
+  String get voiceCommands => 'व्हॉइस कमांड';
 
   @override
-  String get controlWithVoice => 'Control with your voice';
+  String get controlWithVoice => 'तुमच्या व्हॉइसने नियंत्रित करा';
 
   @override
-  String get secure => 'Secure';
+  String get secure => 'सुरक्षित';
 
   @override
-  String get bankGradeSecurity => 'Bank-grade security';
+  String get bankGradeSecurity => 'बँक-ग्रेड सुरक्षा';
 
   @override
-  String get multiLanguage => 'Multi-language';
+  String get multiLanguage => 'बहुभाषी';
 
   @override
-  String get supportForLanguages => 'Support for 10+ languages';
+  String get supportForLanguages => '10+ भाषांचे समर्थन';
 
   @override
-  String get fast => 'Fast';
+  String get fast => 'वेगवान';
 
   @override
-  String get quickTransactions => 'Quick transactions';
+  String get quickTransactions => 'द्रुत व्यवहार';
 
   @override
-  String get poweredByAI => 'Powered by AI Technology';
+  String get poweredByAI => 'AI तंत्रज्ञानाने चालविलेले';
 
   @override
-  String get paymentInitiated => 'Payment initiated 🚀';
+  String get paymentInitiated => 'पेमेंट सुरू केले 🚀';
 
   @override
-  String get viewAllTransactions => 'View all transactions';
+  String get viewAllTransactions => 'सर्व व्यवहार पहा';
 
   @override
-  String get aiIsSpeaking => 'AI is speaking…';
+  String get aiIsSpeaking => 'AI बोलत आहे…';
 
   @override
-  String get validationRequired => 'This field is required';
+  String get validationRequired => 'हे फील्ड आवश्यक आहे';
 
   @override
-  String get validationEmail => 'Please enter a valid email';
+  String get validationEmail => 'कृपया वैध ईमेल प्रविष्ट करा';
 
   @override
-  String get validationPhone => 'Please enter a valid phone number';
+  String get validationPhone => 'कृपया वैध फोन नंबर प्रविष्ट करा';
 
   @override
-  String get validationOtp => 'Please enter a valid OTP';
+  String get validationOtp => 'कृपया वैध OTP प्रविष्ट करा';
 }

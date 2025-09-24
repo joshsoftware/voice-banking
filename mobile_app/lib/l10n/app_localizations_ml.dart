@@ -47,159 +47,159 @@ class AppLocalizationsMl extends AppLocalizations {
   String get curBalance => 'ലഭ്യമായ ബാലൻസ്';
 
   @override
-  String get msgNoTransactionFound => 'No transactions found.';
+  String get msgNoTransactionFound => 'ഇടപാടുകൾ കണ്ടെത്തിയില്ല.';
 
   @override
-  String get logout => 'Logout';
+  String get logout => 'ലോഗ് ഔട്ട്';
 
   @override
-  String get logoutConfirm => 'Are you sure you want to logout?';
+  String get logoutConfirm => 'നിങ്ങൾക്ക് ശരിക്കും ലോഗ് ഔട്ട് ചെയ്യണോ?';
 
   @override
-  String get logoutSuccess => 'Logged out successfully!';
+  String get logoutSuccess => 'വിജയകരമായി ലോഗ് ഔട്ട് ചെയ്തു!';
 
   @override
-  String get welcomeBack => 'Welcome back! 👋';
+  String get welcomeBack => 'വീണ്ടും സ്വാഗതം! ';
 
   @override
-  String get voiceBankingDashboard => 'Your voice banking dashboard';
+  String get voiceBankingDashboard => 'നിങ്ങളുടെ വോയ്സ് ബാങ്കിംഗ് ഡാഷ്‌ബോർഡ്';
 
   @override
-  String get availableBalance => 'Available Balance';
+  String get availableBalance => 'ലഭ്യമായ ബാലൻസ്';
 
   @override
-  String get viewAll => 'View All';
+  String get viewAll => 'എല്ലാം കാണുക';
 
   @override
-  String get voice => 'Voice';
+  String get voice => 'വോയ്സ്';
 
   @override
-  String get stop => 'Stop';
+  String get stop => 'നിർത്തുക';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'റദ്ദാക്കുക';
 
   @override
-  String get welcomeTo => 'Welcome to';
+  String get welcomeTo => 'സ്വാഗതം';
 
   @override
-  String get experienceBanking => 'Experience banking with the power of voice';
+  String get experienceBanking => 'വോയ്സിന്റെ ശക്തിയിൽ ബാങ്കിംഗ് അനുഭവിക്കുക';
 
   @override
-  String get enterMobileNumber => 'Enter Mobile Number';
+  String get enterMobileNumber => 'മൊബൈൽ നമ്പർ നൽകുക';
 
   @override
-  String get weWillSendOtp => 'We\'ll send you an OTP to verify your number';
+  String get weWillSendOtp => 'നിങ്ങളുടെ നമ്പർ പരിശോധിക്കാൻ ഞങ്ങൾ നിങ്ങൾക്ക് OTP അയയ്ക്കും';
 
   @override
-  String get mobileNumber => 'Mobile Number';
+  String get mobileNumber => 'മൊബൈൽ നമ്പർ';
 
   @override
-  String get enterYourMobileNumber => 'Enter your 10-digit mobile number';
+  String get enterYourMobileNumber => 'നിങ്ങളുടെ 10-അക്ക മൊബൈൽ നമ്പർ നൽകുക';
 
   @override
-  String get sendOtp => 'Send OTP';
+  String get sendOtp => 'OTP അയയ്ക്കുക';
 
   @override
-  String get pleaseEnterValidMobile => 'Please enter a valid 10-digit mobile number';
+  String get pleaseEnterValidMobile => 'ദയവായി സാധുവായ 10-അക്ക മൊബൈൽ നമ്പർ നൽകുക';
 
   @override
-  String get verifyYourPhone => 'Verify Your Phone';
+  String get verifyYourPhone => 'നിങ്ങളുടെ ഫോൺ പരിശോധിക്കുക';
 
   @override
-  String get weHaveSentCode => 'We\'ve sent a 6-digit code to';
+  String get weHaveSentCode => 'ഞങ്ങൾ നിങ്ങളുടെ ഫോണിൽ 6-അക്ക കോഡ് അയച്ചിട്ടുണ്ട്';
 
   @override
-  String get enterVerificationCode => 'Enter Verification Code';
+  String get enterVerificationCode => 'പരിശോധന കോഡ് നൽകുക';
 
   @override
-  String get enterSixDigitCode => 'Enter the 6-digit code sent to your phone';
+  String get enterSixDigitCode => 'നിങ്ങളുടെ ഫോണിൽ അയച്ച 6-അക്ക കോഡ് നൽകുക';
 
   @override
-  String get verifyOtp => 'Verify OTP';
+  String get verifyOtp => 'OTP പരിശോധിക്കുക';
 
   @override
-  String get didntReceiveCode => 'Didn\'t receive the code? ';
+  String get didntReceiveCode => 'കോഡ് ലഭിച്ചില്ല? ';
 
   @override
   String resendIn(Object seconds) {
-    return 'Resend in ${seconds}s';
+    return '$seconds സെക്കൻഡിൽ വീണ്ടും അയയ്ക്കുക';
   }
 
   @override
-  String get resendOtp => 'Resend OTP';
+  String get resendOtp => 'OTP വീണ്ടും അയയ്ക്കുക';
 
   @override
-  String get otpValidFor => 'Your OTP is valid for 5 minutes and can only be used once.';
+  String get otpValidFor => 'നിങ്ങളുടെ OTP 5 മിനിറ്റ് സാധുവാണ്, ഒരു തവണ മാത്രം ഉപയോഗിക്കാം.';
 
   @override
-  String get secureVerification => 'Secure verification powered by AI';
+  String get secureVerification => 'AI ഉപയോഗിച്ച് സുരക്ഷിത പരിശോധന';
 
   @override
-  String get otpVerifiedSuccessfully => '✅ OTP verified successfully!';
+  String get otpVerifiedSuccessfully => '✅ OTP വിജയകരമായി പരിശോധിച്ചു!';
 
   @override
-  String get invalidOtp => '❌ Invalid OTP, please try again';
+  String get invalidOtp => '❌ അസാധുവായ OTP, ദയവായി വീണ്ടും ശ്രമിക്കുക';
 
   @override
   String newOtpSent(Object mobileNumber) {
-    return ' New OTP sent to $mobileNumber';
+    return ' പുതിയ OTP $mobileNumber ലേക്ക് അയച്ചു';
   }
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP';
+  String get pleaseEnterOtp => 'ദയവായി OTP നൽകുക';
 
   @override
-  String get otpMustBeSixDigits => 'OTP must be 6 digits';
+  String get otpMustBeSixDigits => 'OTP 6 അക്കങ്ങളായിരിക്കണം';
 
   @override
-  String get whyChooseVoiceBanking => 'Why Choose Voice Banking?';
+  String get whyChooseVoiceBanking => 'വോയ്സ് ബാങ്കിംഗ് എന്തുകൊണ്ട് തിരഞ്ഞെടുക്കണം?';
 
   @override
-  String get voiceCommands => 'Voice Commands';
+  String get voiceCommands => 'വോയ്സ് കമാൻഡുകൾ';
 
   @override
-  String get controlWithVoice => 'Control with your voice';
+  String get controlWithVoice => 'നിങ്ങളുടെ വോയ്സ് ഉപയോഗിച്ച് നിയന്ത്രിക്കുക';
 
   @override
-  String get secure => 'Secure';
+  String get secure => 'സുരക്ഷിതം';
 
   @override
-  String get bankGradeSecurity => 'Bank-grade security';
+  String get bankGradeSecurity => 'ബാങ്ക്-ഗ്രേഡ് സുരക്ഷ';
 
   @override
-  String get multiLanguage => 'Multi-language';
+  String get multiLanguage => 'ബഹുഭാഷാ';
 
   @override
-  String get supportForLanguages => 'Support for 10+ languages';
+  String get supportForLanguages => '10+ ഭാഷകൾക്ക് പിന്തുണ';
 
   @override
-  String get fast => 'Fast';
+  String get fast => 'വേഗതയുള്ള';
 
   @override
-  String get quickTransactions => 'Quick transactions';
+  String get quickTransactions => 'വേഗത്തിലുള്ള ഇടപാടുകൾ';
 
   @override
-  String get poweredByAI => 'Powered by AI Technology';
+  String get poweredByAI => 'AI സാങ്കേതികവിദ്യയാൽ പ്രവർത്തിക്കുന്നു';
 
   @override
-  String get paymentInitiated => 'Payment initiated 🚀';
+  String get paymentInitiated => 'പേയ്‌മെന്റ് ആരംഭിച്ചു ';
 
   @override
-  String get viewAllTransactions => 'View all transactions';
+  String get viewAllTransactions => 'എല്ലാ ഇടപാടുകളും കാണുക';
 
   @override
-  String get aiIsSpeaking => 'AI is speaking…';
+  String get aiIsSpeaking => 'AI സംസാരിക്കുന്നു…';
 
   @override
-  String get validationRequired => 'This field is required';
+  String get validationRequired => 'ഈ ഫീൽഡ് ആവശ്യമാണ്';
 
   @override
-  String get validationEmail => 'Please enter a valid email';
+  String get validationEmail => 'ദയവായി സാധുവായ ഇമെയിൽ നൽകുക';
 
   @override
-  String get validationPhone => 'Please enter a valid phone number';
+  String get validationPhone => 'ദയവായി സാധുവായ ഫോൺ നമ്പർ നൽകുക';
 
   @override
-  String get validationOtp => 'Please enter a valid OTP';
+  String get validationOtp => 'ദയവായി സാധുവായ OTP നൽകുക';
 }

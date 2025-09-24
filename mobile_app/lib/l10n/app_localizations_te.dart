@@ -12,22 +12,22 @@ class AppLocalizationsTe extends AppLocalizations {
   String get appTitle => 'లింగో వాయిస్ బ్యాంకింగ్';
 
   @override
-  String get loginPrompt => 'మీ మొబైల్ నంబర్ నమోదు చేయండి';
+  String get loginPrompt => 'మీ మొబైల్ నంబర్‌ను నమోదు చేయండి';
 
   @override
   String get otpPrompt => 'OTP నమోదు చేయండి';
 
   @override
-  String get micHint => 'మాట్లాడటానికి మైక్‌పై నొక్కండి';
+  String get micHint => 'మాట్లాడడానికి మైక్‌ను ట్యాప్ చేయండి';
 
   @override
-  String get listening => 'వింటున్నాం...';
+  String get listening => 'వింటోంది...';
 
   @override
-  String get transcribing => 'ట్రాన్స్క్రిప్షన్ జరుగుతోంది...';
+  String get transcribing => 'రాస్తోంది...';
 
   @override
-  String get executing => 'మీ అభ్యర్థన ప్రాసెస్ అవుతోంది...';
+  String get executing => 'మీ అభ్యర్థనను ప్రాసెస్ చేస్తోంది...';
 
   @override
   String get otpSuccess => 'OTP విజయవంతంగా ధృవీకరించబడింది!';
@@ -38,7 +38,7 @@ class AppLocalizationsTe extends AppLocalizations {
   }
 
   @override
-  String get failedIntent => 'క్షమించండి, నేను అర్థం చేసుకోలేకపోయాను.';
+  String get failedIntent => 'క్షమించండి, నాకు అది అర్థం కాలేదు.';
 
   @override
   String get recTxns => 'ఇటీవలి లావాదేవీలు';
@@ -47,159 +47,159 @@ class AppLocalizationsTe extends AppLocalizations {
   String get curBalance => 'అందుబాటులో ఉన్న బ్యాలెన్స్';
 
   @override
-  String get msgNoTransactionFound => 'No transactions found.';
+  String get msgNoTransactionFound => 'లావాదేవీలు ఏవీ కనుగొనబడలేదు.';
 
   @override
-  String get logout => 'Logout';
+  String get logout => 'లాగ్ అవుట్';
 
   @override
-  String get logoutConfirm => 'Are you sure you want to logout?';
+  String get logoutConfirm => 'మీరు నిజంగా లాగ్ అవుట్ చేయాలనుకుంటున్నారా?';
 
   @override
-  String get logoutSuccess => 'Logged out successfully!';
+  String get logoutSuccess => 'విజయవంతంగా లాగ్ అవుట్ అయ్యింది!';
 
   @override
-  String get welcomeBack => 'Welcome back! 👋';
+  String get welcomeBack => 'మళ్లీ స్వాగతం! 👋';
 
   @override
-  String get voiceBankingDashboard => 'Your voice banking dashboard';
+  String get voiceBankingDashboard => 'మీ వాయిస్ బ్యాంకింగ్ డాష్‌బోర్డ్';
 
   @override
-  String get availableBalance => 'Available Balance';
+  String get availableBalance => 'అందుబాటులో ఉన్న బ్యాలెన్స్';
 
   @override
-  String get viewAll => 'View All';
+  String get viewAll => 'అన్నీ చూడండి';
 
   @override
-  String get voice => 'Voice';
+  String get voice => 'వాయిస్';
 
   @override
-  String get stop => 'Stop';
+  String get stop => 'ఆపు';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'రద్దు చేయి';
 
   @override
-  String get welcomeTo => 'Welcome to';
+  String get welcomeTo => 'స్వాగతం';
 
   @override
-  String get experienceBanking => 'Experience banking with the power of voice';
+  String get experienceBanking => 'వాయిస్ శక్తితో బ్యాంకింగ్‌ను అనుభవించండి';
 
   @override
-  String get enterMobileNumber => 'Enter Mobile Number';
+  String get enterMobileNumber => 'మొబైల్ నంబర్‌ను నమోదు చేయండి';
 
   @override
-  String get weWillSendOtp => 'We\'ll send you an OTP to verify your number';
+  String get weWillSendOtp => 'మీ నంబర్‌ను ధృవీకరించడానికి మేము మీకు OTP పంపుతాము';
 
   @override
-  String get mobileNumber => 'Mobile Number';
+  String get mobileNumber => 'మొబైల్ నంబర్';
 
   @override
-  String get enterYourMobileNumber => 'Enter your 10-digit mobile number';
+  String get enterYourMobileNumber => 'మీ 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి';
 
   @override
-  String get sendOtp => 'Send OTP';
+  String get sendOtp => 'OTP పంపండి';
 
   @override
-  String get pleaseEnterValidMobile => 'Please enter a valid 10-digit mobile number';
+  String get pleaseEnterValidMobile => 'దయచేసి చెల్లుబాటు అయ్యే 10-అంకెల మొబైల్ నంబర్‌ను నమోదు చేయండి';
 
   @override
-  String get verifyYourPhone => 'Verify Your Phone';
+  String get verifyYourPhone => 'మీ ఫోన్‌ను ధృవీకరించండి';
 
   @override
-  String get weHaveSentCode => 'We\'ve sent a 6-digit code to';
+  String get weHaveSentCode => 'మేము మీ ఫోన్‌కు 6-అంకెల కోడ్‌ను పంపాము';
 
   @override
-  String get enterVerificationCode => 'Enter Verification Code';
+  String get enterVerificationCode => 'ధృవీకరణ కోడ్‌ను నమోదు చేయండి';
 
   @override
-  String get enterSixDigitCode => 'Enter the 6-digit code sent to your phone';
+  String get enterSixDigitCode => 'మీ ఫోన్‌కు పంపిన 6-అంకెల కోడ్‌ను నమోదు చేయండి';
 
   @override
-  String get verifyOtp => 'Verify OTP';
+  String get verifyOtp => 'OTP ధృవీకరించండి';
 
   @override
-  String get didntReceiveCode => 'Didn\'t receive the code? ';
+  String get didntReceiveCode => 'కోడ్ రాలేదా? ';
 
   @override
   String resendIn(Object seconds) {
-    return 'Resend in ${seconds}s';
+    return '$seconds సెకన్లలో మళ్లీ పంపండి';
   }
 
   @override
-  String get resendOtp => 'Resend OTP';
+  String get resendOtp => 'OTP మళ్లీ పంపండి';
 
   @override
-  String get otpValidFor => 'Your OTP is valid for 5 minutes and can only be used once.';
+  String get otpValidFor => 'మీ OTP 5 నిమిషాలకు చెల్లుబాటు అవుతుంది మరియు ఒకసారి మాత్రమే ఉపయోగించవచ్చు.';
 
   @override
-  String get secureVerification => 'Secure verification powered by AI';
+  String get secureVerification => 'AI ద్వారా నడపబడే సురక్షిత ధృవీకరణ';
 
   @override
-  String get otpVerifiedSuccessfully => '✅ OTP verified successfully!';
+  String get otpVerifiedSuccessfully => '✅ OTP విజయవంతంగా ధృవీకరించబడింది!';
 
   @override
-  String get invalidOtp => '❌ Invalid OTP, please try again';
+  String get invalidOtp => '❌ చెల్లని OTP, దయచేసి మళ్లీ ప్రయత్నించండి';
 
   @override
   String newOtpSent(Object mobileNumber) {
-    return ' New OTP sent to $mobileNumber';
+    return ' కొత్త OTP $mobileNumber కు పంపబడింది';
   }
 
   @override
-  String get pleaseEnterOtp => 'Please enter the OTP';
+  String get pleaseEnterOtp => 'దయచేసి OTP నమోదు చేయండి';
 
   @override
-  String get otpMustBeSixDigits => 'OTP must be 6 digits';
+  String get otpMustBeSixDigits => 'OTP 6 అంకెలుగా ఉండాలి';
 
   @override
-  String get whyChooseVoiceBanking => 'Why Choose Voice Banking?';
+  String get whyChooseVoiceBanking => 'వాయిస్ బ్యాంకింగ్‌ను ఎందుకు ఎంచుకోవాలి?';
 
   @override
-  String get voiceCommands => 'Voice Commands';
+  String get voiceCommands => 'వాయిస్ కమాండ్‌లు';
 
   @override
-  String get controlWithVoice => 'Control with your voice';
+  String get controlWithVoice => 'మీ వాయిస్‌తో నియంత్రించండి';
 
   @override
-  String get secure => 'Secure';
+  String get secure => 'సురక్షిత';
 
   @override
-  String get bankGradeSecurity => 'Bank-grade security';
+  String get bankGradeSecurity => 'బ్యాంక్-గ్రేడ్ సురక్ష';
 
   @override
-  String get multiLanguage => 'Multi-language';
+  String get multiLanguage => 'బహుభాషా';
 
   @override
-  String get supportForLanguages => 'Support for 10+ languages';
+  String get supportForLanguages => '10+ భాషలకు మద్దతు';
 
   @override
-  String get fast => 'Fast';
+  String get fast => 'వేగవంతమైన';
 
   @override
-  String get quickTransactions => 'Quick transactions';
+  String get quickTransactions => 'త్వరిత లావాదేవీలు';
 
   @override
-  String get poweredByAI => 'Powered by AI Technology';
+  String get poweredByAI => 'AI సాంకేతికవిద్య ద్వారా నడపబడుతోంది';
 
   @override
-  String get paymentInitiated => 'Payment initiated 🚀';
+  String get paymentInitiated => 'చెల్లింపు ప్రారంభించబడింది ';
 
   @override
-  String get viewAllTransactions => 'View all transactions';
+  String get viewAllTransactions => 'అన్ని లావాదేవీలను చూడండి';
 
   @override
-  String get aiIsSpeaking => 'AI is speaking…';
+  String get aiIsSpeaking => 'AI మాట్లాడుతోంది…';
 
   @override
-  String get validationRequired => 'This field is required';
+  String get validationRequired => 'ఈ ఫీల్డ్ అవసరం';
 
   @override
-  String get validationEmail => 'Please enter a valid email';
+  String get validationEmail => 'దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి';
 
   @override
-  String get validationPhone => 'Please enter a valid phone number';
+  String get validationPhone => 'దయచేసి చెల్లుబాటు అయ్యే ఫోన్ నంబర్ నమోదు చేయండి';
 
   @override
-  String get validationOtp => 'Please enter a valid OTP';
+  String get validationOtp => 'దయచేసి చెల్లుబాటు అయ్యే OTP నమోదు చేయండి';
 }
