@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../models/transaction.dart';
+import 'shared_preferences_service.dart';
 
 class BankingAPI {
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000/bank/me"));
@@ -7,7 +8,14 @@ class BankingAPI {
       Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
 
   Future<double> getBalance() async {
-    final res = await dio.get("/balance");
+    final phone = SharedPreferencesService.getMobileNumber();
+    if (phone == null) {
+      throw Exception("Phone number not found in shared preferences");
+    }
+
+    final res = await dio.get("/balance", queryParameters: {
+      "phone": phone,
+    });
     return (res.data["balance"] as num).toDouble();
   }
 
@@ -55,27 +63,66 @@ class BankingAPI {
     String? endDate,
   }) async {
     try {
-      final queryParams = <String, dynamic>{
-        "customer_id": "985",
-        "phone": phone ?? "string",
-        "recipient": recipient ?? "string",
-        "category": category ?? "string",
-        "limit": limit ?? 9378,
-        "start_date": startDate ?? "string",
-        "end_date": endDate ?? "string",
-      };
+      // Use simplified endpoint for all cases when phone is provided
+      if (phone != null) {
+        final queryParams = <String, dynamic>{
+          "phone": phone,
+          "limit": limit ?? 50,
+        };
 
-      print("Making API call to /transactions with params: $queryParams");
-      final res = await dio.get("/transactions", queryParameters: queryParams);
-      print("API Response status: ${res.statusCode}");
-      print("API Response data: ${res.data}");
+        // Only add date parameters if they are not null
+        if (startDate != null) {
+          queryParams["start_date"] = startDate;
+        }
+        if (endDate != null) {
+          queryParams["end_date"] = endDate;
+        }
 
-      final List<dynamic> transactionsJson = res.data["transactions"];
-      print("Found ${transactionsJson.length} transactions in response");
+        print(
+            "Making API call to /transactions with simplified params: $queryParams");
+        final res =
+            await dio.get("/transactions", queryParameters: queryParams);
+        print("API Response status: ${res.statusCode}");
+        print("API Response data: ${res.data}");
 
-      return transactionsJson
-          .map((json) => Transaction.fromJson(json))
-          .toList();
+        final List<dynamic> transactionsJson = res.data["transactions"];
+        print("Found ${transactionsJson.length} transactions in response");
+
+        return transactionsJson
+            .map((json) => Transaction.fromJson(json))
+            .toList();
+      } else {
+        // Fallback for cases where phone is not provided (shouldn't happen in normal flow)
+        final queryParams = <String, dynamic>{
+          "customer_id": "985",
+          "phone": "string",
+          "recipient": recipient ?? "string",
+          "category": category ?? "string",
+          "limit": limit ?? 9378,
+        };
+
+        // Only add date parameters if they are not null
+        if (startDate != null) {
+          queryParams["start_date"] = startDate;
+        }
+        if (endDate != null) {
+          queryParams["end_date"] = endDate;
+        }
+
+        print(
+            "Making API call to /transactions with full params: $queryParams");
+        final res =
+            await dio.get("/transactions", queryParameters: queryParams);
+        print("API Response status: ${res.statusCode}");
+        print("API Response data: ${res.data}");
+
+        final List<dynamic> transactionsJson = res.data["transactions"];
+        print("Found ${transactionsJson.length} transactions in response");
+
+        return transactionsJson
+            .map((json) => Transaction.fromJson(json))
+            .toList();
+      }
     } catch (e) {
       print("Error in getTransactions: $e");
       throw Exception("Failed to fetch transactions: ${e.toString()}");

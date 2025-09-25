@@ -17,28 +17,46 @@ class TTSService {
   };
 
   TTSService() {
-    _tts.setSpeechRate(0.5);
-    _tts.setVolume(1.0);
-    _tts.setPitch(1.0);
+    _initializeTTS();
+  }
+
+  Future<void> _initializeTTS() async {
+    try {
+      // Wait for TTS to be ready
+      await _tts.awaitSpeakCompletion(true);
+      await _tts.setSpeechRate(0.5);
+      await _tts.setVolume(1.0);
+      await _tts.setPitch(1.0);
+      await _tts.setLanguage("en-IN");
+      print("TTS Initialized successfully");
+    } catch (e) {
+      print("TTS Initialization Error: $e");
+    }
   }
 
   Future<void> speak(String text, {String langCode = "en"}) async {
-    await _tts.stop();
+    try {
+      await _tts.stop();
 
-    // Pick mapped language if available, else fallback
-    String? targetLang = _langMap[langCode];
-    if (targetLang != null) {
-      try {
-        await _tts.setLanguage(targetLang);
-        await _tts.speak(text);
-        return;
-      } catch (e) {
-        // TTS failed for target language, falling back to English
+      // Pick mapped language if available, else fallback
+      String? targetLang = _langMap[langCode];
+      if (targetLang != null) {
+        try {
+          await _tts.setLanguage(targetLang);
+          await _tts.speak(text);
+          return;
+        } catch (e) {
+          print("TTS Language Error: $e");
+          // TTS failed for target language, falling back to English
+        }
       }
-    }
 
-    // Default fallback: English
-    await _tts.setLanguage("en-IN");
-    await _tts.speak("Sorry, responding in English. $text");
+      // Default fallback: English
+      await _tts.setLanguage("en-IN");
+      await _tts.speak(text);
+    } catch (e) {
+      print("TTS Speak Error: $e");
+      // If TTS completely fails, we'll just show the dialog without audio
+    }
   }
 }
