@@ -4,6 +4,9 @@ import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
 import '../bloc/voice_bloc.dart';
 import '../models/voice_intent.dart';
+import '../models/transaction.dart';
+import '../services/banking_api.dart';
+import '../services/shared_preferences_service.dart';
 import '../widgets/speaking_indicator.dart';
 
 class VoiceBankHome extends StatefulWidget {
@@ -14,27 +17,83 @@ class VoiceBankHome extends StatefulWidget {
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _VoiceBankHomeState? state =
-    context.findAncestorStateOfType<_VoiceBankHomeState>();
+        context.findAncestorStateOfType<_VoiceBankHomeState>();
     state?.setLocale(newLocale);
   }
 }
 
 class _VoiceBankHomeState extends State<VoiceBankHome> {
   final ScrollController _scrollController = ScrollController();
+  final BankingAPI _bankingAPI = BankingAPI();
   bool _highlightBalance = false;
+  List<Transaction> _transactions = [];
+  bool _isLoadingTransactions = true;
+  String? _balance;
 
-  // Mock data
-  final balance = "₹12,500.50";
-  final contacts = {"Ananya": "ananya@upi", "Rajiv": "rajiv@upi"};
-  final transactions = const [
-    {"date": "2025-01-15", "desc": "Amazon Purchase", "amount": "-₹1,200", "type": "debit", "category": "shopping"},
-    {"date": "2025-01-15", "desc": "Electricity Bill", "amount": "-₹2,500", "type": "debit", "category": "bills"},
-    {"date": "2025-01-14", "desc": "Salary Credit", "amount": "+₹50,000", "type": "credit", "category": "salary"},
-    {"date": "2025-01-13", "desc": "Swiggy Order", "amount": "-₹800", "type": "debit", "category": "food"},
-    {"date": "2025-01-12", "desc": "UPI Transfer", "amount": "-₹5,000", "type": "debit", "category": "transfer"},
-    {"date": "2025-01-11", "desc": "ATM Withdrawal", "amount": "-₹2,000", "type": "debit", "category": "cash"},
-    {"date": "2025-01-10", "desc": "Interest Credit", "amount": "+₹150", "type": "credit", "category": "interest"},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    await _loadBalance();
+    await _loadTransactions();
+  }
+
+  Future<void> _loadBalance() async {
+    try {
+      final mobileNumber = SharedPreferencesService.getMobileNumber();
+      if (mobileNumber != null) {
+        final result = await _bankingAPI.login(mobileNumber);
+        if (result["success"]) {
+          setState(() {
+            _balance = "₹${result["data"]["balance"]}";
+          });
+        }
+      }
+    } catch (e) {
+      print("Error loading balance: $e");
+    }
+  }
+
+  Future<void> _loadTransactions() async {
+    try {
+      setState(() {
+        _isLoadingTransactions = true;
+      });
+
+      final mobileNumber = SharedPreferencesService.getMobileNumber();
+      print("Loading transactions for mobile: $mobileNumber");
+
+      if (mobileNumber != null) {
+        final transactions = await _bankingAPI.getTransactions(
+          phone: mobileNumber,
+          limit: 5, // Load only top 5 for home screen
+        );
+
+        print("Loaded ${transactions.length} transactions");
+        for (var tx in transactions) {
+          print("Transaction: ${tx.merchant} - ${tx.amount} - ${tx.date}");
+        }
+
+        setState(() {
+          _transactions = transactions;
+          _isLoadingTransactions = false;
+        });
+      } else {
+        print("No mobile number found in shared preferences");
+        setState(() {
+          _isLoadingTransactions = false;
+        });
+      }
+    } catch (e) {
+      print("Error loading transactions: $e");
+      setState(() {
+        _isLoadingTransactions = false;
+      });
+    }
+  }
 
   void setLocale(Locale locale) {
     setState(() {});
@@ -63,7 +122,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           content: Text(AppLocalizations.of(context)!.paymentInitiated),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       );
     }
@@ -137,13 +197,17 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     );
 
     if (shouldLogout == true) {
+      // Clear shared preferences
+      await SharedPreferencesService.clearAll();
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.logoutSuccess),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       );
 
@@ -157,7 +221,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     final loc = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.height < 700;
-    
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -168,7 +232,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         //     color: Colors.white,
         //   ),
         // ),
-        backgroundColor:const Color(0xFF667eea),
+        backgroundColor: const Color(0xFF667eea),
         elevation: 0,
         actions: [
           LanguageToggleWidget(),
@@ -208,8 +272,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               // const Color(0xFFf093fb), // Pink
               // const Color(0xFFf5576c), // Coral
               // const Color(0xFF4facfe), // Light blue
-                   const Color(0xFF667eea),
-                    const Color(0xFF667eea),
+              const Color(0xFF667eea),
+              const Color(0xFF667eea),
               const Color(0xFF667eea), // Soft blue-purple
               const Color(0xFF764ba2), // Purple
               const Color(0xFFf093fb), // Pink
@@ -218,15 +282,19 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
           ),
         ),
-        child: SafeArea(          child: Column(
+        child: SafeArea(
+          child: Column(
             children: [
               // Header Section
               Container(
-                padding: isSmallScreen? EdgeInsets.fromLTRB(16, 0, 16, 16) : EdgeInsets.fromLTRB(24, 10, 24, 16),//EdgeInsets.all(isSmallScreen ? 16 : 20),
+                padding: isSmallScreen
+                    ? EdgeInsets.fromLTRB(16, 0, 16, 16)
+                    : EdgeInsets.fromLTRB(24, 10, 24,
+                        16), //EdgeInsets.all(isSmallScreen ? 16 : 20),
                 child: Column(
                   children: [
-                   // SizedBox(height: isSmallScreen ? 10 : 20),
-                    
+                    // SizedBox(height: isSmallScreen ? 10 : 20),
+
                     // Welcome Message
                     Text(
                       AppLocalizations.of(context)!.welcomeBack,
@@ -236,9 +304,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         color: Colors.white,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     Text(
                       AppLocalizations.of(context)!.voiceBankingDashboard,
                       style: TextStyle(
@@ -249,7 +317,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                   ],
                 ),
               ),
-              
+
               // Main Content
               Expanded(
                 child: Container(
@@ -301,14 +369,15 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                     style: TextStyle(
                                       fontSize: isSmallScreen ? 14 : 16,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.white.withValues(alpha: 0.9),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.9),
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                balance,
+                                _balance ?? "₹0.00",
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 28 : 36,
                                   fontWeight: FontWeight.bold,
@@ -326,9 +395,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                             ],
                           ),
                         ),
-                        
+
                         SizedBox(height: isSmallScreen ? 10 : 14),
-                        
+
                         // Quick Actions
                         // Text(
                         //   'Quick Actions',
@@ -338,9 +407,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         //     color: Colors.grey[800],
                         //   ),
                         // ),
-                        
-                       // const SizedBox(height: 12),
-                        
+
+                        // const SizedBox(height: 12),
+
                         // Row(
                         //   children: [
                         //     Expanded(
@@ -362,9 +431,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         //     ),
                         //   ],
                         // ),
-                        
+
                         //const SizedBox(height: 12),
-                        
+
                         // Row(
                         //   children: [
                         //     Expanded(
@@ -390,9 +459,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         //     ),
                         //   ],
                         // ),
-                        
-                       // SizedBox(height: isSmallScreen ? 24 : 30),
-                        
+
+                        // SizedBox(height: isSmallScreen ? 24 : 30),
+
                         // Recent Transactions Header
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -406,7 +475,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () => _showSnackBar(AppLocalizations.of(context)!.viewAllTransactions),
+                              onPressed: () => Navigator.pushNamed(
+                                  context, '/AllTransactions'),
                               child: Text(
                                 AppLocalizations.of(context)!.viewAll,
                                 style: TextStyle(
@@ -418,11 +488,32 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 12),
-                        
+
                         // Transactions List
-                        ...transactions.take(5).map((tx) => _buildTransactionItem(tx, isSmallScreen)),
+                        if (_isLoadingTransactions)
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        else if (_transactions.isEmpty)
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Text(
+                              AppLocalizations.of(context)!.noTransactionsFound,
+                              style: TextStyle(
+                                fontSize: isSmallScreen ? 14 : 16,
+                                color: Colors.grey[600],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        else
+                          ..._transactions.map(
+                              (tx) => _buildTransactionItem(tx, isSmallScreen)),
                       ],
                     ),
                   ),
@@ -432,7 +523,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           ),
         ),
       ),
-      
+
       // Enhanced Floating Action Button
       floatingActionButton: BlocBuilder<VoiceBloc, VoiceState>(
         builder: (context, state) {
@@ -443,7 +534,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               if (state is Listening || state is Transcribing)
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -482,7 +574,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                           height: 12,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blue),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -498,7 +591,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                     ],
                   ),
                 ),
-              
+
               // Main Voice Button
               FloatingActionButton.extended(
                 onPressed: () {
@@ -506,18 +599,22 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                   if (state is Idle) {
                     bloc.add(StartListening());
                   } else if (state is Listening) {
-                    bloc.add(StopListening(locale: Localizations.localeOf(context).languageCode));
+                    bloc.add(StopListening(
+                        locale: Localizations.localeOf(context).languageCode));
                   } else {
                     bloc.add(Reset());
                   }
                 },
-                backgroundColor: state is Listening ? Colors.red[600] : Colors.blue[600],
+                backgroundColor:
+                    state is Listening ? Colors.red[600] : Colors.blue[600],
                 icon: Icon(
                   state is Listening ? Icons.stop : Icons.mic,
                   color: Colors.white,
                 ),
                 label: Text(
-                  state is Listening ? AppLocalizations.of(context)!.stop : AppLocalizations.of(context)!.voice,
+                  state is Listening
+                      ? AppLocalizations.of(context)!.stop
+                      : AppLocalizations.of(context)!.voice,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -531,7 +628,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     );
   }
 
-  Widget _buildQuickAction(IconData icon, String title, Color color, VoidCallback onTap) {
+  Widget _buildQuickAction(
+      IconData icon, String title, Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -577,10 +675,19 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     );
   }
 
-  Widget _buildTransactionItem(Map<String, String> transaction, bool isSmallScreen) {
-    final isDebit = transaction['type'] == 'debit';
-    final category = transaction['category']!;
-    
+  Widget _buildTransactionItem(Transaction transaction, bool isSmallScreen) {
+    final isDebit = transaction.type == 'debit';
+    final category = transaction.category;
+
+    String _formatDate(String dateString) {
+      try {
+        final date = DateTime.parse(dateString);
+        return '${date.day}/${date.month}/${date.year}';
+      } catch (e) {
+        return dateString;
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
@@ -615,7 +722,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  transaction['desc']!,
+                  transaction.merchant,
                   style: TextStyle(
                     fontSize: isSmallScreen ? 14 : 16,
                     fontWeight: FontWeight.bold,
@@ -624,7 +731,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  transaction['date']!,
+                  _formatDate(transaction.date),
                   style: TextStyle(
                     fontSize: isSmallScreen ? 11 : 12,
                     color: Colors.grey[600],
@@ -634,7 +741,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             ),
           ),
           Text(
-            transaction['amount']!,
+            transaction.formattedAmount,
             style: TextStyle(
               fontSize: isSmallScreen ? 14 : 16,
               fontWeight: FontWeight.bold,

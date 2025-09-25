@@ -5,15 +5,15 @@ class TTSService {
 
   final Map<String, String> _langMap = {
     "en": "en-IN",
-    "hi": "hi-IN",  // Hindi
-    "ta": "ta-IN",  // Tamil
-    "te": "te-IN",  // Telugu
-    "bn": "bn-IN",  // Bengali
-    "gu": "gu-IN",  // Gujarati
-    "ml": "ml-IN",  // Malayalam
-    "mr": "mr-IN",  // Marathi
-    "kn": "kn-IN",  // Kannada
-    "pa": "pa-IN",  // Punjabi
+    "hi": "hi-IN", // Hindi
+    "ta": "ta-IN", // Tamil
+    "te": "te-IN", // Telugu
+    "bn": "bn-IN", // Bengali
+    "gu": "gu-IN", // Gujarati
+    "ml": "ml-IN", // Malayalam
+    "mr": "mr-IN", // Marathi
+    "kn": "kn-IN", // Kannada
+    "pa": "pa-IN", // Punjabi
   };
 
   TTSService() {
@@ -27,14 +27,13 @@ class TTSService {
 
     // Pick mapped language if available, else fallback
     String? targetLang = _langMap[langCode];
-    print(targetLang);
     if (targetLang != null) {
       try {
         await _tts.setLanguage(targetLang);
         await _tts.speak(text);
         return;
       } catch (e) {
-        print("TTS failed for $targetLang, falling back to English.");
+        // TTS failed for target language, falling back to English
       }
     }
 

@@ -202,4 +202,25 @@ class AppLocalizationsPa extends AppLocalizations {
 
   @override
   String get validationOtp => 'ਕਿਰਪਾ ਕਰਕੇ ਵੈਧ OTP ਦਰਜ ਕਰੋ';
+
+  @override
+  String get allTransactions => 'All Transactions';
+
+  @override
+  String get transactions => 'transactions';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get errorLoadingTransactions => 'Error loading transactions';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get noTransactionsFound => 'No transactions found';
+
+  @override
+  String get noTransactionsDescription => 'You don\'t have any transactions yet';
 }

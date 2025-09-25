@@ -488,6 +488,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid OTP'**
   String get validationOtp;
+
+  /// No description provided for @allTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'All Transactions'**
+  String get allTransactions;
+
+  /// No description provided for @transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'transactions'**
+  String get transactions;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @errorLoadingTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading transactions'**
+  String get errorLoadingTransactions;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noTransactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found'**
+  String get noTransactionsFound;
+
+  /// No description provided for @noTransactionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any transactions yet'**
+  String get noTransactionsDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

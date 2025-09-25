@@ -61,6 +61,13 @@
   "validationRequired": "This field is required",
   "validationEmail": "Please enter a valid email",
   "validationPhone": "Please enter a valid phone number",
-  "validationOtp": "Please enter a valid OTP"
+  "validationOtp": "Please enter a valid OTP",
+  "allTransactions": "All Transactions",
+  "transactions": "transactions",
+  "loading": "Loading...",
+  "errorLoadingTransactions": "Error loading transactions",
+  "retry": "Retry",
+  "noTransactionsFound": "No transactions found",
+  "noTransactionsDescription": "You don't have any transactions yet"
 }
 

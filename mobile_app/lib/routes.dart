@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voice_banking_poc/screens/landing_screen.dart';
 import 'package:voice_banking_poc/screens/otp_screen.dart';
 import 'package:voice_banking_poc/screens/voice_bank_home.dart';
+import 'package:voice_banking_poc/screens/all_transactions_screen.dart';
 
 class MyRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -12,6 +13,8 @@ class MyRouter {
         return MaterialPageRoute(builder: (context) => OtpScreen(params: settings.arguments as OtpScreenParams,));
       case '/HomeScreen':
         return MaterialPageRoute(builder: (context) => VoiceBankHome());
+      case '/AllTransactions':
+        return MaterialPageRoute(builder: (context) => AllTransactionsScreen());
       default:
         return MaterialPageRoute(builder: (context) => ErrorPage());
     }
