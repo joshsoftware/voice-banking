@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
 import '../bloc/voice_bloc.dart';
-import '../models/voice_intent.dart';
-import '../widgets/speaking_indicator.dart';
 
 class VoiceBankHome extends StatefulWidget {
   const VoiceBankHome({super.key});
@@ -434,6 +432,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       ),
       
       // Enhanced Floating Action Button
+      // Enhanced Floating Action Button
       floatingActionButton: BlocBuilder<VoiceBloc, VoiceState>(
         builder: (context, state) {
           return Column(
@@ -499,36 +498,81 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                   ),
                 ),
               
+              // Error Status Indicator
+              if (state is Error)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.red[50],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.red[200]!),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.red.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red[600],
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          state.message,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red[600],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              
               // Main Voice Button
               FloatingActionButton.extended(
                 onPressed: () {
+                  print("🎤 Voice button pressed! Current state: $state");
                   final bloc = context.read<VoiceBloc>();
                   if (state is Idle) {
+                    print("🚀 Starting listening...");
                     bloc.add(StartListening());
                   } else if (state is Listening) {
+                    print("⏹️ Stopping listening...");
                     bloc.add(StopListening(locale: Localizations.localeOf(context).languageCode));
                   } else {
+                    print("🔄 Resetting...");
                     bloc.add(Reset());
                   }
                 },
-                backgroundColor: state is Listening ? Colors.red[600] : Colors.blue[600],
+                backgroundColor: state is Listening ? Colors.red[600] : 
+                               state is Error ? Colors.orange[600] : Colors.blue[600],
                 icon: Icon(
-                  state is Listening ? Icons.stop : Icons.mic,
+                  state is Listening ? Icons.stop : 
+                  state is Error ? Icons.refresh : Icons.mic,
                   color: Colors.white,
                 ),
                 label: Text(
-                  state is Listening ? AppLocalizations.of(context)!.stop : AppLocalizations.of(context)!.voice,
+                  state is Listening ? AppLocalizations.of(context)!.stop : 
+                  state is Error ? "Retry" : AppLocalizations.of(context)!.voice,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
+              ),            ],
           );
         },
-      ),
-    );
+      ),    );
   }
 
   Widget _buildQuickAction(IconData icon, String title, Color color, VoidCallback onTap) {
