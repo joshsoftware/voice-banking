@@ -143,3 +143,27 @@ htmlcov/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# iOS Build Artifacts - Large files that shouldn't be committed
+mobile_app/ios/Runner.xcarchive/
+mobile_app/ios/build/
+mobile_app/ios/*.xcarchive/
+mobile_app/ios/*.ipa
+mobile_app/ios/ExportOptions.plist
+mobile_app/ios/DistributionSummary.plist
+mobile_app/ios/Packaging.log
+
+# iOS dSYM files (debug symbols) - often very large
+mobile_app/ios/**/*.dSYM/
+mobile_app/ios/**/Flutter.framework.dSYM/
+mobile_app/ios/**/Runner.app.dSYM/
+
+# Xcode build artifacts
+mobile_app/ios/DerivedData/
+mobile_app/ios/.build/
+mobile_app/ios/*.xcodeproj/xcuserdata/
+mobile_app/ios/*.xcworkspace/xcuserdata/
+
+# iOS Simulator builds
+mobile_app/ios/ios/
+mobile_app/ios/Flutter/ios_framework/
