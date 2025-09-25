@@ -60,7 +60,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     } else if (name == "pay_person") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("Payment initiated 🚀"),
+          content: Text(AppLocalizations.of(context)!.paymentInitiated),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -111,6 +111,47 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     }
   }
 
+  void _logout() async {
+    // Show confirmation dialog
+    final bool? shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.logout),
+          content: Text(AppLocalizations.of(context)!.logoutConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(AppLocalizations.of(context)!.logout),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true) {
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.logoutSuccess),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      );
+
+      // Navigate back to landing screen and clear all previous routes
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -120,43 +161,75 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text(
-          loc.appTitle,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.blue[600],
+        // title: Text(
+        //   loc.appTitle,
+        //   style: const TextStyle(
+        //     fontWeight: FontWeight.bold,
+        //     color: Colors.white,
+        //   ),
+        // ),
+        backgroundColor:const Color(0xFF667eea),
         elevation: 0,
-        actions: [LanguageToggleWidget()],
+        actions: [
+          LanguageToggleWidget(),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (String value) {
+              if (value == 'logout') {
+                _logout();
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout, color: Colors.red[600]),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.logout,
+                      style: TextStyle(color: Colors.red[600]),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              Colors.blue[600]!,
-              Colors.blue[400]!,
-              Colors.grey[50]!,
+              // const Color(0xFF667eea), // Soft blue-purple
+              // const Color(0xFF764ba2), // Purple
+              // const Color(0xFFf093fb), // Pink
+              // const Color(0xFFf5576c), // Coral
+              // const Color(0xFF4facfe), // Light blue
+                   const Color(0xFF667eea),
+                    const Color(0xFF667eea),
+              const Color(0xFF667eea), // Soft blue-purple
+              const Color(0xFF764ba2), // Purple
+              const Color(0xFFf093fb), // Pink
+              //const Color(0xFFf5576c), // Coral
             ],
-            stops: const [0.0, 0.2, 0.2],
+            stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
           ),
         ),
-        child: SafeArea(
-          child: Column(
+        child: SafeArea(          child: Column(
             children: [
               // Header Section
               Container(
-                padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                padding: isSmallScreen? EdgeInsets.fromLTRB(16, 0, 16, 16) : EdgeInsets.fromLTRB(24, 10, 24, 16),//EdgeInsets.all(isSmallScreen ? 16 : 20),
                 child: Column(
                   children: [
-                    SizedBox(height: isSmallScreen ? 10 : 20),
+                   // SizedBox(height: isSmallScreen ? 10 : 20),
                     
                     // Welcome Message
                     Text(
-                      'Welcome back! 👋',
+                      AppLocalizations.of(context)!.welcomeBack,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 18 : 22,
                         fontWeight: FontWeight.w300,
@@ -167,7 +240,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                     const SizedBox(height: 8),
                     
                     Text(
-                      'Your voice banking dashboard',
+                      AppLocalizations.of(context)!.voiceBankingDashboard,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
                         color: Colors.white.withValues(alpha: 0.9),
@@ -244,7 +317,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Available Balance',
+                                AppLocalizations.of(context)!.availableBalance,
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.white.withValues(alpha: 0.8),
@@ -254,71 +327,71 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                           ),
                         ),
                         
-                        SizedBox(height: isSmallScreen ? 20 : 24),
+                        SizedBox(height: isSmallScreen ? 10 : 14),
                         
                         // Quick Actions
-                        Text(
-                          'Quick Actions',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 18 : 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                          ),
-                        ),
+                        // Text(
+                        //   'Quick Actions',
+                        //   style: TextStyle(
+                        //     fontSize: isSmallScreen ? 18 : 20,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.grey[800],
+                        //   ),
+                        // ),
                         
-                        const SizedBox(height: 12),
+                       // const SizedBox(height: 12),
                         
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.send,
-                                'Send Money',
-                                Colors.blue,
-                                () => _showSnackBar('Send Money feature coming soon!'),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.qr_code_scanner,
-                                'Scan & Pay',
-                                Colors.purple,
-                                () => _showSnackBar('Scan & Pay feature coming soon!'),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.send,
+                        //         'Send Money',
+                        //         Colors.blue,
+                        //         () => _showSnackBar('Send Money feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 12),
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.qr_code_scanner,
+                        //         'Scan & Pay',
+                        //         Colors.purple,
+                        //         () => _showSnackBar('Scan & Pay feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         
-                        const SizedBox(height: 12),
+                        //const SizedBox(height: 12),
                         
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.account_balance,
-                                'Pay Bills',
-                                Colors.orange,
-                                () => _showSnackBar('Pay Bills feature coming soon!'),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildQuickAction(
-                                Icons.history,
-                                'Transaction History',
-                                Colors.teal,
-                                () => _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.easeInOut,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.account_balance,
+                        //         'Pay Bills',
+                        //         Colors.orange,
+                        //         () => _showSnackBar('Pay Bills feature coming soon!'),
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 12),
+                        //     Expanded(
+                        //       child: _buildQuickAction(
+                        //         Icons.history,
+                        //         'Transaction History',
+                        //         Colors.teal,
+                        //         () => _scrollController.animateTo(
+                        //           _scrollController.position.maxScrollExtent,
+                        //           duration: const Duration(seconds: 1),
+                        //           curve: Curves.easeInOut,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         
-                        SizedBox(height: isSmallScreen ? 24 : 30),
+                       // SizedBox(height: isSmallScreen ? 24 : 30),
                         
                         // Recent Transactions Header
                         Row(
@@ -333,9 +406,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () => _showSnackBar('View all transactions'),
+                              onPressed: () => _showSnackBar(AppLocalizations.of(context)!.viewAllTransactions),
                               child: Text(
-                                'View All',
+                                AppLocalizations.of(context)!.viewAll,
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   fontWeight: FontWeight.bold,
@@ -396,7 +469,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Listening...',
+                          AppLocalizations.of(context)!.listening,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -414,7 +487,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Transcribing...',
+                          AppLocalizations.of(context)!.transcribing,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -444,7 +517,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                   color: Colors.white,
                 ),
                 label: Text(
-                  state is Listening ? 'Stop' : 'Voice',
+                  state is Listening ? AppLocalizations.of(context)!.stop : AppLocalizations.of(context)!.voice,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
