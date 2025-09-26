@@ -71,6 +71,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<GotTranscript>((e, emit) async {
+      print("=== NEW VOICE BLOC CODE IS RUNNING - LANGUAGE FIX VERSION ===");
       // Get orchestrator data and intent data
       final orchestratorData = e.data["orchestrator_data"];
       final intentData = e.data["intent_data"];
@@ -78,8 +79,15 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       final translation = e.data["translation"] ?? "";
       final sessionId = e.data["session_id"] ?? "";
 
-      // Use the user's selected language for TTS output (not the detected input language)
-      final ttsLanguage = e.locale;
+      print("Voice Bloc Debug - Full intentData: $intentData");
+      print("Voice Bloc Debug - intentData type: ${intentData.runtimeType}");
+
+      // Use the language detected by the API from intent_data.language
+      final ttsLanguage = intentData?["language"] ?? "en";
+      print(
+          "Voice Bloc Debug - API detected language: ${intentData?["language"]}");
+      print("Voice Bloc Debug - TTS language to use: $ttsLanguage");
+      print("Voice Bloc Debug - Passed locale: ${e.locale}");
 
       // Parse intent
       String intentName = intentData?["intent"] ?? "unknown";

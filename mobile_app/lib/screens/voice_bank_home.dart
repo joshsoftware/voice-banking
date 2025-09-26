@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../l10n/app_localizations.dart';
@@ -437,14 +438,15 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
                         // Recent Transactions Header
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              AppLocalizations.of(context)!.recTxns,
-                              style: TextStyle(
-                                fontSize: isSmallScreen ? 18 : 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[800],
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context)!.recTxns,
+                                style: TextStyle(
+                                  fontSize: isSmallScreen ? 18 : 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
                               ),
                             ),
                             TextButton(
@@ -457,6 +459,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue[600],
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
@@ -524,98 +527,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Voice Status Indicator
-                if (state is Listening || state is Transcribing)
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (state is Listening) ...[
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.of(context)!.listening,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red[600],
-                            ),
-                          ),
-                        ] else if (state is Transcribing) ...[
-                          const SizedBox(
-                            width: 12,
-                            height: 12,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.blue),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.of(context)!.transcribing,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue[600],
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-
                 // Main Voice Button
-                FloatingActionButton.extended(
-                  onPressed: () {
-                    final bloc = context.read<VoiceBloc>();
-                    if (state is Idle) {
-                      bloc.add(StartListening());
-                    } else if (state is Listening) {
-                      bloc.add(StopListening(
-                          locale:
-                              Localizations.localeOf(context).languageCode));
-                    } else {
-                      bloc.add(Reset());
-                    }
-                  },
-                  backgroundColor:
-                      state is Listening ? Colors.red[600] : Colors.blue[600],
-                  icon: Icon(
-                    state is Listening ? Icons.stop : Icons.mic,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    state is Listening
-                        ? AppLocalizations.of(context)!.stop
-                        : AppLocalizations.of(context)!.voice,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                _buildAnimatedVoiceButton(state, context),
               ],
             );
           },
@@ -936,5 +849,157 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     } catch (e) {
       return dateString;
     }
+  }
+
+  Color _getButtonColor(VoiceState state) {
+    if (state is Listening) {
+      return Colors.red[600]!;
+    } else if (state is Transcribing) {
+      return Colors.orange[600]!;
+    } else if (state is Executing) {
+      return Colors.purple[600]!;
+    } else {
+      return Colors.blue[600]!;
+    }
+  }
+
+  Widget _buildButtonIcon(VoiceState state) {
+    if (state is Listening) {
+      return const Icon(Icons.stop, color: Colors.white);
+    } else if (state is Transcribing) {
+      return const SizedBox(
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+      );
+    } else if (state is Executing) {
+      return const SizedBox(
+        width: 20,
+        height: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+      );
+    } else {
+      return const Icon(Icons.mic, color: Colors.white);
+    }
+  }
+
+  Widget _buildButtonLabel(VoiceState state, BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    if (state is Listening) {
+      return Text(
+        loc.stop,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (state is Transcribing) {
+      return Text(
+        loc.transcribing,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (state is Executing) {
+      return Text(
+        loc.executing,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Text(
+        loc.voice,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+  }
+
+  Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
+    if (state is Listening) {
+      return _buildPulsingButton(state, context);
+    } else {
+      return FloatingActionButton.extended(
+        onPressed: () {
+          final bloc = context.read<VoiceBloc>();
+          if (state is Idle) {
+            bloc.add(StartListening());
+          } else if (state is Listening) {
+            bloc.add(StopListening(
+                locale: Localizations.localeOf(context).languageCode));
+          } else {
+            bloc.add(Reset());
+          }
+        },
+        backgroundColor: _getButtonColor(state),
+        icon: _buildButtonIcon(state),
+        label: _buildButtonLabel(state, context),
+      );
+    }
+  }
+
+  Widget _buildPulsingButton(VoiceState state, BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 1000),
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      onEnd: () {
+        // Restart animation for continuous pulsing
+        if (state is Listening) {
+          (context as Element).markNeedsBuild();
+        }
+      },
+      builder: (context, value, child) {
+        final pulseValue =
+            sin(value * 2 * pi) * 0.5 + 0.5; // Sine wave for smooth pulsing
+        return Transform.scale(
+          scale: 1.0 + (pulseValue * 0.1),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.red.withValues(alpha: 0.3 * pulseValue),
+                  blurRadius: 20 * pulseValue,
+                  spreadRadius: 5 * pulseValue,
+                ),
+                BoxShadow(
+                  color: Colors.red.withValues(alpha: 0.1 * pulseValue),
+                  blurRadius: 40 * pulseValue,
+                  spreadRadius: 10 * pulseValue,
+                ),
+              ],
+            ),
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                final bloc = context.read<VoiceBloc>();
+                if (state is Idle) {
+                  bloc.add(StartListening());
+                } else if (state is Listening) {
+                  bloc.add(StopListening(
+                      locale: Localizations.localeOf(context).languageCode));
+                } else {
+                  bloc.add(Reset());
+                }
+              },
+              backgroundColor: _getButtonColor(state),
+              icon: _buildButtonIcon(state),
+              label: _buildButtonLabel(state, context),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

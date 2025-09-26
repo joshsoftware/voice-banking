@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class FAQScreen extends StatelessWidget {
   const FAQScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.height < 700;
 
@@ -12,7 +14,7 @@ class FAQScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text(
-          'FAQ',
+          loc.faq,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -80,7 +82,7 @@ class FAQScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Frequently Asked Questions',
+                          loc.frequentlyAskedQuestions,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 20 : 24,
                             fontWeight: FontWeight.bold,
@@ -90,7 +92,7 @@ class FAQScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Learn how to use voice banking effectively',
+                          loc.learnHowToUseVoiceBanking,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 14 : 16,
                             color: Colors.white.withValues(alpha: 0.9),
@@ -106,8 +108,8 @@ class FAQScreen extends StatelessWidget {
                   // FAQ Items
                   _buildFAQItem(
                     context,
-                    'What to speak',
-                    'For example, You can ask what is my current balance',
+                    loc.whatToSpeak,
+                    loc.whatToSpeakDescription,
                     Icons.mic,
                     Colors.green,
                     isSmallScreen,
@@ -117,8 +119,8 @@ class FAQScreen extends StatelessWidget {
 
                   _buildFAQItem(
                     context,
-                    'How to check transactions',
-                    'You can ask what is my last x transactions',
+                    loc.howToCheckTransactions,
+                    loc.howToCheckTransactionsDescription,
                     Icons.history,
                     Colors.blue,
                     isSmallScreen,
@@ -128,8 +130,8 @@ class FAQScreen extends StatelessWidget {
 
                   _buildFAQItem(
                     context,
-                    'Voice Commands',
-                    'Speak clearly and naturally. The system understands conversational language.',
+                    loc.voiceCommands,
+                    loc.voiceCommandsDescription,
                     Icons.record_voice_over,
                     Colors.purple,
                     isSmallScreen,
@@ -139,8 +141,8 @@ class FAQScreen extends StatelessWidget {
 
                   _buildFAQItem(
                     context,
-                    'Supported Languages',
-                    'Currently supports English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, Tamil, and Telugu.',
+                    loc.supportedLanguages,
+                    loc.supportedLanguagesDescription,
                     Icons.language,
                     Colors.orange,
                     isSmallScreen,
@@ -150,8 +152,8 @@ class FAQScreen extends StatelessWidget {
 
                   _buildFAQItem(
                     context,
-                    'Privacy & Security',
-                    'Your voice data is processed securely and is not stored permanently.',
+                    loc.privacySecurity,
+                    loc.privacySecurityDescription,
                     Icons.security,
                     Colors.red,
                     isSmallScreen,
@@ -180,7 +182,7 @@ class FAQScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Pro Tips',
+                              loc.proTips,
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 16 : 18,
                                 fontWeight: FontWeight.bold,
@@ -191,17 +193,17 @@ class FAQScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _buildTipItem(
-                          'Speak in a quiet environment for better recognition',
+                          loc.tipQuietEnvironment,
                           Icons.volume_up,
                           isSmallScreen,
                         ),
                         _buildTipItem(
-                          'Use natural language like "Show me my balance"',
+                          loc.tipNaturalLanguage,
                           Icons.chat,
                           isSmallScreen,
                         ),
                         _buildTipItem(
-                          'Wait for the listening indicator before speaking',
+                          loc.tipWaitForIndicator,
                           Icons.timer,
                           isSmallScreen,
                         ),
@@ -232,7 +234,7 @@ class FAQScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Need More Help?',
+                          loc.needMoreHelp,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 16 : 18,
                             fontWeight: FontWeight.bold,
@@ -241,7 +243,7 @@ class FAQScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Contact our support team for additional assistance',
+                          loc.contactSupportDescription,
                           style: TextStyle(
                             fontSize: isSmallScreen ? 12 : 14,
                             color: Colors.grey[600],

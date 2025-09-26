@@ -68,6 +68,25 @@
   "errorLoadingTransactions": "Error loading transactions",
   "retry": "Retry",
   "noTransactionsFound": "No transactions found",
-  "noTransactionsDescription": "You don't have any transactions yet"
+  "noTransactionsDescription": "You don't have any transactions yet",
+  "faq": "FAQ",
+  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "learnHowToUseVoiceBanking": "Learn how to use voice banking effectively",
+  "whatToSpeak": "What to speak",
+  "whatToSpeakDescription": "For example, You can ask what is my current balance",
+  "howToCheckTransactions": "How to check transactions",
+  "howToCheckTransactionsDescription": "You can ask what is my last x transactions",
+  "voiceCommands": "Voice Commands",
+  "voiceCommandsDescription": "Speak clearly and naturally. The system understands conversational language.",
+  "supportedLanguages": "Supported Languages",
+  "supportedLanguagesDescription": "Currently supports English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, Tamil, and Telugu.",
+  "privacySecurity": "Privacy & Security",
+  "privacySecurityDescription": "Your voice data is processed securely and is not stored permanently.",
+  "proTips": "Pro Tips",
+  "tipQuietEnvironment": "Speak in a quiet environment for better recognition",
+  "tipNaturalLanguage": "Use natural language like \"Show me my balance\"",
+  "tipWaitForIndicator": "Wait for the listening indicator before speaking",
+  "needMoreHelp": "Need More Help?",
+  "contactSupportDescription": "Contact our support team for additional assistance"
 }
 

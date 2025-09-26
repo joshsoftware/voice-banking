@@ -59,7 +59,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutSuccess => 'Logged out successfully!';
 
   @override
-  String get welcomeBack => 'Welcome back! 👋';
+  String get welcomeBack => 'Welcome! ';
 
   @override
   String get voiceBankingDashboard => 'Your voice banking dashboard';
@@ -223,4 +223,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noTransactionsDescription => 'You don\'t have any transactions yet';
+
+  @override
+  String get faq => 'FAQ';
+
+  @override
+  String get frequentlyAskedQuestions => 'Frequently Asked Questions';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'Learn how to use voice banking effectively';
+
+  @override
+  String get whatToSpeak => 'What to speak';
+
+  @override
+  String get whatToSpeakDescription => 'For example, You can ask what is my current balance';
+
+  @override
+  String get howToCheckTransactions => 'How to check transactions';
+
+  @override
+  String get howToCheckTransactionsDescription => 'You can ask what is my last x transactions';
+
+  @override
+  String get voiceCommandsDescription => 'Speak clearly and naturally. The system understands conversational language.';
+
+  @override
+  String get supportedLanguages => 'Supported Languages';
+
+  @override
+  String get supportedLanguagesDescription => 'Currently supports English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, Tamil, and Telugu.';
+
+  @override
+  String get privacySecurity => 'Privacy & Security';
+
+  @override
+  String get privacySecurityDescription => 'Your voice data is processed securely and is not stored permanently.';
+
+  @override
+  String get proTips => 'Pro Tips';
+
+  @override
+  String get tipQuietEnvironment => 'Speak in a quiet environment for better recognition';
+
+  @override
+  String get tipNaturalLanguage => 'Use natural language like \"Show me my balance\"';
+
+  @override
+  String get tipWaitForIndicator => 'Wait for the listening indicator before speaking';
+
+  @override
+  String get needMoreHelp => 'Need More Help?';
+
+  @override
+  String get contactSupportDescription => 'Contact our support team for additional assistance';
 }

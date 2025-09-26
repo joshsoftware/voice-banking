@@ -204,23 +204,77 @@ class AppLocalizationsGu extends AppLocalizations {
   String get validationOtp => 'કૃપા કરીને માન્ય OTP દાખલ કરો';
 
   @override
-  String get allTransactions => 'All Transactions';
+  String get allTransactions => 'બધા વ્યવહાર';
 
   @override
-  String get transactions => 'transactions';
+  String get transactions => 'વ્યવહાર';
 
   @override
-  String get loading => 'Loading...';
+  String get loading => 'લોડ થઈ રહ્યું છે...';
 
   @override
-  String get errorLoadingTransactions => 'Error loading transactions';
+  String get errorLoadingTransactions => 'વ્યવહાર લોડ કરવામાં ભૂલ';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'ફરીથી પ્રયાસ કરો';
 
   @override
-  String get noTransactionsFound => 'No transactions found';
+  String get noTransactionsFound => 'કોઈ વ્યવહાર મળ્યા નથી';
 
   @override
-  String get noTransactionsDescription => 'You don\'t have any transactions yet';
+  String get noTransactionsDescription => 'તમારી પાસે હજુ સુધી કોઈ વ્યવહાર નથી';
+
+  @override
+  String get faq => 'વારંવાર પૂછાતા પ્રશ્નો';
+
+  @override
+  String get frequentlyAskedQuestions => 'વારંવાર પૂછાતા પ્રશ્નો';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'વૉઇસ બેંકિંગનો અસરકારક ઉપયોગ કેવી રીતે કરવો તે શીખો';
+
+  @override
+  String get whatToSpeak => 'શું બોલવું';
+
+  @override
+  String get whatToSpeakDescription => 'ઉદાહરણ તરીકે, તમે પૂછી શકો છો કે મારું વર્તમાન બેલન્સ કેટલું છે';
+
+  @override
+  String get howToCheckTransactions => 'વ્યવહાર કેવી રીતે તપાસવા';
+
+  @override
+  String get howToCheckTransactionsDescription => 'તમે પૂછી શકો છો કે મારા છેલ્લા x વ્યવહાર શું છે';
+
+  @override
+  String get voiceCommandsDescription => 'સ્પષ્ટ અને કુદરતી રીતે બોલો. સિસ્ટમ વાતચીતની ભાષા સમજે છે.';
+
+  @override
+  String get supportedLanguages => 'સમર્થિત ભાષાઓ';
+
+  @override
+  String get supportedLanguagesDescription => 'હાલમાં અંગ્રેજી, હિન્દી, બંગાળી, ગુજરાતી, કન્નડ, મલયાલમ, મરાઠી, પંજાબી, તમિલ અને તેલુગુનો સમર્થન કરે છે.';
+
+  @override
+  String get privacySecurity => 'ગોપનીયતા અને સુરક્ષા';
+
+  @override
+  String get privacySecurityDescription => 'તમારો વૉઇસ ડેટા સુરક્ષિત રીતે પ્રક્રિયા કરવામાં આવે છે અને કાયમી રીતે સંગ્રહિત થતો નથી.';
+
+  @override
+  String get proTips => 'વિશેષજ્ઞ સૂચનો';
+
+  @override
+  String get tipQuietEnvironment => 'વધુ સારી ઓળખ માટે શાંત વાતાવરણમાં બોલો';
+
+  @override
+  String get tipNaturalLanguage => 'કુદરતી ભાષા વાપરો જેમ કે \"મારું બેલન્સ બતાવો\"';
+
+  @override
+  String get tipWaitForIndicator => 'બોલતા પહેલા સાંભળવાના સૂચકની રાહ જુઓ';
+
+  @override
+  String get needMoreHelp => 'વધુ મદદ જોઈએ?';
+
+  @override
+  String get contactSupportDescription => 'વધારાની સહાયતા માટે અમારી સહાયતા ટીમનો સંપર્ક કરો';
 }

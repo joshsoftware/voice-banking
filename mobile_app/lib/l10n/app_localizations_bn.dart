@@ -192,35 +192,89 @@ class AppLocalizationsBn extends AppLocalizations {
   String get aiIsSpeaking => 'AI কথা বলছে…';
 
   @override
-  String get validationRequired => 'This field is required';
+  String get validationRequired => 'এই ক্ষেত্রটি প্রয়োজন';
 
   @override
-  String get validationEmail => 'Please enter a valid email';
+  String get validationEmail => 'অনুগ্রহ করে একটি বৈধ ইমেইল লিখুন';
 
   @override
-  String get validationPhone => 'Please enter a valid phone number';
+  String get validationPhone => 'অনুগ্রহ করে একটি বৈধ ফোন নম্বর লিখুন';
 
   @override
-  String get validationOtp => 'Please enter a valid OTP';
+  String get validationOtp => 'অনুগ্রহ করে একটি বৈধ OTP লিখুন';
 
   @override
-  String get allTransactions => 'All Transactions';
+  String get allTransactions => 'সব লেনদেন';
 
   @override
-  String get transactions => 'transactions';
+  String get transactions => 'লেনদেন';
 
   @override
-  String get loading => 'Loading...';
+  String get loading => 'লোড হচ্ছে...';
 
   @override
-  String get errorLoadingTransactions => 'Error loading transactions';
+  String get errorLoadingTransactions => 'লেনদেন লোড করতে ত্রুটি';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'পুনরায় চেষ্টা করুন';
 
   @override
-  String get noTransactionsFound => 'No transactions found';
+  String get noTransactionsFound => 'কোন লেনদেন পাওয়া যায়নি';
 
   @override
-  String get noTransactionsDescription => 'You don\'t have any transactions yet';
+  String get noTransactionsDescription => 'আপনার এখনো কোন লেনদেন নেই';
+
+  @override
+  String get faq => 'প্রায়শই জিজ্ঞাসিত প্রশ্ন';
+
+  @override
+  String get frequentlyAskedQuestions => 'প্রায়শই জিজ্ঞাসিত প্রশ্ন';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'ভয়েস ব্যাংকিংয়ের কার্যকর ব্যবহার শিখুন';
+
+  @override
+  String get whatToSpeak => 'কী বলতে হবে';
+
+  @override
+  String get whatToSpeakDescription => 'উদাহরণস্বরূপ, আপনি জিজ্ঞাসা করতে পারেন আমার বর্তমান ব্যালেন্স কত';
+
+  @override
+  String get howToCheckTransactions => 'লেনদেন কীভাবে দেখবেন';
+
+  @override
+  String get howToCheckTransactionsDescription => 'আপনি জিজ্ঞাসা করতে পারেন আমার শেষ x লেনদেন কী';
+
+  @override
+  String get voiceCommandsDescription => 'স্পষ্ট এবং স্বাভাবিকভাবে কথা বলুন। সিস্টেম কথোপকথনের ভাষা বুঝতে পারে।';
+
+  @override
+  String get supportedLanguages => 'সমর্থিত ভাষা';
+
+  @override
+  String get supportedLanguagesDescription => 'বর্তমানে ইংরেজি, হিন্দি, বাংলা, গুজরাটি, কন্নড়, মালয়ালম, মারাঠি, পাঞ্জাবি, তামিল এবং তেলুগু সমর্থন করে।';
+
+  @override
+  String get privacySecurity => 'গোপনীয়তা ও নিরাপত্তা';
+
+  @override
+  String get privacySecurityDescription => 'আপনার ভয়েস ডেটা নিরাপদে প্রক্রিয়াজাত করা হয় এবং স্থায়ীভাবে সংরক্ষণ করা হয় না।';
+
+  @override
+  String get proTips => 'বিশেষজ্ঞ পরামর্শ';
+
+  @override
+  String get tipQuietEnvironment => 'ভালো স্বীকৃতির জন্য শান্ত পরিবেশে কথা বলুন';
+
+  @override
+  String get tipNaturalLanguage => 'প্রাকৃতিক ভাষা ব্যবহার করুন যেমন \"আমার ব্যালেন্স দেখান\"';
+
+  @override
+  String get tipWaitForIndicator => 'কথা বলার আগে শোনার নির্দেশকের জন্য অপেক্ষা করুন';
+
+  @override
+  String get needMoreHelp => 'আরো সাহায্য প্রয়োজন?';
+
+  @override
+  String get contactSupportDescription => 'অতিরিক্ত সহায়তার জন্য আমাদের সহায়তা দলকে যোগাযোগ করুন';
 }

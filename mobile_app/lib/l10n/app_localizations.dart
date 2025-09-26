@@ -210,7 +210,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back! 👋'**
+  /// **'Welcome! '**
   String get welcomeBack;
 
   /// No description provided for @voiceBankingDashboard.
@@ -530,6 +530,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You don\'t have any transactions yet'**
   String get noTransactionsDescription;
+
+  /// No description provided for @faq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get faq;
+
+  /// No description provided for @frequentlyAskedQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently Asked Questions'**
+  String get frequentlyAskedQuestions;
+
+  /// No description provided for @learnHowToUseVoiceBanking.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn how to use voice banking effectively'**
+  String get learnHowToUseVoiceBanking;
+
+  /// No description provided for @whatToSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'What to speak'**
+  String get whatToSpeak;
+
+  /// No description provided for @whatToSpeakDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'For example, You can ask what is my current balance'**
+  String get whatToSpeakDescription;
+
+  /// No description provided for @howToCheckTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'How to check transactions'**
+  String get howToCheckTransactions;
+
+  /// No description provided for @howToCheckTransactionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can ask what is my last x transactions'**
+  String get howToCheckTransactionsDescription;
+
+  /// No description provided for @voiceCommandsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak clearly and naturally. The system understands conversational language.'**
+  String get voiceCommandsDescription;
+
+  /// No description provided for @supportedLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Supported Languages'**
+  String get supportedLanguages;
+
+  /// No description provided for @supportedLanguagesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently supports English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, Tamil, and Telugu.'**
+  String get supportedLanguagesDescription;
+
+  /// No description provided for @privacySecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Security'**
+  String get privacySecurity;
+
+  /// No description provided for @privacySecurityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your voice data is processed securely and is not stored permanently.'**
+  String get privacySecurityDescription;
+
+  /// No description provided for @proTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro Tips'**
+  String get proTips;
+
+  /// No description provided for @tipQuietEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak in a quiet environment for better recognition'**
+  String get tipQuietEnvironment;
+
+  /// No description provided for @tipNaturalLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Use natural language like \"Show me my balance\"'**
+  String get tipNaturalLanguage;
+
+  /// No description provided for @tipWaitForIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the listening indicator before speaking'**
+  String get tipWaitForIndicator;
+
+  /// No description provided for @needMoreHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Need More Help?'**
+  String get needMoreHelp;
+
+  /// No description provided for @contactSupportDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact our support team for additional assistance'**
+  String get contactSupportDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

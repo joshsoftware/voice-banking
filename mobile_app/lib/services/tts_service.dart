@@ -38,13 +38,20 @@ class TTSService {
     try {
       await _tts.stop();
 
+      print("TTS Debug - Requested language code: $langCode");
+      print("TTS Debug - Text to speak: $text");
+
       // Pick mapped language if available, else fallback
       String? targetLang = _langMap[langCode];
+      print("TTS Debug - Mapped language: $targetLang");
 
       if (targetLang != null) {
         try {
+          print("TTS Debug - Setting language to: $targetLang");
           await _tts.setLanguage(targetLang);
+          print("TTS Debug - Language set successfully, starting speech");
           await _tts.speak(text);
+          print("TTS Debug - Speech completed successfully");
           return;
         } catch (e) {
           print("TTS Language Error: $e");
@@ -53,6 +60,7 @@ class TTSService {
       }
 
       // Default fallback: English
+      print("TTS Debug - Falling back to English");
       await _tts.setLanguage("en-IN");
       await _tts.speak(text);
     } catch (e) {
