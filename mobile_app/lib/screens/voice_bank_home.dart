@@ -4,8 +4,8 @@ import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
 import '../bloc/voice_bloc.dart';
 import '../models/transaction.dart';
-import '../services/banking_api.dart';
 import '../services/shared_preferences_service.dart';
+import '../services/banking_api.dart';
 
 class VoiceBankHome extends StatefulWidget {
   const VoiceBankHome({super.key});
@@ -22,10 +22,10 @@ class VoiceBankHome extends StatefulWidget {
 
 class _VoiceBankHomeState extends State<VoiceBankHome> {
   final ScrollController _scrollController = ScrollController();
-  final BankingAPI _bankingAPI = BankingAPI();
   List<Transaction> _transactions = [];
   bool _isLoadingTransactions = true;
   String? _balance;
+  String? _customerName;
 
   @override
   void initState() {
@@ -34,22 +34,28 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Future<void> _loadData() async {
-    await _loadBalance();
+    // Load from shared preferences and load transactions for home screen display
+    _loadCustomerName();
+    _loadBalanceFromPrefs();
     await _loadTransactions();
   }
 
-  Future<void> _loadBalance() async {
-    try {
-      final balance = await _bankingAPI.getBalance();
-      setState(() {
-        _balance = "₹${balance.toStringAsFixed(2)}";
-      });
-    } catch (e) {
-      print("Error loading balance: $e");
-      setState(() {
-        _balance = "₹0.00";
-      });
-    }
+  void _loadBalanceFromPrefs() {
+    // Load balance from shared preferences (set by voice transcribe-intent API)
+    final balance = SharedPreferencesService.getBalance();
+    print(
+        "Home Screen Debug - Loading balance from shared preferences: $balance");
+    setState(() {
+      _balance = balance != null ? "₹${balance}" : "₹0.00";
+    });
+    print("Home Screen Debug - Balance set to: $_balance");
+  }
+
+  void _loadCustomerName() {
+    final customerName = SharedPreferencesService.getCustomerName();
+    setState(() {
+      _customerName = customerName;
+    });
   }
 
   Future<void> _loadTransactions() async {
@@ -62,7 +68,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       print("Loading transactions for mobile: $mobileNumber");
 
       if (mobileNumber != null) {
-        final transactions = await _bankingAPI.getTransactions(
+        // Import BankingAPI for transactions
+        final BankingAPI bankingAPI = BankingAPI();
+        final transactions = await bankingAPI.getTransactions(
           phone: mobileNumber,
           limit: 5, // Load only top 5 for home screen
         );
@@ -273,7 +281,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
                     // Welcome Message
                     Text(
-                      AppLocalizations.of(context)!.welcomeBack,
+                      _customerName != null
+                          ? "${AppLocalizations.of(context)!.welcomeBack}, $_customerName!"
+                          : AppLocalizations.of(context)!.welcomeBack,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 18 : 22,
                         fontWeight: FontWeight.w300,
@@ -521,6 +531,12 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                 "Voice Bank Home Debug - Showing transactions dialog with ${state.transactions.length} transactions");
             _showTransactionsDialog(
                 context, state.message, state.transactions, state.sessionId);
+          } else if (state is Executing) {
+            print(
+                "Voice Bank Home Debug - Received executing state with message: ${state.message}");
+            // Refresh balance and customer name from shared preferences (updated by voice bloc)
+            _loadBalanceFromPrefs();
+            _loadCustomerName();
           }
         },
         child: BlocBuilder<VoiceBloc, VoiceState>(

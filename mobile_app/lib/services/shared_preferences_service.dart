@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesService {
   static const String _mobileNumberKey = 'mobile_number';
   static const String _customerIdKey = 'customer_id';
+  static const String _customerNameKey = 'customer_name';
+  static const String _balanceKey = 'balance';
   static const String _isLoggedInKey = 'is_logged_in';
 
   static SharedPreferences? _prefs;
@@ -25,6 +27,22 @@ class SharedPreferencesService {
 
   static String? getCustomerId() {
     return _prefs?.getString(_customerIdKey);
+  }
+
+  static Future<void> saveCustomerName(String customerName) async {
+    await _prefs?.setString(_customerNameKey, customerName);
+  }
+
+  static String? getCustomerName() {
+    return _prefs?.getString(_customerNameKey);
+  }
+
+  static Future<void> saveBalance(String balance) async {
+    await _prefs?.setString(_balanceKey, balance);
+  }
+
+  static String? getBalance() {
+    return _prefs?.getString(_balanceKey);
   }
 
   static Future<void> setLoggedIn(bool isLoggedIn) async {

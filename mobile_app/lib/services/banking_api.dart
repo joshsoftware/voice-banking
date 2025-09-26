@@ -9,26 +9,28 @@ class BankingAPI {
 
   Future<double> getBalance() async {
     final phone = SharedPreferencesService.getMobileNumber();
+    final customerId = SharedPreferencesService.getCustomerId();
+
     if (phone == null) {
       throw Exception("Phone number not found in shared preferences");
     }
 
+    if (customerId == null) {
+      throw Exception("Customer ID not found in shared preferences");
+    }
+
     final res = await dio.get("/balance", queryParameters: {
+      "customer_id": customerId,
       "phone": phone,
     });
-    return (res.data["balance"] as num).toDouble();
-  }
 
-  Future<String> pay(String to, double amount) async {
-    final res = await dio.post("/pay", queryParameters: {
-      "to": to,
-      "amount": amount,
-    });
-    if (res.data["status"] == "success") {
-      return "Paid ₹$amount to $to. Remaining balance ₹${res.data["balance"]}";
-    } else {
-      return "Payment failed: ${res.data["reason"]}";
+    // Also save customer name from balance response if available
+    final customerName = res.data["customer_name"]?.toString();
+    if (customerName != null && customerName.isNotEmpty) {
+      await SharedPreferencesService.saveCustomerName(customerName);
     }
+
+    return (res.data["balance"] as num).toDouble();
   }
 
   Future<List<Map<String, dynamic>>> searchTransactions(
@@ -41,7 +43,6 @@ class BankingAPI {
   Future<Map<String, dynamic>> login(String phoneNumber) async {
     try {
       final res = await dio.get("/balance", queryParameters: {
-        "customer_id": "985", // Using the customer_id from the API example
         "phone": phoneNumber,
       });
       return {"success": true, "data": res.data, "message": "Login successful"};
@@ -86,7 +87,6 @@ class BankingAPI {
         print("API Response data: ${res.data}");
 
         final List<dynamic> transactionsJson = res.data["transactions"];
-        print("Found ${transactionsJson.length} transactions in response");
 
         return transactionsJson
             .map((json) => Transaction.fromJson(json))
@@ -94,7 +94,7 @@ class BankingAPI {
       } else {
         // Fallback for cases where phone is not provided (shouldn't happen in normal flow)
         final queryParams = <String, dynamic>{
-          "customer_id": "985",
+          // "customer_id": "985",
           "phone": "string",
           "recipient": recipient ?? "string",
           "category": category ?? "string",
@@ -109,22 +109,16 @@ class BankingAPI {
           queryParams["end_date"] = endDate;
         }
 
-        print(
-            "Making API call to /transactions with full params: $queryParams");
         final res =
             await dio.get("/transactions", queryParameters: queryParams);
-        print("API Response status: ${res.statusCode}");
-        print("API Response data: ${res.data}");
 
         final List<dynamic> transactionsJson = res.data["transactions"];
-        print("Found ${transactionsJson.length} transactions in response");
 
         return transactionsJson
             .map((json) => Transaction.fromJson(json))
             .toList();
       }
     } catch (e) {
-      print("Error in getTransactions: $e");
       throw Exception("Failed to fetch transactions: ${e.toString()}");
     }
   }

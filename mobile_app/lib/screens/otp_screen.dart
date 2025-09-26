@@ -65,7 +65,24 @@ class _OtpScreenState extends State<OtpScreen> {
         // Save mobile number and login status to shared preferences
         await SharedPreferencesService.saveMobileNumber(
             widget.params.mobileNumber.toString());
-        await SharedPreferencesService.saveCustomerId("985");
+
+        // Get customer_id, customer_name, and balance from API response
+        final customerId = result["data"]["customer_id"]?.toString();
+        final customerName = result["data"]["customer_name"]?.toString();
+        final balance = result["data"]["balance"]?.toString();
+
+        if (customerId != null) {
+          await SharedPreferencesService.saveCustomerId(customerId);
+        }
+
+        if (customerName != null) {
+          await SharedPreferencesService.saveCustomerName(customerName);
+        }
+
+        if (balance != null) {
+          await SharedPreferencesService.saveBalance(balance);
+        }
+
         await SharedPreferencesService.setLoggedIn(true);
 
         ScaffoldMessenger.of(context).showSnackBar(

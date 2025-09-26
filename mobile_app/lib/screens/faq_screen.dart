@@ -107,7 +107,7 @@ class FAQScreen extends StatelessWidget {
                   _buildFAQItem(
                     context,
                     'What to speak',
-                    'You can ask what is my current balance',
+                    'For example, You can ask what is my current balance',
                     Icons.mic,
                     Colors.green,
                     isSmallScreen,
