@@ -206,6 +206,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         backgroundColor: const Color(0xFF667eea),
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, '/FAQ'),
+            tooltip: 'FAQ',
+          ),
           LanguageToggleWidget(),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
