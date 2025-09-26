@@ -4,6 +4,7 @@ import '../services/voice_repository.dart';
 import '../services/banking_api.dart';
 import '../services/tts_service.dart';
 import '../services/shared_preferences_service.dart';
+import '../services/translation_service.dart';
 import '../models/voice_intent.dart';
 
 sealed class VoiceState {}
@@ -53,6 +54,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   final VoiceRepository repo;
   final BankingAPI bank = BankingAPI();
   final TTSService tts = TTSService();
+  String _currentLocale = 'en'; // Track current locale
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
@@ -62,6 +64,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
 
     on<StopListening>((e, emit) async {
       emit(Transcribing());
+      _currentLocale = e.locale; // Store current locale
       final data = await repo.stopAndTranscribe(locale: e.locale);
       add(GotTranscript(data, e.locale));
     });
@@ -75,8 +78,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       // Get orchestrator data and intent data
       final orchestratorData = e.data["orchestrator_data"];
       final intentData = e.data["intent_data"];
-      final message = e.data["message"] ?? "";
-      final translation = e.data["translation"] ?? "";
       final sessionId = e.data["session_id"] ?? "";
 
       print("Voice Bloc Debug - Full intentData: $intentData");
@@ -104,39 +105,45 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               orchestratorData["data"]["transactions"]);
         }
 
-        // Get message for transactions
-        String transactionMessage = orchestratorData["message"] ??
+        // Get message for transactions (use English from backend)
+        String originalMessage = orchestratorData["message"] ??
             orchestratorData["data"]?["message"] ??
             "Here are your recent transactions";
 
-        // Speak the message
+        // Translate the message to user's language
+        final transactionCount = transactions.length;
+        final context = {'count': transactionCount.toString()};
+        String translatedMessage = TranslationService.translateApiResponse(
+            originalMessage, _currentLocale, context);
+
+        // Speak the translated message
         try {
-          await tts.speak(transactionMessage, langCode: ttsLanguage);
+          await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
 
         // Show transactions dialog
-        emit(ShowTransactionsDialog(
-            transactionMessage, transactions, sessionId));
+        emit(
+            ShowTransactionsDialog(translatedMessage, transactions, sessionId));
         add(Reset());
         return;
       }
 
       // Handle other intents (transfer money, check balance, etc.)
-      String? orchestratorMessage;
+      String? originalMessage;
 
       if (orchestratorData != null) {
         // Case 1: error message at top-level (failure cases)
         if (orchestratorData["message"] != null &&
             orchestratorData["message"].toString().trim().isNotEmpty) {
-          orchestratorMessage = orchestratorData["message"].toString().trim();
+          originalMessage = orchestratorData["message"].toString().trim();
         }
         // Case 2: success message inside data (success cases)
         else if (orchestratorData["data"] != null &&
             orchestratorData["data"]["message"] != null &&
             orchestratorData["data"]["message"].toString().trim().isNotEmpty) {
-          orchestratorMessage =
+          originalMessage =
               orchestratorData["data"]["message"].toString().trim();
         }
 
@@ -158,9 +165,33 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         }
       }
 
-      if (orchestratorMessage != null) {
+      if (originalMessage != null) {
+        // Translate the message to user's language
+        Map<String, dynamic> context = {};
+
+        // Add context based on intent type
+        if (intentName == "check_balance" && orchestratorData["data"] != null) {
+          final balance = orchestratorData["data"]["balance"];
+          if (balance != null) {
+            context['amount'] = balance.toString();
+          }
+        } else if (intentName == "transfer_money" &&
+            orchestratorData["data"] != null) {
+          final amount = orchestratorData["data"]["amount"];
+          final recipient = orchestratorData["data"]["recipient"];
+          if (amount != null) {
+            context['amount'] = amount.toString();
+          }
+          if (recipient != null) {
+            context['recipient'] = recipient.toString();
+          }
+        }
+
+        String translatedMessage = TranslationService.translateApiResponse(
+            originalMessage, _currentLocale, context);
+
         try {
-          await tts.speak(orchestratorMessage, langCode: ttsLanguage);
+          await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
@@ -181,7 +212,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             intentType = VoiceIntentType.unknown;
         }
 
-        emit(Executing(orchestratorMessage, VoiceIntent(intentType)));
+        emit(Executing(translatedMessage, VoiceIntent(intentType)));
         add(Reset());
         return;
       }

@@ -87,6 +87,13 @@
   "tipNaturalLanguage": "Use natural language like \"Show me my balance\"",
   "tipWaitForIndicator": "Wait for the listening indicator before speaking",
   "needMoreHelp": "Need More Help?",
-  "contactSupportDescription": "Contact our support team for additional assistance"
+  "contactSupportDescription": "Contact our support team for additional assistance",
+  "balanceSuccess": "Your current balance is {amount} rupees.",
+  "transactionsFound": "Here are your {count} most recent transactions.",
+  "noTransactions": "No transactions found.",
+  "transferSuccess": "Transfer of {amount} rupees to {recipient} has been initiated successfully.",
+  "transferFailed": "Transfer failed. Please try again.",
+  "errorGeneric": "Sorry, I encountered an error. Please try again.",
+  "errorInsufficientFunds": "Insufficient funds. Please check your balance."
 }
 
