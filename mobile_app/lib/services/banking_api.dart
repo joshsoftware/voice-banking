@@ -79,12 +79,8 @@ class BankingAPI {
           queryParams["end_date"] = endDate;
         }
 
-        print(
-            "Making API call to /transactions with simplified params: $queryParams");
         final res =
             await dio.get("/transactions", queryParameters: queryParams);
-        print("API Response status: ${res.statusCode}");
-        print("API Response data: ${res.data}");
 
         final List<dynamic> transactionsJson = res.data["transactions"];
 

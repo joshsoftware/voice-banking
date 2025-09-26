@@ -39,11 +39,8 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
       }
 
       final mobileNumber = SharedPreferencesService.getMobileNumber();
-      print(
-          "All Transactions Screen - Loading transactions for mobile: $mobileNumber");
 
       if (mobileNumber == null) {
-        print("All Transactions Screen - ERROR: Mobile number is null!");
         if (mounted) {
           setState(() {
             _error = "Mobile number not found. Please login again..";
@@ -58,26 +55,11 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
         limit: 50, // Load more transactions for the full view
       );
 
-      print(
-          "All Transactions Screen - Received ${transactions.length} transactions");
-      for (var tx in transactions) {
-        print(
-            "All Transactions Screen - Transaction: ${tx.merchant} - ${tx.amount} - ${tx.date}");
-      }
-
-      print(
-          "All Transactions Screen - About to call setState with ${transactions.length} transactions");
-
       if (mounted) {
         setState(() {
           _transactions = transactions;
           _isLoading = false;
         });
-        print(
-            "All Transactions Screen - setState completed - _isLoading: $_isLoading, _transactions.length: ${_transactions.length}");
-      } else {
-        print(
-            "All Transactions Screen - Widget not mounted, skipping setState");
       }
     } catch (e) {
       print("All Transactions Screen - Error loading transactions: $e");
@@ -86,10 +68,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
           _error = e.toString();
           _isLoading = false;
         });
-      } else {
-        print(
-            "All Transactions Screen - Widget not mounted, skipping error setState");
-      }
+      } else {}
     }
   }
 
@@ -150,8 +129,6 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "All Transactions Screen - build() called - _isLoading: $_isLoading, _error: $_error, _transactions.length: ${_transactions.length}");
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.height < 700;
 
@@ -234,11 +211,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
   }
 
   Widget _buildTransactionsList(bool isSmallScreen) {
-    print(
-        "All Transactions Screen - _buildTransactionsList called - _isLoading: $_isLoading, _error: $_error, _transactions.length: ${_transactions.length}");
-
     if (_isLoading) {
-      print("All Transactions Screen - Showing loading state");
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -258,7 +231,6 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
     }
 
     if (_error != null) {
-      print("All Transactions Screen - Showing error state: $_error");
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -305,7 +277,6 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
     }
 
     if (_transactions.isEmpty) {
-      print("All Transactions Screen - Showing empty state");
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -339,8 +310,6 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
       );
     }
 
-    print(
-        "All Transactions Screen - Showing transactions list with ${_transactions.length} item");
     return RefreshIndicator(
       onRefresh: _loadTransactions,
       child: ListView.builder(
@@ -348,8 +317,6 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
         itemCount: _transactions.length,
         itemBuilder: (context, index) {
           final transaction = _transactions[index];
-          print(
-              "All Transactions Screen - Building transaction item $index: ${transaction.merchant}");
           return _buildTransactionItem(transaction, isSmallScreen);
         },
       ),

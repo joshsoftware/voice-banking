@@ -71,12 +71,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<GotTranscript>((e, emit) async {
-      final lang = e.locale;
-
-      // Debug logging - UPDATED CODE - FORCE REBUILD
-      print("=== NEW VOICE BLOC CODE IS RUNNING - VERSION 3.0 ===");
-      print("Voice Bloc Debug - Received transcript data: ${e.data}");
-
       // Get orchestrator data and intent data
       final orchestratorData = e.data["orchestrator_data"];
       final intentData = e.data["intent_data"];
@@ -84,19 +78,15 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       final translation = e.data["translation"] ?? "";
       final sessionId = e.data["session_id"] ?? "";
 
-      print("Voice Bloc Debug - orchestratorData: $orchestratorData");
-      print("Voice Bloc Debug - intentData: $intentData");
-      print("Voice Bloc Debug - message: $message");
-      print("Voice Bloc Debug - translation: $translation");
+      // Use the user's selected language for TTS output (not the detected input language)
+      final ttsLanguage = e.locale;
 
       // Parse intent
       String intentName = intentData?["intent"] ?? "unknown";
-      print("Voice Bloc Debug - Detected intent: $intentName");
 
       // Handle different intents
       if (intentName == "recent_txn" && orchestratorData != null) {
         // Handle recent transactions - show popup dialog
-        print("Voice Bloc Debug - Handling recent transactions intent");
 
         // Get transactions from orchestrator data
         List<Map<String, dynamic>> transactions = [];
@@ -111,13 +101,9 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             orchestratorData["data"]?["message"] ??
             "Here are your recent transactions";
 
-        print("Voice Bloc Debug - Found ${transactions.length} transactions");
-        print("Voice Bloc Debug - Transaction message: $transactionMessage");
-
         // Speak the message
         try {
-          await tts.speak(transactionMessage, langCode: lang);
-          print("Voice Bloc Debug - TRANSACTION TTS COMPLETED SUCCESSFULLY");
+          await tts.speak(transactionMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
@@ -137,8 +123,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         if (orchestratorData["message"] != null &&
             orchestratorData["message"].toString().trim().isNotEmpty) {
           orchestratorMessage = orchestratorData["message"].toString().trim();
-          print(
-              "Voice Bloc Debug - Found top-level orchestrator message: $orchestratorMessage");
         }
         // Case 2: success message inside data (success cases)
         else if (orchestratorData["data"] != null &&
@@ -146,8 +130,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             orchestratorData["data"]["message"].toString().trim().isNotEmpty) {
           orchestratorMessage =
               orchestratorData["data"]["message"].toString().trim();
-          print(
-              "Voice Bloc Debug - Found data.message orchestrator message: $orchestratorMessage");
         }
 
         // Update balance and customer name from orchestrator data if available
@@ -156,16 +138,12 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           final customerName = orchestratorData["data"]["customer_name"];
 
           if (balance != null) {
-            print(
-                "Voice Bloc Debug - Updating balance from orchestrator: $balance");
             // Store balance in shared preferences for UI updates
             await SharedPreferencesService.saveBalance(balance.toString());
           }
 
           if (customerName != null &&
               customerName.toString().trim().isNotEmpty) {
-            print(
-                "Voice Bloc Debug - Updating customer name from orchestrator: $customerName");
             await SharedPreferencesService.saveCustomerName(
                 customerName.toString().trim());
           }
@@ -173,12 +151,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       }
 
       if (orchestratorMessage != null) {
-        print(
-            "Voice Bloc Debug - SPEAKING ORCHESTRATOR MESSAGE: '$orchestratorMessage'");
-
         try {
-          await tts.speak(orchestratorMessage, langCode: lang);
-          print("Voice Bloc Debug - ORCHESTRATOR TTS COMPLETED SUCCESSFULLY");
+          await tts.speak(orchestratorMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
@@ -205,8 +179,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       }
 
       // NO FALLBACKS - JUST RESET
-      print(
-          "Voice Bloc Debug - NO ORCHESTRATOR MESSAGE FOUND - NOT SPEAKING ANYTHING");
       add(Reset());
     });
   }

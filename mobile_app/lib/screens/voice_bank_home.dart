@@ -43,12 +43,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   void _loadBalanceFromPrefs() {
     // Load balance from shared preferences (set by voice transcribe-intent API)
     final balance = SharedPreferencesService.getBalance();
-    print(
-        "Home Screen Debug - Loading balance from shared preferences: $balance");
     setState(() {
       _balance = balance != null ? "₹${balance}" : "₹0.00";
     });
-    print("Home Screen Debug - Balance set to: $_balance");
   }
 
   void _loadCustomerName() {
@@ -65,7 +62,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       });
 
       final mobileNumber = SharedPreferencesService.getMobileNumber();
-      print("Loading transactions for mobile: $mobileNumber");
 
       if (mobileNumber != null) {
         // Import BankingAPI for transactions
@@ -75,20 +71,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           limit: 5, // Load only top 5 for home screen
         );
 
-        print("Loaded ${transactions.length} transactions");
-        for (var tx in transactions) {
-          print("Transaction: ${tx.merchant} - ${tx.amount} - ${tx.date}");
-        }
-
         setState(() {
           _transactions = transactions;
           _isLoadingTransactions = false;
         });
-
-        print(
-            "UI State updated - _isLoadingTransactions: $_isLoadingTransactions, _transactions.length: ${_transactions.length}");
       } else {
-        print("No mobile number found in shared preferences");
         setState(() {
           _isLoadingTransactions = false;
         });
@@ -480,8 +467,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         // Transactions List
                         Builder(
                           builder: (context) {
-                            print(
-                                "Rendering transactions - isLoading: $_isLoadingTransactions, count: ${_transactions.length}");
                             if (_isLoadingTransactions) {
                               return Center(
                                 child: Padding(
@@ -525,15 +510,10 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       // Enhanced Floating Action Button
       floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
         listener: (context, state) {
-          print("Voice Bank Home Debug - Received state: ${state.runtimeType}");
           if (state is ShowTransactionsDialog) {
-            print(
-                "Voice Bank Home Debug - Showing transactions dialog with ${state.transactions.length} transactions");
             _showTransactionsDialog(
                 context, state.message, state.transactions, state.sessionId);
           } else if (state is Executing) {
-            print(
-                "Voice Bank Home Debug - Received executing state with message: ${state.message}");
             // Refresh balance and customer name from shared preferences (updated by voice bloc)
             _loadBalanceFromPrefs();
             _loadCustomerName();
@@ -724,8 +704,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
   void _showTransactionsDialog(BuildContext context, String message,
       List<Map<String, dynamic>> transactions, String sessionId) {
-    print(
-        "Voice Bank Home Debug - _showTransactionsDialog called with message: $message, transactions: ${transactions.length}");
     showDialog(
       context: context,
       builder: (BuildContext context) {

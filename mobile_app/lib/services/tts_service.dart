@@ -40,6 +40,7 @@ class TTSService {
 
       // Pick mapped language if available, else fallback
       String? targetLang = _langMap[langCode];
+
       if (targetLang != null) {
         try {
           await _tts.setLanguage(targetLang);

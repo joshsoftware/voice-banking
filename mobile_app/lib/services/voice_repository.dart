@@ -45,11 +45,7 @@ class VoiceRepository {
         'phone': phone,
       });
 
-      print(
-          "Voice Repository Debug - Making API call to /voice/transcribe-intent");
       final res = await dio.post('/voice/transcribe-intent', data: form);
-      print(
-          "Voice Repository Debug - API call successful, status: ${res.statusCode}");
 
       res.data['lang'] = locale ?? 'en';
       return res.data;

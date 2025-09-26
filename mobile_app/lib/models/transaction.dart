@@ -16,20 +16,27 @@ class Transaction {
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
-    print("Transaction.fromJson - Parsing transaction: $json");
     try {
+      // Handle null transaction_type - determine type based on amount
+      String transactionType;
+      final transactionTypeRaw = json['transaction_type'];
+      if (transactionTypeRaw != null) {
+        transactionType = transactionTypeRaw as String;
+      } else {
+        // If transaction_type is null, determine from amount
+        final amount = (json['amount'] as num).toDouble();
+        transactionType = amount >= 0 ? 'credit' : 'debit';
+      }
+
       final transaction = Transaction(
         id: json['id'] as int,
         merchant: json['recipient'] as String, // API uses 'recipient' field
         amount: (json['amount'] as num).toDouble(),
         date: json['transaction_date']
             as String, // API uses 'transaction_date' field
-        type: json['transaction_type']
-            as String, // API uses 'transaction_type' field
+        type: transactionType,
         category: json['category'] as String, // API provides category directly
       );
-      print(
-          "Transaction.fromJson - Successfully parsed: ${transaction.merchant} - ${transaction.amount}");
       return transaction;
     } catch (e) {
       print("Transaction.fromJson - Error parsing transaction: $e");
