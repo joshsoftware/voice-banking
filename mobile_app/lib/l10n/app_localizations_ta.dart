@@ -202,4 +202,79 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get validationOtp => 'தயவுசெய்து சரியான OTP உள்ளிடவும்';
+
+  @override
+  String get allTransactions => 'அனைத்து பரிவர்த்தனைகள்';
+
+  @override
+  String get transactions => 'பரிவர்த்தனைகள்';
+
+  @override
+  String get loading => 'ஏற்றுகிறது...';
+
+  @override
+  String get errorLoadingTransactions => 'பரிவர்த்தனைகளை ஏற்றுவதில் பிழை';
+
+  @override
+  String get retry => 'மீண்டும் முயற்சிக்கவும்';
+
+  @override
+  String get noTransactionsFound => 'பரிவர்த்தனைகள் எதுவும் கிடைக்கவில்லை';
+
+  @override
+  String get noTransactionsDescription => 'உங்களிடம் இன்னும் பரிவர்த்தனைகள் எதுவும் இல்லை';
+
+  @override
+  String get faq => 'அடிக்கடி கேட்கப்படும் கேள்விகள்';
+
+  @override
+  String get frequentlyAskedQuestions => 'அடிக்கடி கேட்கப்படும் கேள்விகள்';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'வாய்ஸ் பேங்கிங் திறம்பட எவ்வாறு பயன்படுத்துவது என்பதைக் கற்றுக்கொள்ளுங்கள்';
+
+  @override
+  String get whatToSpeak => 'என்ன பேச வேண்டும்';
+
+  @override
+  String get whatToSpeakDescription => 'உதாரணமாக, எனது தற்போதைய இருப்பு எவ்வளவு என்று நீங்கள் கேட்கலாம்';
+
+  @override
+  String get howToCheckTransactions => 'பரிவர்த்தனைகளை எவ்வாறு சரிபார்க்கலாம்';
+
+  @override
+  String get howToCheckTransactionsDescription => 'எனது கடைசி x பரிவர்த்தனைகள் என்னவென்று நீங்கள் கேட்கலாம்';
+
+  @override
+  String get voiceCommandsDescription => 'தெளிவாகவும் இயல்பாகவும் பேசுங்கள். கணினி உரையாடல் மொழியை புரிந்துகொள்கிறது.';
+
+  @override
+  String get supportedLanguages => 'ஆதரவளிக்கப்படும் மொழிகள்';
+
+  @override
+  String get supportedLanguagesDescription => 'தற்போது ஆங்கிலம், இந்தி, வங்காளம், குஜராத்தி, கன்னடம், மலையாளம், மராத்தி, பஞ்சாபி, தமிழ் மற்றும் தெலுங்கு மொழிகளுக்கு ஆதரவளிக்கிறது.';
+
+  @override
+  String get privacySecurity => 'தனியுரிமை மற்றும் பாதுகாப்பு';
+
+  @override
+  String get privacySecurityDescription => 'உங்கள் வாய்ஸ் தரவு பாதுகாப்பாக செயலாக்கப்படுகிறது மற்றும் நிரந்தரமாக சேமிக்கப்படுவதில்லை.';
+
+  @override
+  String get proTips => 'தொழில்முறை குறிப்புகள்';
+
+  @override
+  String get tipQuietEnvironment => 'சிறந்த அங்கீகாரத்திற்காக அமைதியான சூழலில் பேசுங்கள்';
+
+  @override
+  String get tipNaturalLanguage => 'இயற்கையான மொழியைப் பயன்படுத்துங்கள் எடுத்துக்காட்டாக \"எனது இருப்பைக் காட்டுங்கள்\"';
+
+  @override
+  String get tipWaitForIndicator => 'பேசுவதற்கு முன் கேட்கும் குறிகாட்டிக்காக காத்திருக்கவும்';
+
+  @override
+  String get needMoreHelp => 'மேலும் உதவி தேவையா?';
+
+  @override
+  String get contactSupportDescription => 'கூடுதல் உதவிக்காக எங்கள் ஆதரவு குழுவைத் தொடர்பு கொள்ளுங்கள்';
 }

@@ -202,4 +202,79 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get validationOtp => 'कृपया वैध OTP प्रविष्ट करा';
+
+  @override
+  String get allTransactions => 'सर्व व्यवहार';
+
+  @override
+  String get transactions => 'व्यवहार';
+
+  @override
+  String get loading => 'लोड होत आहे...';
+
+  @override
+  String get errorLoadingTransactions => 'व्यवहार लोड करताना त्रुटी';
+
+  @override
+  String get retry => 'पुन्हा प्रयत्न करा';
+
+  @override
+  String get noTransactionsFound => 'कोणतेही व्यवहार सापडले नाहीत';
+
+  @override
+  String get noTransactionsDescription => 'तुमच्याकडे अद्याप कोणतेही व्यवहार नाहीत';
+
+  @override
+  String get faq => 'नेहमी विचारले जाणारे प्रश्न';
+
+  @override
+  String get frequentlyAskedQuestions => 'नेहमी विचारले जाणारे प्रश्न';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'व्हॉइस बँकिंगचा प्रभावी वापर कसा करावा हे शिका';
+
+  @override
+  String get whatToSpeak => 'काय बोलावे';
+
+  @override
+  String get whatToSpeakDescription => 'उदाहरणार्थ, तुम्ही माझा सध्याचा बॅलन्स किती आहे असे विचारू शकता';
+
+  @override
+  String get howToCheckTransactions => 'व्यवहार कसे तपासावे';
+
+  @override
+  String get howToCheckTransactionsDescription => 'तुम्ही माझे शेवटचे x व्यवहार काय आहेत असे विचारू शकता';
+
+  @override
+  String get voiceCommandsDescription => 'स्पष्ट आणि नैसर्गिकरित्या बोला. सिस्टम संभाषणाची भाषा समजते.';
+
+  @override
+  String get supportedLanguages => 'समर्थित भाषा';
+
+  @override
+  String get supportedLanguagesDescription => 'सध्या इंग्रजी, हिंदी, बंगाली, गुजराती, कन्नड, मलयाळम, मराठी, पंजाबी, तमिळ आणि तेलुगू भाषांना समर्थन देते.';
+
+  @override
+  String get privacySecurity => 'गोपनीयता आणि सुरक्षा';
+
+  @override
+  String get privacySecurityDescription => 'तुमचा व्हॉइस डेटा सुरक्षितपणे प्रक्रिया केला जातो आणि कायमस्वरूपी संग्रहित केला जात नाही.';
+
+  @override
+  String get proTips => 'व्यावसायिक सल्ले';
+
+  @override
+  String get tipQuietEnvironment => 'चांगल्या ओळखीसाठी शांत वातावरणात बोला';
+
+  @override
+  String get tipNaturalLanguage => 'नैसर्गिक भाषा वापरा जसे की \"माझा बॅलन्स दाखवा\"';
+
+  @override
+  String get tipWaitForIndicator => 'बोलण्यापूर्वी ऐकण्याच्या सूचकाची वाट पहा';
+
+  @override
+  String get needMoreHelp => 'अधिक मदत हवी?';
+
+  @override
+  String get contactSupportDescription => 'अतिरिक्त सहाय्यासाठी आमच्या सहाय्य टीमशी संपर्क साधा';
 }

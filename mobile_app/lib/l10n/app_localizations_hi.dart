@@ -202,4 +202,79 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get validationOtp => 'कृपया एक वैध OTP दर्ज करें';
+
+  @override
+  String get allTransactions => 'सभी लेन-देन';
+
+  @override
+  String get transactions => 'लेन-देन';
+
+  @override
+  String get loading => 'लोड हो रहा है...';
+
+  @override
+  String get errorLoadingTransactions => 'लेन-देन लोड करने में त्रुटि';
+
+  @override
+  String get retry => 'पुनः प्रयास करें';
+
+  @override
+  String get noTransactionsFound => 'कोई लेन-देन नहीं मिला';
+
+  @override
+  String get noTransactionsDescription => 'आपके पास अभी तक कोई लेन-देन नहीं है';
+
+  @override
+  String get faq => 'अक्सर पूछे जाने वाले प्रश्न';
+
+  @override
+  String get frequentlyAskedQuestions => 'अक्सर पूछे जाने वाले प्रश्न';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'वॉइस बैंकिंग का प्रभावी उपयोग करना सीखें';
+
+  @override
+  String get whatToSpeak => 'क्या बोलना है';
+
+  @override
+  String get whatToSpeakDescription => 'उदाहरण के लिए, आप पूछ सकते हैं कि मेरा वर्तमान बैलेंस क्या है';
+
+  @override
+  String get howToCheckTransactions => 'लेन-देन कैसे देखें';
+
+  @override
+  String get howToCheckTransactionsDescription => 'आप पूछ सकते हैं कि मेरे अंतिम x लेन-देन क्या हैं';
+
+  @override
+  String get voiceCommandsDescription => 'स्पष्ट और प्राकृतिक रूप से बोलें। सिस्टम बातचीत की भाषा को समझता है।';
+
+  @override
+  String get supportedLanguages => 'समर्थित भाषाएं';
+
+  @override
+  String get supportedLanguagesDescription => 'वर्तमान में अंग्रेजी, हिंदी, बंगाली, गुजराती, कन्नड़, मलयालम, मराठी, पंजाबी, तमिल और तेलुगु का समर्थन करता है।';
+
+  @override
+  String get privacySecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get privacySecurityDescription => 'आपका वॉइस डेटा सुरक्षित रूप से प्रोसेस किया जाता है और स्थायी रूप से संग्रहीत नहीं किया जाता।';
+
+  @override
+  String get proTips => 'विशेषज्ञ सुझाव';
+
+  @override
+  String get tipQuietEnvironment => 'बेहतर पहचान के लिए शांत वातावरण में बोलें';
+
+  @override
+  String get tipNaturalLanguage => 'प्राकृतिक भाषा का उपयोग करें जैसे \"मेरा बैलेंस दिखाएं\"';
+
+  @override
+  String get tipWaitForIndicator => 'बोलने से पहले सुनने के संकेतक की प्रतीक्षा करें';
+
+  @override
+  String get needMoreHelp => 'और सहायता चाहिए?';
+
+  @override
+  String get contactSupportDescription => 'अतिरिक्त सहायता के लिए हमारी सहायता टीम से संपर्क करें';
 }

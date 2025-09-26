@@ -202,4 +202,79 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get validationOtp => 'దయచేసి చెల్లుబాటు అయ్యే OTP నమోదు చేయండి';
+
+  @override
+  String get allTransactions => 'అన్ని లావాదేవీలు';
+
+  @override
+  String get transactions => 'లావాదేవీలు';
+
+  @override
+  String get loading => 'లోడ్ అవుతోంది...';
+
+  @override
+  String get errorLoadingTransactions => 'లావాదేవీలను లోడ్ చేయడంలో లోపం';
+
+  @override
+  String get retry => 'మళ్లీ ప్రయత్నించండి';
+
+  @override
+  String get noTransactionsFound => 'లావాదేవీలు ఏవీ కనుగొనబడలేదు';
+
+  @override
+  String get noTransactionsDescription => 'మీకు ఇంకా లావాదేవీలు లేవు';
+
+  @override
+  String get faq => 'తరచుగా అడిగే ప్రశ్నలు';
+
+  @override
+  String get frequentlyAskedQuestions => 'తరచుగా అడిగే ప్రశ్నలు';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'వాయిస్ బ్యాంకింగ్‌ను ప్రభావవంతంగా ఎలా ఉపయోగించాలో నేర్చుకోండి';
+
+  @override
+  String get whatToSpeak => 'ఏమి మాట్లాడాలి';
+
+  @override
+  String get whatToSpeakDescription => 'ఉదాహరణకు, నా ప్రస్తుత బ్యాలెన్స్ ఎంత అని మీరు అడగవచ్చు';
+
+  @override
+  String get howToCheckTransactions => 'లావాదేవీలను ఎలా తనిఖీ చేయాలి';
+
+  @override
+  String get howToCheckTransactionsDescription => 'నా చివరి x లావాదేవీలు ఏమిటి అని మీరు అడగవచ్చు';
+
+  @override
+  String get voiceCommandsDescription => 'స్పష్టంగా మరియు సహజంగా మాట్లాడండి. సిస్టమ్ సంభాషణ భాషను అర్థం చేసుకుంటుంది.';
+
+  @override
+  String get supportedLanguages => 'మద్దతు ఉన్న భాషలు';
+
+  @override
+  String get supportedLanguagesDescription => 'ప్రస్తుతం ఆంగ్లం, హిందీ, బెంగాలీ, గుజరాతీ, కన్నడ, మలయాళం, మరాఠీ, పంజాబీ, తమిళం మరియు తెలుగు భాషలకు మద్దతు ఇస్తుంది.';
+
+  @override
+  String get privacySecurity => 'గోప్యత మరియు భద్రత';
+
+  @override
+  String get privacySecurityDescription => 'మీ వాయిస్ డేటా సురక్షితంగా ప్రాసెస్ చేయబడుతుంది మరియు శాశ్వతంగా నిల్వ చేయబడదు.';
+
+  @override
+  String get proTips => 'వృత్తిపరమైన చిట్కాలు';
+
+  @override
+  String get tipQuietEnvironment => 'మెరుగైన గుర్తింపు కోసం నిశ్శబ్ద వాతావరణంలో మాట్లాడండి';
+
+  @override
+  String get tipNaturalLanguage => 'సహజ భాషను ఉపయోగించండి ఉదాహరణకు \"నా బ్యాలెన్స్ చూపించండి\"';
+
+  @override
+  String get tipWaitForIndicator => 'మాట్లాడే ముందు వినే సూచిక కోసం వేచి ఉండండి';
+
+  @override
+  String get needMoreHelp => 'మరింత సహాయం కావాలా?';
+
+  @override
+  String get contactSupportDescription => 'అదనపు సహాయం కోసం మా మద్దతు బృందాన్ని సంప్రదించండి';
 }

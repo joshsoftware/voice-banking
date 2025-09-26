@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voice_banking_poc/routes.dart';
 import 'bloc/voice_bloc.dart';
 import 'services/voice_repository.dart';
+import 'services/shared_preferences_service.dart';
 import 'l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print("Starting app...");
+
+  // Initialize shared preferences
+  await SharedPreferencesService.init();
 
   final voiceRepo = VoiceRepository();
 
@@ -28,7 +31,7 @@ class VoiceBankingApp extends StatefulWidget {
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _VoiceBankingAppState? state =
-    context.findAncestorStateOfType<_VoiceBankingAppState>();
+        context.findAncestorStateOfType<_VoiceBankingAppState>();
     state?.setLocale(newLocale);
   }
 }
@@ -44,30 +47,30 @@ class _VoiceBankingAppState extends State<VoiceBankingApp> {
 
   @override
   Widget build(BuildContext context) {
-      return MaterialApp(
-        title: "Lingo Voice Banking",
-        theme: ThemeData(primarySwatch: Colors.blue),
-        initialRoute: '/',
-        onGenerateRoute: MyRouter.generateRoute,
-        locale: _locale,
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          AppLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'), // English
-          Locale('hi'), // Hindi
-          Locale('ta'), // Tamil
-          Locale('te'), // Telugu
-          Locale('bn'), // Bengali
-          Locale('gu'),  // Gujarati
-          Locale('ml'),  // Malayalam
-          Locale('mr'),  // Marathi
-          Locale('kn'),  // Kannada
-          Locale('pa'),  // Punjabi
-        ],
-      );
+    return MaterialApp(
+      title: "Lingo Voice Banking",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      initialRoute: '/',
+      onGenerateRoute: MyRouter.generateRoute,
+      locale: _locale,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('hi'), // Hindi
+        Locale('ta'), // Tamil
+        Locale('te'), // Telugu
+        Locale('bn'), // Bengali
+        Locale('gu'), // Gujarati
+        Locale('ml'), // Malayalam
+        Locale('mr'), // Marathi
+        Locale('kn'), // Kannada
+        Locale('pa'), // Punjabi
+      ],
+    );
   }
 }

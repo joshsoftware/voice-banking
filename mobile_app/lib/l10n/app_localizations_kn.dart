@@ -202,4 +202,79 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get validationOtp => 'ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ OTP ನಮೂದಿಸಿ';
+
+  @override
+  String get allTransactions => 'ಎಲ್ಲಾ ವಹಿವಾಟುಗಳು';
+
+  @override
+  String get transactions => 'ವಹಿವಾಟುಗಳು';
+
+  @override
+  String get loading => 'ಲೋಡ್ ಆಗುತ್ತಿದೆ...';
+
+  @override
+  String get errorLoadingTransactions => 'ವಹಿವಾಟುಗಳನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ';
+
+  @override
+  String get retry => 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ';
+
+  @override
+  String get noTransactionsFound => 'ಯಾವುದೇ ವಹಿವಾಟುಗಳು ಕಂಡುಬಂದಿಲ್ಲ';
+
+  @override
+  String get noTransactionsDescription => 'ನಿಮ್ಮಲ್ಲಿ ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟುಗಳು ಇಲ್ಲ';
+
+  @override
+  String get faq => 'ಆಗಾಗ್ಗೆ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು';
+
+  @override
+  String get frequentlyAskedQuestions => 'ಆಗಾಗ್ಗೆ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು';
+
+  @override
+  String get learnHowToUseVoiceBanking => 'ವಾಯ್ಸ್ ಬ್ಯಾಂಕಿಂಗ್ ಅನ್ನು ಪರಿಣಾಮಕಾರಿಯಾಗಿ ಬಳಸುವುದು ಹೇಗೆಂದು ತಿಳಿಯಿರಿ';
+
+  @override
+  String get whatToSpeak => 'ಏನು ಮಾತನಾಡಬೇಕು';
+
+  @override
+  String get whatToSpeakDescription => 'ಉದಾಹರಣೆಗೆ, ನೀವು ನನ್ನ ಪ್ರಸ್ತುತ ಬ್ಯಾಲೆನ್ಸ್ ಎಷ್ಟು ಎಂದು ಕೇಳಬಹುದು';
+
+  @override
+  String get howToCheckTransactions => 'ವಹಿವಾಟುಗಳನ್ನು ಹೇಗೆ ಪರಿಶೀಲಿಸುವುದು';
+
+  @override
+  String get howToCheckTransactionsDescription => 'ನೀವು ನನ್ನ ಕೊನೆಯ x ವಹಿವಾಟುಗಳು ಯಾವುವು ಎಂದು ಕೇಳಬಹುದು';
+
+  @override
+  String get voiceCommandsDescription => 'ಸ್ಪಷ್ಟವಾಗಿ ಮತ್ತು ನೈಸರ್ಗಿಕವಾಗಿ ಮಾತನಾಡಿ. ವ್ಯವಸ್ಥೆಯು ಸಂಭಾಷಣೆಯ ಭಾಷೆಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ.';
+
+  @override
+  String get supportedLanguages => 'ಬೆಂಬಲಿತ ಭಾಷೆಗಳು';
+
+  @override
+  String get supportedLanguagesDescription => 'ಪ್ರಸ್ತುತ ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ, ಬಂಗಾಳಿ, ಗುಜರಾತಿ, ಕನ್ನಡ, ಮಲಯಾಳಂ, ಮರಾಠಿ, ಪಂಜಾಬಿ, ತಮಿಳು ಮತ್ತು ತೆಲುಗು ಭಾಷೆಗಳಿಗೆ ಬೆಂಬಲ ನೀಡುತ್ತದೆ.';
+
+  @override
+  String get privacySecurity => 'ಗೌಪ್ಯತೆ ಮತ್ತು ಸುರಕ್ಷತೆ';
+
+  @override
+  String get privacySecurityDescription => 'ನಿಮ್ಮ ವಾಯ್ಸ್ ಡೇಟಾವನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಶಾಶ್ವತವಾಗಿ ಸಂಗ್ರಹಿಸಲಾಗುವುದಿಲ್ಲ.';
+
+  @override
+  String get proTips => 'ವೃತ್ತಿಪರ ಸಲಹೆಗಳು';
+
+  @override
+  String get tipQuietEnvironment => 'ಉತ್ತಮ ಗುರುತಿಸುವಿಕೆಗಾಗಿ ಶಾಂತ ವಾತಾವರಣದಲ್ಲಿ ಮಾತನಾಡಿ';
+
+  @override
+  String get tipNaturalLanguage => 'ನೈಸರ್ಗಿಕ ಭಾಷೆಯನ್ನು ಬಳಸಿ ಉದಾಹರಣೆಗೆ \"ನನ್ನ ಬ್ಯಾಲೆನ್ಸ್ ತೋರಿಸಿ\"';
+
+  @override
+  String get tipWaitForIndicator => 'ಮಾತನಾಡುವ ಮೊದಲು ಕೇಳುವ ಸೂಚಕಕ್ಕಾಗಿ ಕಾಯಿರಿ';
+
+  @override
+  String get needMoreHelp => 'ಹೆಚ್ಚು ಸಹಾಯ ಬೇಕೇ?';
+
+  @override
+  String get contactSupportDescription => 'ಹೆಚ್ಚುವರಿ ಸಹಾಯಕ್ಕಾಗಿ ನಮ್ಮ ಬೆಂಬಲ ತಂಡವನ್ನು ಸಂಪರ್ಕಿಸಿ';
 }
