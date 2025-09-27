@@ -638,6 +638,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact our support team for additional assistance'**
   String get contactSupportDescription;
+
+  /// No description provided for @balanceSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current balance is {amount} rupees.'**
+  String balanceSuccess(Object amount);
+
+  /// No description provided for @transactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your {count} most recent transactions.'**
+  String transactionsFound(Object count);
+
+  /// No description provided for @noTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found.'**
+  String get noTransactions;
+
+  /// No description provided for @transferSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer of {amount} rupees to {recipient} has been initiated successfully.'**
+  String transferSuccess(Object amount, Object recipient);
+
+  /// No description provided for @transferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed. Please try again.'**
+  String get transferFailed;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, I encountered an error. Please try again.'**
+  String get errorGeneric;
+
+  /// No description provided for @errorInsufficientFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient funds. Please check your balance.'**
+  String get errorInsufficientFunds;
+
+  /// No description provided for @otpNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Lingo Voice Banking OTP: {otp}'**
+  String otpNotification(Object otp);
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed'**
+  String get loginFailed;
+
+  /// No description provided for @networkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error: {error}'**
+  String networkError(Object error);
+
+  /// No description provided for @verificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed: {error}'**
+  String verificationFailed(Object error);
+
+  /// No description provided for @resendInSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String resendInSeconds(Object seconds);
+
+  /// No description provided for @resendOtpFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to resend OTP: {message}'**
+  String resendOtpFailed(Object message);
+
+  /// No description provided for @transactionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Details'**
+  String get transactionDetails;
+
+  /// No description provided for @sessionId.
+  ///
+  /// In en, this message translates to:
+  /// **'Session ID: {sessionId}...'**
+  String sessionId(Object sessionId);
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @debit.
+  ///
+  /// In en, this message translates to:
+  /// **'Debit'**
+  String get debit;
+
+  /// No description provided for @credit.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get credit;
+
+  /// No description provided for @mobileNumberNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number not found. Please login again.'**
+  String get mobileNumberNotFound;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @hindi.
+  ///
+  /// In en, this message translates to:
+  /// **'हिन्दी'**
+  String get hindi;
+
+  /// No description provided for @tamil.
+  ///
+  /// In en, this message translates to:
+  /// **'தமிழ்'**
+  String get tamil;
+
+  /// No description provided for @telugu.
+  ///
+  /// In en, this message translates to:
+  /// **'తెలుగు'**
+  String get telugu;
+
+  /// No description provided for @bengali.
+  ///
+  /// In en, this message translates to:
+  /// **'বাংলা'**
+  String get bengali;
+
+  /// No description provided for @gujarati.
+  ///
+  /// In en, this message translates to:
+  /// **'ગુજરાતી'**
+  String get gujarati;
+
+  /// No description provided for @malayalam.
+  ///
+  /// In en, this message translates to:
+  /// **'മലയാളം'**
+  String get malayalam;
+
+  /// No description provided for @marathi.
+  ///
+  /// In en, this message translates to:
+  /// **'मराठी'**
+  String get marathi;
+
+  /// No description provided for @kannada.
+  ///
+  /// In en, this message translates to:
+  /// **'ಕನ್ನಡ'**
+  String get kannada;
+
+  /// No description provided for @punjabi.
+  ///
+  /// In en, this message translates to:
+  /// **'ਪੰਜਾਬੀ'**
+  String get punjabi;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

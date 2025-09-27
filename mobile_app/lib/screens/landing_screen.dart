@@ -37,7 +37,7 @@ class _LandingScreenState extends State<LandingScreen> {
         // Show OTP notification
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.otpNotification.replaceAll("{otp}", otp)),
+            content: Text(AppLocalizations.of(context)!.otpNotification(otp)),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape:
@@ -64,7 +64,7 @@ class _LandingScreenState extends State<LandingScreen> {
       // Show error message for network issues
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.networkError.replaceAll("{error}", e.toString())),
+          content: Text(AppLocalizations.of(context)!.networkError(e.toString())),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:

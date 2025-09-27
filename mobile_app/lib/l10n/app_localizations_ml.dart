@@ -277,4 +277,109 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'അധിക സഹായത്തിനായി ഞങ്ങളുടെ സപ്പോർട്ട് ടീമുമായി ബന്ധപ്പെടുക';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'നിങ്ങളുടെ നിലവിലെ ബാലൻസ് $amount രൂപയാണ്।';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'ഇവിടെ നിങ്ങളുടെ $count ഏറ്റവും പുതിയ ഇടപാടുകളാണ്।';
+  }
+
+  @override
+  String get noTransactions => 'ഇടപാടുകൾ കണ്ടെത്തിയില്ല।';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipient എന്നയാൾക്ക് $amount രൂപയുടെ കൈമാറ്റം വിജയകരമായി ആരംഭിച്ചു।';
+  }
+
+  @override
+  String get transferFailed => 'കൈമാറ്റം പരാജയപ്പെട്ടു। ദയവായി വീണ്ടും ശ്രമിക്കുക।';
+
+  @override
+  String get errorGeneric => 'ക്ഷമിക്കണം, എനിക്ക് ഒരു പിശക് സംഭവിച്ചു। ദയവായി വീണ്ടും ശ്രമിക്കുക।';
+
+  @override
+  String get errorInsufficientFunds => 'പര്യാപ്തമല്ലാത്ത ധനം। ദയവായി നിങ്ങളുടെ ബാലൻസ് പരിശോധിക്കുക।';
+
+  @override
+  String otpNotification(Object otp) {
+    return 'ലിംഗോ വോയ്സ് ബാങ്കിംഗ് OTP: $otp';
+  }
+
+  @override
+  String get loginFailed => 'ലോഗിൻ പരാജയം';
+
+  @override
+  String networkError(Object error) {
+    return 'നെറ്റ്‌വർക്ക് പിശക്: $error';
+  }
+
+  @override
+  String verificationFailed(Object error) {
+    return 'പരിശോധന പരാജയം: $error';
+  }
+
+  @override
+  String resendInSeconds(Object seconds) {
+    return '$seconds സെക്കൻഡിൽ വീണ്ടും അയയ്ക്കുക';
+  }
+
+  @override
+  String resendOtpFailed(Object message) {
+    return 'OTP വീണ്ടും അയയ്ക്കാൻ പരാജയം: $message';
+  }
+
+  @override
+  String get transactionDetails => 'ഇടപാട് വിവരങ്ങൾ';
+
+  @override
+  String sessionId(Object sessionId) {
+    return 'സെഷൻ ID: $sessionId...';
+  }
+
+  @override
+  String get close => 'അടയ്ക്കുക';
+
+  @override
+  String get debit => 'ഡെബിറ്റ്';
+
+  @override
+  String get credit => 'ക്രെഡിറ്റ്';
+
+  @override
+  String get mobileNumberNotFound => 'മൊബൈൽ നമ്പർ കണ്ടെത്തിയില്ല। ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക।';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get hindi => 'हिन्दी';
+
+  @override
+  String get tamil => 'தமிழ்';
+
+  @override
+  String get telugu => 'తెలుగు';
+
+  @override
+  String get bengali => 'বাংলা';
+
+  @override
+  String get gujarati => 'ગુજરાતી';
+
+  @override
+  String get malayalam => 'മലയാളം';
+
+  @override
+  String get marathi => 'मराठी';
+
+  @override
+  String get kannada => 'ಕನ್ನಡ';
+
+  @override
+  String get punjabi => 'ਪੰਜਾਬੀ';
 }

@@ -277,4 +277,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'Contact our support team for additional assistance';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'Your current balance is $amount rupees.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'Here are your $count most recent transactions.';
+  }
+
+  @override
+  String get noTransactions => 'No transactions found.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return 'Transfer of $amount rupees to $recipient has been initiated successfully.';
+  }
+
+  @override
+  String get transferFailed => 'Transfer failed. Please try again.';
+
+  @override
+  String get errorGeneric => 'Sorry, I encountered an error. Please try again.';
+
+  @override
+  String get errorInsufficientFunds => 'Insufficient funds. Please check your balance.';
+
+  @override
+  String otpNotification(Object otp) {
+    return 'Lingo Voice Banking OTP: $otp';
+  }
+
+  @override
+  String get loginFailed => 'Login failed';
+
+  @override
+  String networkError(Object error) {
+    return 'Network error: $error';
+  }
+
+  @override
+  String verificationFailed(Object error) {
+    return 'Verification failed: $error';
+  }
+
+  @override
+  String resendInSeconds(Object seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String resendOtpFailed(Object message) {
+    return 'Failed to resend OTP: $message';
+  }
+
+  @override
+  String get transactionDetails => 'Transaction Details';
+
+  @override
+  String sessionId(Object sessionId) {
+    return 'Session ID: $sessionId...';
+  }
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get debit => 'Debit';
+
+  @override
+  String get credit => 'Credit';
+
+  @override
+  String get mobileNumberNotFound => 'Mobile number not found. Please login again.';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get hindi => 'हिन्दी';
+
+  @override
+  String get tamil => 'தமிழ்';
+
+  @override
+  String get telugu => 'తెలుగు';
+
+  @override
+  String get bengali => 'বাংলা';
+
+  @override
+  String get gujarati => 'ગુજરાતી';
+
+  @override
+  String get malayalam => 'മലയാളം';
+
+  @override
+  String get marathi => 'मराठी';
+
+  @override
+  String get kannada => 'ಕನ್ನಡ';
+
+  @override
+  String get punjabi => 'ਪੰਜਾਬੀ';
 }

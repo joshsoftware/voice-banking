@@ -277,4 +277,109 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'கூடுதல் உதவிக்காக எங்கள் ஆதரவு குழுவைத் தொடர்பு கொள்ளுங்கள்';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'உங்கள் தற்போதைய இருப்பு $amount ரூபாய்।';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'இங்கே உங்களின் $count சமீபத்திய பரிவர்த்தனைகள்।';
+  }
+
+  @override
+  String get noTransactions => 'பரிவர்த்தனைகள் எதுவும் கிடைக்கவில்லை।';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipient க்கு $amount ரூபாய் பரிமாற்றம் வெற்றிகரமாக தொடங்கப்பட்டது।';
+  }
+
+  @override
+  String get transferFailed => 'பரிமாற்றம் தோல்வியடைந்தது। தயவுசெய்து மீண்டும் முயற்சிக்கவும்।';
+
+  @override
+  String get errorGeneric => 'மன்னிக்கவும், எனக்கு ஒரு பிழை ஏற்பட்டது। தயவுசெய்து மீண்டும் முயற்சிக்கவும்।';
+
+  @override
+  String get errorInsufficientFunds => 'போதுமான நிதி இல்லை। தயவுசெய்து உங்கள் இருப்பை சரிபார்க்கவும்।';
+
+  @override
+  String otpNotification(Object otp) {
+    return 'லிங்கோ வாய்ஸ் பேங்கிங் OTP: $otp';
+  }
+
+  @override
+  String get loginFailed => 'உள்நுழைவு தோல்வி';
+
+  @override
+  String networkError(Object error) {
+    return 'நெட்வொர்க் பிழை: $error';
+  }
+
+  @override
+  String verificationFailed(Object error) {
+    return 'சரிபார்ப்பு தோல்வி: $error';
+  }
+
+  @override
+  String resendInSeconds(Object seconds) {
+    return '$seconds வினாடிகளில் மீண்டும் அனுப்பு';
+  }
+
+  @override
+  String resendOtpFailed(Object message) {
+    return 'OTP மீண்டும் அனுப்ப தோல்வி: $message';
+  }
+
+  @override
+  String get transactionDetails => 'பரிவர்த்தனை விவரங்கள்';
+
+  @override
+  String sessionId(Object sessionId) {
+    return 'அமர்வு ID: $sessionId...';
+  }
+
+  @override
+  String get close => 'மூடு';
+
+  @override
+  String get debit => 'டெபிட்';
+
+  @override
+  String get credit => 'கிரெடிட்';
+
+  @override
+  String get mobileNumberNotFound => 'மொபைல் எண் கிடைக்கவில்லை। தயவுசெய்து மீண்டும் உள்நுழையவும்।';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get hindi => 'हिन्दी';
+
+  @override
+  String get tamil => 'தமிழ்';
+
+  @override
+  String get telugu => 'తెలుగు';
+
+  @override
+  String get bengali => 'বাংলা';
+
+  @override
+  String get gujarati => 'ગુજરાતી';
+
+  @override
+  String get malayalam => 'മലയാളം';
+
+  @override
+  String get marathi => 'मराठी';
+
+  @override
+  String get kannada => 'ಕನ್ನಡ';
+
+  @override
+  String get punjabi => 'ਪੰਜਾਬੀ';
 }

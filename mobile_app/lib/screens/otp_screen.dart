@@ -112,7 +112,7 @@ class _OtpScreenState extends State<OtpScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.verificationFailed.replaceAll("{error}", e.toString())),
+          content: Text(AppLocalizations.of(context)!.verificationFailed(e.toString())),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -161,7 +161,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.resendOtpFailed.replaceAll("{message}", result["message"])),
+            content: Text(AppLocalizations.of(context)!.resendOtpFailed(result["message"])),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
             shape:
@@ -176,7 +176,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.networkError.replaceAll("{error}", e.toString())),
+          content: Text(AppLocalizations.of(context)!.networkError(e.toString())),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:
@@ -430,7 +430,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
                           if (_remainingTime > 0) ...[
                             Text(
-                              AppLocalizations.of(context)!.resendInSeconds.replaceAll("{seconds}", _remainingTime.toString()),
+                              AppLocalizations.of(context)!.resendInSeconds(_remainingTime.toString()),
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 12 : 14,
                                 color: Colors.grey[500],

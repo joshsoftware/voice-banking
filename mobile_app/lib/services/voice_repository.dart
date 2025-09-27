@@ -18,11 +18,20 @@ class VoiceRepository {
   }
 
   Future<void> start() async {
-    if (await _rec.hasPermission()) {
-      final path = await getFilePath();
-      await _rec.start(
-          const RecordConfig(encoder: AudioEncoder.wav, sampleRate: 16000),
-          path: path);
+    try {
+      if (await _rec.hasPermission()) {
+        final path = await getFilePath();
+        await _rec.start(
+            const RecordConfig(encoder: AudioEncoder.wav, sampleRate: 16000),
+            path: path);
+        print("Voice recording started successfully");
+      } else {
+        print("Microphone permission denied");
+        throw Exception("Microphone permission denied");
+      }
+    } catch (e) {
+      print("Error starting voice recording: $e");
+      throw Exception("Failed to start voice recording: $e");
     }
   }
 

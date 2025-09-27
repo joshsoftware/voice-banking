@@ -58,8 +58,14 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
-      await repo.start();
-      emit(Listening());
+      try {
+        await repo.start();
+        emit(Listening());
+      } catch (e) {
+        print("Error starting voice recording: $e");
+        // Keep the state as Idle if recording fails
+        emit(Idle());
+      }
     });
 
     on<StopListening>((e, emit) async {
