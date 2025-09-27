@@ -190,3 +190,183 @@ Thumbs.db
 # Keep important files
 !**/lib/l10n/app_*.arb
 !**/lib/l10n/app_localizations.dart
+
+# Additional iOS specific files and directories
+**/ios/build/
+**/ios/*.xcarchive/
+**/ios/*.ipa
+**/ios/*.dSYM/
+**/ios/DerivedData/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/Project.xcworkspace/xcuserdata/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+**/ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/Podfile.lock
+**/ios/.symlinks/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# iOS Archive and Distribution
+**/ios/Archive/
+**/ios/Export/
+**/ios/*.app
+**/ios/*.ipa
+**/ios/*.dSYM.zip
+
+# iOS Simulator
+**/ios/Simulator/
+
+# iOS Provisioning Profiles
+**/ios/*.mobileprovision
+**/ios/*.provisionprofile
+
+# iOS Certificates
+**/ios/*.p12
+**/ios/*.cer
+
+# Xcode specific
+**/ios/*.xcworkspace/xcuserdata/
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/IDEWorkspaceChecks.plist
+
+# iOS Build artifacts
+**/ios/build/
+**/ios/DerivedData/
+**/ios/.build/
+
+# Keep important iOS files
+!**/ios/Runner/Info.plist
+!**/ios/Runner/AppDelegate.swift
+!**/ios/Runner/AppDelegate.h
+!**/ios/Runner/main.m
+!**/ios/Runner/Assets.xcassets/
+!**/ios/Runner/Base.lproj/
+!**/ios/Runner.xcodeproj/project.pbxproj
+!**/ios/Runner.xcodeproj/project.xcworkspace/
+!**/ios/Podfile
+!**/ios/Runner.xcworkspace/contents.xcworkspacedata
+
+
+# Additional iOS specific files and directories
+**/ios/build/
+**/ios/*.xcarchive/
+**/ios/*.ipa
+**/ios/*.dSYM/
+**/ios/DerivedData/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/Project.xcworkspace/xcuserdata/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+**/ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/Podfile.lock
+**/ios/.symlinks/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# iOS Archive and Distribution
+**/ios/Archive/
+**/ios/Export/
+**/ios/*.app
+**/ios/*.ipa
+**/ios/*.dSYM.zip
+
+# iOS Simulator
+**/ios/Simulator/
+
+# iOS Provisioning Profiles
+**/ios/*.mobileprovision
+**/ios/*.provisionprofile
+
+# iOS Certificates
+**/ios/*.p12
+**/ios/*.cer
+
+# Xcode specific
+**/ios/*.xcworkspace/xcuserdata/
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/IDEWorkspaceChecks.plist
+
+# iOS Build artifacts
+**/ios/build/
+**/ios/DerivedData/
+**/ios/.build/
+
+# Keep important iOS files
+
+# Additional iOS specific files and directories
+**/ios/build/
+**/ios/*.xcarchive/
+**/ios/*.ipa
+**/ios/*.dSYM/
+**/ios/DerivedData/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/Project.xcworkspace/xcuserdata/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+**/ios/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/Podfile.lock
+**/ios/.symlinks/
+
+# iOS Archive and Distribution
+**/ios/Archive/
+**/ios/Export/
+**/ios/*.app
+**/ios/*.dSYM.zip
+
+# iOS Simulator
+**/ios/Simulator/
+
+# iOS Provisioning Profiles
+**/ios/*.mobileprovision
+**/ios/*.provisionprofile
+
+# iOS Certificates
+**/ios/*.p12
+**/ios/*.cer
+
+# Xcode specific
+**/ios/*.xcworkspace/xcuserdata/
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+**/ios/UserInterfaceState.xcuserstate
+**/ios/IDEWorkspaceChecks.plist
+
+# iOS Build artifacts
+**/ios/build/
+**/ios/DerivedData/
+**/ios/.build/
+
+# Keep important iOS files
+!**/ios/Runner/Info.plist
+!**/ios/Runner/AppDelegate.swift
+!**/ios/Runner/AppDelegate.h
+!**/ios/Runner/main.m
+!**/ios/Runner/Assets.xcassets/
+!**/ios/Runner/Base.lproj/
+!**/ios/Runner.xcodeproj/project.pbxproj
+!**/ios/Runner.xcodeproj/project.xcworkspace/
+!**/ios/Podfile
+!**/ios/Runner.xcworkspace/contents.xcworkspacedata
