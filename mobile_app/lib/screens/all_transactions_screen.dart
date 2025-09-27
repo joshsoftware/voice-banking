@@ -183,7 +183,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
                       '${_transactions.length} ${AppLocalizations.of(context)!.transactions}',
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Colors.white.withOpacity(0.9),
                       ),
                     ),
                   ],
@@ -335,7 +335,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -346,7 +346,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _getCategoryColor(category).withValues(alpha: 0.1),
+              color: _getCategoryColor(category).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(

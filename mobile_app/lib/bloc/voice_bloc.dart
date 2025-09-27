@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 import '../models/models.dart' as models;
 import '../services/voice_repository.dart';
 import '../services/banking_api.dart';
@@ -58,8 +59,14 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
-      await repo.start();
-      emit(Listening());
+      try {
+        await repo.start();
+        emit(Listening());
+      } catch (e) {
+        print("Voice Bloc Error - Permission denied: $e");
+        // Show a snackbar or dialog to inform user about permission
+        emit(Idle());
+      }
     });
 
     on<StopListening>((e, emit) async {

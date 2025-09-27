@@ -235,7 +235,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   borderRadius: BorderRadius.circular(isSmallScreen ? 40 : 50),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 15,
                       offset: const Offset(0, 8),
                     ),
@@ -268,7 +268,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 loc.weHaveSentCode,
                 style: TextStyle(
                   fontSize: isSmallScreen ? 14 : 16,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Colors.white.withOpacity(0.9),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -296,7 +296,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 15,
                       offset: const Offset(0, 8),
                     ),
@@ -473,10 +473,10 @@ class _OtpScreenState extends State<OtpScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                      Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: Row(
                   children: [
@@ -491,7 +491,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         loc.otpValidFor,
                         style: TextStyle(
                           fontSize: isSmallScreen ? 11 : 13,
-                          color: Colors.white.withValues(alpha: 0.9),
+                          color: Colors.white.withOpacity(0.9),
                         ),
                       ),
                     ),
@@ -506,7 +506,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 loc.secureVerification,
                 style: TextStyle(
                   fontSize: 11,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: Colors.white.withOpacity(0.7),
                 ),
               ),
 

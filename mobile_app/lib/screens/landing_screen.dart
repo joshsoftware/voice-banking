@@ -132,12 +132,12 @@ class _LandingScreenState extends State<LandingScreen> {
                               BorderRadius.circular(isSmallScreen ? 40 : 60),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
+                              color: Colors.black.withOpacity(0.15),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
                             BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: Colors.white.withOpacity(0.8),
                               blurRadius: 1,
                               offset: const Offset(0, 1),
                             ),
@@ -183,7 +183,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       loc.experienceBanking,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 13 : 15,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Colors.white.withOpacity(0.9),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -198,7 +198,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
+                            color: Colors.black.withOpacity(0.1),
                             blurRadius: 15,
                             offset: const Offset(0, 8),
                           ),
@@ -318,10 +318,10 @@ class _LandingScreenState extends State<LandingScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.2)),
+                              color: Colors.white.withOpacity(0.2)),
                         ),
                         child: Column(
                           children: [
@@ -382,7 +382,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       loc.poweredByAI,
                       style: TextStyle(
                         fontSize: 11,
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: Colors.white.withOpacity(0.7),
                       ),
                     ),
 
@@ -419,7 +419,7 @@ class _LandingScreenState extends State<LandingScreen> {
           subtitle,
           style: TextStyle(
             fontSize: 9,
-            color: Colors.white.withValues(alpha: 0.8),
+            color: Colors.white.withOpacity(0.8),
           ),
           textAlign: TextAlign.center,
         ),
