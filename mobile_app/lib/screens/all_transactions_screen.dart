@@ -43,7 +43,7 @@ class _AllTransactionsScreenState extends State<AllTransactionsScreen> {
       if (mobileNumber == null) {
         if (mounted) {
           setState(() {
-            _error = "Mobile number not found. Please login again..";
+            _error = AppLocalizations.of(context)!.mobileNumberNotFound;
             _isLoading = false;
           });
         }

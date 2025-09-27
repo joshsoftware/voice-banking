@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main.dart'; // for VoiceBankingApp.setLocale
-
+import "../l10n/app_localizations.dart";
 
 class LanguageToggleWidget extends StatelessWidget {
 
@@ -8,51 +8,53 @@ class LanguageToggleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    
     return PopupMenuButton<Locale>(
       icon: const Icon(Icons.language),
       onSelected: (locale) {
         VoiceBankingApp.setLocale(context, locale);
       },
-      itemBuilder: (context) => const [
+      itemBuilder: (context) => [
         PopupMenuItem(
-          value: Locale('en'),
-          child: Text("English"),
+          value: const Locale('en'),
+          child: Text(loc.english),
         ),
         PopupMenuItem(
-          value: Locale('hi'),
-          child: Text("हिन्दी"),
+          value: const Locale('hi'),
+          child: Text(loc.hindi),
         ),
         PopupMenuItem(
-          value: Locale('ta'),
-          child: Text("தமிழ்"),
+          value: const Locale('ta'),
+          child: Text(loc.tamil),
         ),
         PopupMenuItem(
             value: const Locale('te'),
-            child: Text("తెలుగు"),
+            child: Text(loc.telugu),
         ),
         PopupMenuItem(
             value: const Locale('bn'),
-            child: Text("বাংলা"),
+            child: Text(loc.bengali),
         ),
         PopupMenuItem(
             value: const Locale('gu'),
-            child: Text("ગુજરાતી"),
+            child: Text(loc.gujarati),
         ),
         PopupMenuItem(
             value: const Locale('ml'),
-            child: Text("മലയാളം"),
+            child: Text(loc.malayalam),
         ),
         PopupMenuItem(
             value: const Locale('mr'),
-            child: Text("मराठी"),
+            child: Text(loc.marathi),
         ),
         PopupMenuItem(
             value: const Locale('kn'),
-            child: Text("ಕನ್ನಡ"),
+            child: Text(loc.kannada),
         ),
         PopupMenuItem(
             value: const Locale('pa'),
-            child: Text("ਪੰਜਾਬੀ"),
+            child: Text(loc.punjabi),
         ),
       ],
     );

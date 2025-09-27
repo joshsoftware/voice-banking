@@ -37,7 +37,7 @@ class _LandingScreenState extends State<LandingScreen> {
         // Show OTP notification
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Lingo Voice Banking OTP: $otp"),
+            content: Text(AppLocalizations.of(context)!.otpNotification.replaceAll("{otp}", otp)),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
             shape:
@@ -52,7 +52,7 @@ class _LandingScreenState extends State<LandingScreen> {
         // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result["message"] ?? "Login failed"),
+            content: Text(result["message"] ?? AppLocalizations.of(context)!.loginFailed),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
             shape:
@@ -64,7 +64,7 @@ class _LandingScreenState extends State<LandingScreen> {
       // Show error message for network issues
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Network error: ${e.toString()}"),
+          content: Text(AppLocalizations.of(context)!.networkError.replaceAll("{error}", e.toString())),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           shape:

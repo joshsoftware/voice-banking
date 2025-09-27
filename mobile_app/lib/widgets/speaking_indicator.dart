@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import "../l10n/app_localizations.dart";
 class SpeakingIndicator extends StatefulWidget {
   const SpeakingIndicator({super.key});
 
@@ -38,7 +38,7 @@ class _SpeakingIndicatorState extends State<SpeakingIndicator>
           const Icon(Icons.volume_up, color: Colors.green),
           const SizedBox(width: 8),
           const Text(
-            "AI is speaking…",
+            AppLocalizations.of(context)!.aiIsSpeaking,
             style: TextStyle(
               fontSize: 16,
               color: Colors.green,
