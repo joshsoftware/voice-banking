@@ -39,9 +39,9 @@ class _SpeakingIndicatorState extends State<SpeakingIndicator>
         children: [
           const Icon(Icons.volume_up, color: Colors.green),
           const SizedBox(width: 8),
-          const Text(
+          Text(
             AppLocalizations.of(context)!.aiIsSpeaking,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.green,
               fontWeight: FontWeight.bold,

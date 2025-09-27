@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../l10n/app_localizations.dart';
@@ -21,17 +20,40 @@ class VoiceBankHome extends StatefulWidget {
   }
 }
 
-class _VoiceBankHomeState extends State<VoiceBankHome> {
+class _VoiceBankHomeState extends State<VoiceBankHome>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   List<Transaction> _transactions = [];
   bool _isLoadingTransactions = true;
   String? _balance;
   String? _customerName;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    
+    // Initialize pulse animation controller
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    
+    _pulseAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(
+      parent: _pulseController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -192,13 +214,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        // title: Text(
-        //   loc.appTitle,
-        //   style: const TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     color: Colors.white,
-        //   ),
-        // ),
         backgroundColor: const Color(0xFF667eea),
         elevation: 0,
         actions: [
@@ -239,17 +254,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              // const Color(0xFF667eea), // Soft blue-purple
-              // const Color(0xFF764ba2), // Purple
-              // const Color(0xFFf093fb), // Pink
-              // const Color(0xFFf5576c), // Coral
-              // const Color(0xFF4facfe), // Light blue
               const Color(0xFF667eea),
               const Color(0xFF667eea),
               const Color(0xFF667eea), // Soft blue-purple
               const Color(0xFF764ba2), // Purple
               const Color(0xFFf093fb), // Pink
-              //const Color(0xFFf5576c), // Coral
             ],
             stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
           ),
@@ -261,12 +270,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               Container(
                 padding: isSmallScreen
                     ? EdgeInsets.fromLTRB(16, 0, 16, 16)
-                    : EdgeInsets.fromLTRB(24, 10, 24,
-                        16), //EdgeInsets.all(isSmallScreen ? 16 : 20),
+                    : EdgeInsets.fromLTRB(24, 10, 24, 16),
                 child: Column(
                   children: [
-                    // SizedBox(height: isSmallScreen ? 10 : 20),
-
                     // Welcome Message
                     Text(
                       _customerName != null
@@ -372,70 +378,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
                         SizedBox(height: isSmallScreen ? 10 : 14),
 
-                        // Quick Actions
-                        // Text(
-                        //   'Quick Actions',
-                        //   style: TextStyle(
-                        //     fontSize: isSmallScreen ? 18 : 20,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.grey[800],
-                        //   ),
-                        // ),
-
-                        // const SizedBox(height: 12),
-
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.send,
-                        //         'Send Money',
-                        //         Colors.blue,
-                        //         () => _showSnackBar('Send Money feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //     const SizedBox(width: 12),
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.qr_code_scanner,
-                        //         'Scan & Pay',
-                        //         Colors.purple,
-                        //         () => _showSnackBar('Scan & Pay feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        //const SizedBox(height: 12),
-
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.account_balance,
-                        //         'Pay Bills',
-                        //         Colors.orange,
-                        //         () => _showSnackBar('Pay Bills feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //     const SizedBox(width: 12),
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.history,
-                        //         'Transaction History',
-                        //         Colors.teal,
-                        //         () => _scrollController.animateTo(
-                        //           _scrollController.position.maxScrollExtent,
-                        //           duration: const Duration(seconds: 1),
-                        //           curve: Curves.easeInOut,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        // SizedBox(height: isSmallScreen ? 24 : 30),
-
                         // Recent Transactions Header
                         Row(
                           children: [
@@ -520,6 +462,16 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             // Refresh balance and customer name from shared preferences (updated by voice bloc)
             _loadBalanceFromPrefs();
             _loadCustomerName();
+          } else if (state is Error) {
+            // Show error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+            );
           }
         },
         child: BlocBuilder<VoiceBloc, VoiceState>(
@@ -951,33 +903,29 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Widget _buildPulsingButton(VoiceState state, BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 1000),
-      tween: Tween<double>(begin: 0.0, end: 1.0),
-      onEnd: () {
-        // Restart animation for continuous pulsing
-        if (state is Listening) {
-          (context as Element).markNeedsBuild();
-        }
-      },
-      builder: (context, value, child) {
-        final pulseValue =
-            sin(value * 2 * pi) * 0.5 + 0.5; // Sine wave for smooth pulsing
+    // Start the pulse animation when listening
+    if (state is Listening && !_pulseController.isAnimating) {
+      _pulseController.repeat(reverse: true);
+    }
+    
+    return AnimatedBuilder(
+      animation: _pulseAnimation,
+      builder: (context, child) {
         return Transform.scale(
-          scale: 1.0 + (pulseValue * 0.1),
+          scale: _pulseAnimation.value,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.red.withValues(alpha: 0.3 * pulseValue),
-                  blurRadius: 20 * pulseValue,
-                  spreadRadius: 5 * pulseValue,
+                  color: Colors.red.withValues(alpha: 0.3 * _pulseAnimation.value),
+                  blurRadius: 20 * _pulseAnimation.value,
+                  spreadRadius: 5 * _pulseAnimation.value,
                 ),
                 BoxShadow(
-                  color: Colors.red.withValues(alpha: 0.1 * pulseValue),
-                  blurRadius: 40 * pulseValue,
-                  spreadRadius: 10 * pulseValue,
+                  color: Colors.red.withValues(alpha: 0.1 * _pulseAnimation.value),
+                  blurRadius: 40 * _pulseAnimation.value,
+                  spreadRadius: 10 * _pulseAnimation.value,
                 ),
               ],
             ),

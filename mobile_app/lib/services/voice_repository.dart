@@ -59,6 +59,9 @@ class VoiceRepository {
           sampleRate: 16000,
           bitRate: 128000,
           numChannels: 1, // Mono for better compatibility
+          autoGain: true, // Enable auto gain for better recording quality
+          echoCancel: true, // Enable echo cancellation
+          noiseSuppress: true, // Enable noise suppression
         );
         
         await _rec.start(config, path: path);
