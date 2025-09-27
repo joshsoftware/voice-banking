@@ -285,7 +285,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                       AppLocalizations.of(context)!.voiceBankingDashboard,
                       style: TextStyle(
                         fontSize: isSmallScreen ? 14 : 16,
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: Colors.white.withOpacity(0.9),
                       ),
                     ),
                   ],
@@ -321,7 +321,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.green.withValues(alpha: 0.3),
+                                color: Colors.green.withOpacity(0.3),
                                 blurRadius: 15,
                                 offset: const Offset(0, 8),
                               ),
@@ -344,7 +344,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                       fontSize: isSmallScreen ? 14 : 16,
                                       fontWeight: FontWeight.w500,
                                       color:
-                                          Colors.white.withValues(alpha: 0.9),
+                                          Colors.white.withOpacity(0.9),
                                     ),
                                   ),
                                 ],
@@ -363,7 +363,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                 AppLocalizations.of(context)!.availableBalance,
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
-                                  color: Colors.white.withValues(alpha: 0.8),
+                                  color: Colors.white.withOpacity(0.8),
                                 ),
                               ),
                             ],
@@ -558,7 +558,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -569,7 +569,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _getCategoryColor(category).withValues(alpha: 0.1),
+              color: _getCategoryColor(category).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -717,7 +717,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                           border: Border.all(color: Colors.grey[200]!),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
+                              color: Colors.black.withOpacity(0.05),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
@@ -729,7 +729,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: _getCategoryColor(category)
-                                    .withValues(alpha: 0.1),
+                                    .withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
@@ -970,12 +970,12 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.red.withValues(alpha: 0.3 * pulseValue),
+                  color: Colors.red.withOpacity(0.3 * pulseValue),
                   blurRadius: 20 * pulseValue,
                   spreadRadius: 5 * pulseValue,
                 ),
                 BoxShadow(
-                  color: Colors.red.withValues(alpha: 0.1 * pulseValue),
+                  color: Colors.red.withOpacity(0.1 * pulseValue),
                   blurRadius: 40 * pulseValue,
                   spreadRadius: 10 * pulseValue,
                 ),

@@ -14,22 +14,51 @@ class VoiceRepository {
 
   Future<String> getFilePath() async {
     final dir = await getApplicationDocumentsDirectory();
-    return '${dir.path}/recording.mp3';
+    return '${dir.path}/recording.wav';
   }
 
   Future<void> start() async {
-    if (await _rec.hasPermission()) {
+    try {
+      print("Voice Repository - Checking microphone permission...");
+      
+      // Check permission first
+      bool hasPermission = await _rec.hasPermission();
+      print("Voice Repository - Permission status: $hasPermission");
+      
+      if (!hasPermission) {
+        throw Exception("Microphone permission is required. Please enable it in Settings > Privacy & Security > Microphone.");
+      }
+      
+      // Try to start recording with basic configuration
       final path = await getFilePath();
+      print("Voice Repository - Starting recording at path: $path");
+      
+      // Use basic configuration that should work on iOS
       await _rec.start(
-          const RecordConfig(encoder: AudioEncoder.wav, sampleRate: 16000),
+          const RecordConfig(
+            encoder: AudioEncoder.wav,
+            sampleRate: 16000,
+          ),
           path: path);
+      
+      print("Voice Repository - Recording started successfully");
+    } catch (e) {
+      print("Voice Repository - Error starting recording: $e");
+      rethrow;
     }
   }
 
   Future<Map<String, dynamic>> stopAndTranscribe({locale = 'en'}) async {
     try {
+      print("Voice Repository - Stopping recording...");
       final path = await _rec.stop();
-      final file = File(path!);
+      print("Voice Repository - Recording stopped, path: $path");
+      
+      if (path == null) {
+        throw Exception("No recording file found");
+      }
+      
+      final file = File(path);
 
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
@@ -37,15 +66,17 @@ class VoiceRepository {
         throw Exception("Phone number not found in shared preferences");
       }
 
+      print("Voice Repository - Sending audio to API...");
       final form = FormData.fromMap({
         'audio':
-            await MultipartFile.fromFile(file.path, filename: 'recording.mp3'),
+            await MultipartFile.fromFile(file.path, filename: 'recording.wav'),
         'session_id': const Uuid().v4(),
         'locale': locale,
         'phone': phone,
       });
 
       final res = await dio.post('/voice/transcribe-intent', data: form);
+      print("Voice Repository - API response received");
 
       res.data['lang'] = locale ?? 'en';
       return res.data;
