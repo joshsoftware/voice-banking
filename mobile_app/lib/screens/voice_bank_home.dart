@@ -209,7 +209,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
           ),
           LanguageToggleWidget(),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
             onSelected: (String value) {
               if (value == 'logout') {
                 _logout();
@@ -343,8 +343,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                     style: TextStyle(
                                       fontSize: isSmallScreen ? 14 : 16,
                                       fontWeight: FontWeight.w500,
-                                      color:
-                                          Colors.white.withOpacity(0.9),
+                                      color: Colors.white.withOpacity(0.9),
                                     ),
                                   ),
                                 ],

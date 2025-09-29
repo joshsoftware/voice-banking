@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import '../main.dart'; // for VoiceBankingApp.setLocale
 
-
 class LanguageToggleWidget extends StatelessWidget {
-
   const LanguageToggleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<Locale>(
-      icon: const Icon(Icons.language),
+      icon: const Icon(Icons.language, color: Colors.white),
       onSelected: (locale) {
         VoiceBankingApp.setLocale(context, locale);
       },
@@ -27,32 +25,32 @@ class LanguageToggleWidget extends StatelessWidget {
           child: Text("தமிழ்"),
         ),
         PopupMenuItem(
-            value: const Locale('te'),
-            child: Text("తెలుగు"),
+          value: const Locale('te'),
+          child: Text("తెలుగు"),
         ),
         PopupMenuItem(
-            value: const Locale('bn'),
-            child: Text("বাংলা"),
+          value: const Locale('bn'),
+          child: Text("বাংলা"),
         ),
         PopupMenuItem(
-            value: const Locale('gu'),
-            child: Text("ગુજરાતી"),
+          value: const Locale('gu'),
+          child: Text("ગુજરાતી"),
         ),
         PopupMenuItem(
-            value: const Locale('ml'),
-            child: Text("മലയാളം"),
+          value: const Locale('ml'),
+          child: Text("മലയാളം"),
         ),
         PopupMenuItem(
-            value: const Locale('mr'),
-            child: Text("मराठी"),
+          value: const Locale('mr'),
+          child: Text("मराठी"),
         ),
         PopupMenuItem(
-            value: const Locale('kn'),
-            child: Text("ಕನ್ನಡ"),
+          value: const Locale('kn'),
+          child: Text("ಕನ್ನಡ"),
         ),
         PopupMenuItem(
-            value: const Locale('pa'),
-            child: Text("ਪੰਜਾਬੀ"),
+          value: const Locale('pa'),
+          child: Text("ਪੰਜਾਬੀ"),
         ),
       ],
     );
