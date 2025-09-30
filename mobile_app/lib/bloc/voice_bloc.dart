@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import '../models/models.dart' as models;
 import '../services/voice_repository.dart';
 import '../services/banking_api.dart';
@@ -169,7 +168,26 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             await SharedPreferencesService.saveCustomerName(
                 customerName.toString().trim());
           }
+
+          // Handle recent transactions for any intent that has them
+
+          if (orchestratorData["data"]["recent_transactions"] != null) {
+            final recentTransactions = List<Map<String, dynamic>>.from(
+                orchestratorData["data"]["recent_transactions"]);
+
+            // Store recent transactions in shared preferences for UI updates
+            await SharedPreferencesService.saveRecentTransactions(
+                recentTransactions);
+          }
         }
+      }
+
+      // Fallback: Check for recent transactions in the main response data
+      if (e.data["recent_transactions"] != null) {
+        final recentTransactions =
+            List<Map<String, dynamic>>.from(e.data["recent_transactions"]);
+        await SharedPreferencesService.saveRecentTransactions(
+            recentTransactions);
       }
 
       if (originalMessage != null) {

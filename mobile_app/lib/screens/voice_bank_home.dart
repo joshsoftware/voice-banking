@@ -41,6 +41,21 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     await _loadTransactions();
   }
 
+  Future<void> _loadRecentTransactionsFromPrefs() async {
+    // Load recent transactions from shared preferences (set by voice transcribe-intent API)
+    final recentTransactions = SharedPreferencesService.getRecentTransactions();
+
+    if (recentTransactions.isNotEmpty) {
+      // Convert to Transaction objects
+      final transactions =
+          recentTransactions.map((tx) => Transaction.fromJson(tx)).toList();
+      setState(() {
+        _transactions = transactions;
+        _isLoadingTransactions = false;
+      });
+    }
+  }
+
   void _loadBalanceFromPrefs() {
     // Load balance from shared preferences (set by voice transcribe-intent API)
     final balance = SharedPreferencesService.getBalance();
@@ -516,9 +531,10 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             _showTransactionsDialog(
                 context, state.message, state.transactions, state.sessionId);
           } else if (state is Executing) {
-            // Refresh balance and customer name from shared preferences (updated by voice bloc)
+            // Refresh balance, customer name, and recent transactions from shared preferences (updated by voice bloc)
             _loadBalanceFromPrefs();
             _loadCustomerName();
+            _loadRecentTransactionsFromPrefs();
           }
         },
         child: BlocBuilder<VoiceBloc, VoiceState>(
