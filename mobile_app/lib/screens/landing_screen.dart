@@ -234,6 +234,8 @@ class _LandingScreenState extends State<LandingScreen> {
                             TextFormField(
                               controller: _controller,
                               keyboardType: TextInputType.phone,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) => _submitNumber(),
                               validator: _validateMobile,
                               decoration: InputDecoration(
                                 labelText: loc.mobileNumber,
@@ -320,8 +322,8 @@ class _LandingScreenState extends State<LandingScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                              color: Colors.white.withOpacity(0.2)),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(0.2)),
                         ),
                         child: Column(
                           children: [

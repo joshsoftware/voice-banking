@@ -331,7 +331,10 @@ class _OtpScreenState extends State<OtpScreen> {
                       // OTP Input Field
                       TextFormField(
                         controller: _otpController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: false, decimal: false),
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => _verifyOtp(),
                         validator: _validateOtp,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -475,8 +478,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: Colors.white.withOpacity(0.2)),
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: Row(
                   children: [

@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import '../models/models.dart' as models;
 import '../services/voice_repository.dart';
 import '../services/banking_api.dart';
@@ -100,6 +99,11 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       // Parse intent
       String intentName = intentData?["intent"] ?? "unknown";
 
+      print("Voice Bloc Debug - Parsed intentName: $intentName");
+      print(
+          "Voice Bloc Debug - orchestratorData is null: ${orchestratorData == null}");
+      print("Voice Bloc Debug - About to check for recent_txn intent");
+
       // Handle different intents
       if (intentName == "recent_txn" && orchestratorData != null) {
         // Handle recent transactions - show popup dialog
@@ -137,10 +141,62 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         return;
       }
 
-      // Handle other intents (transfer money, check balance, etc.)
+      // Handle unknown intents - show error message
+      if (intentName == "unknown") {
+        String? originalMessage;
+
+        print("Voice Bloc Debug - Unknown intent detected");
+        print("Voice Bloc Debug - orchestratorData: $orchestratorData");
+        print("Voice Bloc Debug - Full response data: ${e.data}");
+
+        // Get the error message from orchestrator data
+        if (orchestratorData != null &&
+            orchestratorData["message"] != null &&
+            orchestratorData["message"].toString().trim().isNotEmpty) {
+          originalMessage = orchestratorData["message"].toString().trim();
+          print(
+              "Voice Bloc Debug - Found message in orchestratorData: $originalMessage");
+        } else {
+          print(
+              "Voice Bloc Debug - No message found in orchestratorData, checking main response");
+          // Check if there's a message in the main response data
+          if (e.data["message"] != null &&
+              e.data["message"].toString().trim().isNotEmpty) {
+            originalMessage = e.data["message"].toString().trim();
+            print(
+                "Voice Bloc Debug - Found message in main response: $originalMessage");
+          }
+        }
+
+        if (originalMessage != null) {
+          // Translate the message to user's language
+          String translatedMessage = TranslationService.translateApiResponse(
+              originalMessage, _currentLocale, {});
+
+          print("Voice Bloc Debug - Translated message: $translatedMessage");
+
+          // Speak the translated message
+          try {
+            await tts.speak(translatedMessage, langCode: ttsLanguage);
+          } catch (e) {
+            print("TTS Error: $e");
+          }
+
+          // Show the error message
+          emit(Executing(
+              translatedMessage, VoiceIntent(VoiceIntentType.unknown)));
+          add(Reset());
+          return;
+        } else {
+          print(
+              "Voice Bloc Debug - No message found for unknown intent, will fall through to general handling");
+        }
+      }
+
+      // Handle other intents (transfer money, check balance, etc.) - skip unknown intents
       String? originalMessage;
 
-      if (orchestratorData != null) {
+      if (orchestratorData != null && intentName != "unknown") {
         // Case 1: error message at top-level (failure cases)
         if (orchestratorData["message"] != null &&
             orchestratorData["message"].toString().trim().isNotEmpty) {
@@ -169,7 +225,26 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             await SharedPreferencesService.saveCustomerName(
                 customerName.toString().trim());
           }
+
+          // Handle recent transactions for any intent that has them
+
+          if (orchestratorData["data"]["recent_transactions"] != null) {
+            final recentTransactions = List<Map<String, dynamic>>.from(
+                orchestratorData["data"]["recent_transactions"]);
+
+            // Store recent transactions in shared preferences for UI updates
+            await SharedPreferencesService.saveRecentTransactions(
+                recentTransactions);
+          }
         }
+      }
+
+      // Fallback: Check for recent transactions in the main response data
+      if (e.data["recent_transactions"] != null) {
+        final recentTransactions =
+            List<Map<String, dynamic>>.from(e.data["recent_transactions"]);
+        await SharedPreferencesService.saveRecentTransactions(
+            recentTransactions);
       }
 
       if (originalMessage != null) {
