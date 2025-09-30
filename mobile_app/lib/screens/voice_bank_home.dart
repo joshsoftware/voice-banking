@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../l10n/app_localizations.dart';
@@ -27,11 +27,21 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   bool _isLoadingTransactions = true;
   String? _balance;
   String? _customerName;
+  bool _isRecording = false; // Track recording state locally
+  bool _isHolding = false; // Track if user is holding the button
+  Timer? _holdTimer; // Timer for hold duration
+  double _holdProgress = 0.0; // Progress of hold (0.0 to 1.0)
 
   @override
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _holdTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -535,6 +545,17 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             _loadBalanceFromPrefs();
             _loadCustomerName();
             _loadRecentTransactionsFromPrefs();
+          } else if (state is Listening) {
+            setState(() {
+              _isRecording = true;
+              _isHolding = false; // Stop holding when recording starts
+            });
+          } else if (state is Transcribing || state is Idle) {
+            setState(() {
+              _isRecording = false;
+              _isHolding = false;
+              _holdProgress = 0.0;
+            });
           }
         },
         child: BlocBuilder<VoiceBloc, VoiceState>(
@@ -907,9 +928,17 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonLabel(VoiceState state, BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    if (state is Listening) {
+    if (_isHolding && !_isRecording) {
       return Text(
-        loc.stop,
+        "Hold... ${(0.1 - (_holdProgress * 0.1)).toStringAsFixed(1)}s",
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else if (state is Listening) {
+      return Text(
+        "Release to Stop",
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -933,7 +962,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       );
     } else {
       return Text(
-        loc.voice,
+        "Hold to Speak",
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -943,78 +972,98 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
-    if (state is Listening) {
-      return _buildPulsingButton(state, context);
-    } else {
-      return FloatingActionButton.extended(
-        onPressed: () {
-          final bloc = context.read<VoiceBloc>();
-          if (state is Idle) {
-            bloc.add(StartListening());
-          } else if (state is Listening) {
-            bloc.add(StopListening(
-                locale: Localizations.localeOf(context).languageCode));
-          } else {
-            bloc.add(Reset());
-          }
-        },
-        backgroundColor: _getButtonColor(state),
-        icon: _buildButtonIcon(state),
-        label: _buildButtonLabel(state, context),
-      );
-    }
+    return _buildHoldToSpeakButton(state, context);
   }
 
-  Widget _buildPulsingButton(VoiceState state, BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      duration: const Duration(milliseconds: 1000),
-      tween: Tween<double>(begin: 0.0, end: 1.0),
-      onEnd: () {
-        // Restart animation for continuous pulsing
-        if (state is Listening) {
-          (context as Element).markNeedsBuild();
-        }
+  Widget _buildHoldToSpeakButton(VoiceState state, BuildContext context) {
+    return GestureDetector(
+      onPanDown: (_) {
+        _startHold();
       },
-      builder: (context, value, child) {
-        final pulseValue =
-            sin(value * 2 * pi) * 0.5 + 0.5; // Sine wave for smooth pulsing
-        return Transform.scale(
-          scale: 1.0 + (pulseValue * 0.1),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.red.withOpacity(0.3 * pulseValue),
-                  blurRadius: 20 * pulseValue,
-                  spreadRadius: 5 * pulseValue,
-                ),
-                BoxShadow(
-                  color: Colors.red.withOpacity(0.1 * pulseValue),
-                  blurRadius: 40 * pulseValue,
-                  spreadRadius: 10 * pulseValue,
-                ),
-              ],
+      onPanEnd: (_) {
+        _endHold();
+      },
+      onPanCancel: () {
+        _endHold();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: _getButtonColor(state).withOpacity(0.3),
+              blurRadius: 15,
+              spreadRadius: 3,
             ),
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                final bloc = context.read<VoiceBloc>();
-                if (state is Idle) {
-                  bloc.add(StartListening());
-                } else if (state is Listening) {
-                  bloc.add(StopListening(
-                      locale: Localizations.localeOf(context).languageCode));
-                } else {
-                  bloc.add(Reset());
-                }
-              },
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Progress indicator
+            if (_isHolding && !_isRecording)
+              Positioned.fill(
+                child: CircularProgressIndicator(
+                  value: _holdProgress,
+                  strokeWidth: 4,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  backgroundColor: Colors.white.withOpacity(0.3),
+                ),
+              ),
+            // Button
+            FloatingActionButton.extended(
+              onPressed: null, // Disable tap, only use gesture
               backgroundColor: _getButtonColor(state),
               icon: _buildButtonIcon(state),
               label: _buildButtonLabel(state, context),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
+  }
+
+  void _startHold() {
+    if (_isHolding || _isRecording) return;
+
+    setState(() {
+      _isHolding = true;
+      _holdProgress = 0.0;
+    });
+
+    // Start timer for 0.1 seconds
+    _holdTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      setState(() {
+        _holdProgress = (timer.tick * 50) / 100.0; // 0.1 seconds = 100ms
+      });
+
+      if (_holdProgress >= 1.0) {
+        // 0.1 seconds completed, start recording
+        timer.cancel();
+        _startRecording();
+      }
+    });
+  }
+
+  void _endHold() {
+    _holdTimer?.cancel();
+
+    if (_isRecording) {
+      // Stop recording
+      final bloc = context.read<VoiceBloc>();
+      bloc.add(
+          StopListening(locale: Localizations.localeOf(context).languageCode));
+    }
+
+    setState(() {
+      _isHolding = false;
+      _holdProgress = 0.0;
+    });
+  }
+
+  void _startRecording() {
+    if (_isRecording) return;
+
+    final bloc = context.read<VoiceBloc>();
+    bloc.add(StartListening());
   }
 }
