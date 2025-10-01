@@ -8,6 +8,7 @@ class SharedPreferencesService {
   static const String _balanceKey = 'balance';
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _recentTransactionsKey = 'recent_transactions';
+  static const String _sessionIdKey = 'session_id';
 
   static SharedPreferences? _prefs;
 
@@ -73,6 +74,14 @@ class SharedPreferencesService {
       }
     }
     return [];
+  }
+
+  static Future<void> saveSessionId(String sessionId) async {
+    await _prefs?.setString(_sessionIdKey, sessionId);
+  }
+
+  static String? getSessionId() {
+    return _prefs?.getString(_sessionIdKey);
   }
 
   static Future<void> clearAll() async {

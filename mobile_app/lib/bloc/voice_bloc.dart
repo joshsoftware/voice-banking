@@ -33,6 +33,28 @@ class ShowTransactionsDialog extends VoiceState {
   ShowTransactionsDialog(this.message, this.transactions, this.sessionId);
 }
 
+class ShowOtpDialog extends VoiceState {
+  final String message;
+  final String sessionId;
+  final String recipient;
+  final double amount;
+  ShowOtpDialog(this.message, this.sessionId, this.recipient, this.amount);
+}
+
+class ShowDuplicateDialog extends VoiceState {
+  final String message;
+  final String sessionId;
+  final List<Map<String, dynamic>> beneficiaries;
+  ShowDuplicateDialog(this.message, this.sessionId, this.beneficiaries);
+}
+
+class ShowBeneficiariesDialog extends VoiceState {
+  final String message;
+  final List<Map<String, dynamic>> beneficiaries;
+  final String sessionId;
+  ShowBeneficiariesDialog(this.message, this.beneficiaries, this.sessionId);
+}
+
 sealed class VoiceEvent {}
 
 class StartListening extends VoiceEvent {}
@@ -50,11 +72,21 @@ class GotTranscript extends VoiceEvent {
 
 class Reset extends VoiceEvent {}
 
+class VerifyOtp extends VoiceEvent {
+  final String otp;
+  final String sessionId;
+  final String locale;
+  VerifyOtp({required this.otp, required this.sessionId, required this.locale});
+}
+
 class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   final VoiceRepository repo;
   final BankingAPI bank = BankingAPI();
   final TTSService tts = TTSService();
   String _currentLocale = 'en'; // Track current locale
+  bool _isDuplicateSelection =
+      false; // Track if we're in duplicate selection mode
+  String? _duplicateSessionId; // Store session ID for duplicate selection
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
@@ -71,16 +103,60 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     on<StopListening>((e, emit) async {
       emit(Transcribing());
       _currentLocale = e.locale; // Store current locale
-      final data = await repo.stopAndTranscribe(locale: e.locale);
-      add(GotTranscript(data, e.locale));
+
+      // Check if we're in duplicate selection mode
+      print(
+          "Voice Bloc Debug - Duplicate selection mode: $_isDuplicateSelection");
+      print("Voice Bloc Debug - Duplicate session ID: $_duplicateSessionId");
+
+      if (_isDuplicateSelection && _duplicateSessionId != null) {
+        try {
+          print("Voice Bloc Debug - Processing duplicate selection with audio");
+          // For duplicate selection, we need to send the audio file with session ID
+          final data = await repo.stopAndTranscribeWithSessionId(
+              sessionId: _duplicateSessionId!, locale: e.locale);
+          // Reset duplicate selection mode
+          _isDuplicateSelection = false;
+          _duplicateSessionId = null;
+          add(GotTranscript(data, e.locale));
+        } catch (error) {
+          print("Duplicate Selection Error: $error");
+          emit(Executing("Beneficiary selection failed. Please try again.",
+              VoiceIntent(VoiceIntentType.unknown)));
+          add(Reset());
+        }
+      } else {
+        print("Voice Bloc Debug - Processing normal voice input");
+        final data = await repo.stopAndTranscribe(locale: e.locale);
+        add(GotTranscript(data, e.locale));
+      }
     });
 
     on<Reset>((e, emit) {
       emit(Idle());
     });
 
+    on<VerifyOtp>((e, emit) async {
+      emit(Transcribing());
+
+      try {
+        // Call the transcribe API with OTP in header
+        final data = await repo.verifyOtpWithTranscribe(
+            otp: e.otp, sessionId: e.sessionId, locale: e.locale);
+
+        // Process the response similar to GotTranscript
+        add(GotTranscript(data, e.locale));
+      } catch (error) {
+        print("OTP Verification Error: $error");
+        emit(Executing("OTP verification failed. Please try again.",
+            VoiceIntent(VoiceIntentType.unknown)));
+        add(Reset());
+      }
+    });
+
     on<GotTranscript>((e, emit) async {
       print("=== NEW VOICE BLOC CODE IS RUNNING - LANGUAGE FIX VERSION ===");
+      print("Voice Bloc Debug - GotTranscript handler started");
       // Get orchestrator data and intent data
       final orchestratorData = e.data["orchestrator_data"];
       final intentData = e.data["intent_data"];
@@ -100,11 +176,40 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       String intentName = intentData?["intent"] ?? "unknown";
 
       print("Voice Bloc Debug - Parsed intentName: $intentName");
+      print("Voice Bloc Debug - About to start intent handling section");
+      print("Voice Bloc Debug - Full intentData: $intentData");
+      print("Voice Bloc Debug - Full orchestratorData: $orchestratorData");
       print(
           "Voice Bloc Debug - orchestratorData is null: ${orchestratorData == null}");
       print("Voice Bloc Debug - About to check for recent_txn intent");
+      print("Voice Bloc Debug - About to check for list_beneficiaries intent");
+      print("Voice Bloc Debug - About to start intent handling section");
+
+      // Check if beneficiaries data exists
+      if (orchestratorData != null && orchestratorData["data"] != null) {
+        print(
+            "Voice Bloc Debug - orchestratorData.data exists: ${orchestratorData["data"]}");
+        if (orchestratorData["data"]["beneficiaries"] != null) {
+          print(
+              "Voice Bloc Debug - beneficiaries data found: ${orchestratorData["data"]["beneficiaries"]}");
+        } else {
+          print(
+              "Voice Bloc Debug - No beneficiaries data in orchestrator_data.data");
+        }
+      }
+
+      // Check if there's an early message processing happening
+      if (orchestratorData != null && orchestratorData["message"] != null) {
+        print(
+            "Voice Bloc Debug - Found message in orchestrator_data: ${orchestratorData["message"]}");
+      }
+
+      // Check if there's any early processing that might be calling TTS
+      print("Voice Bloc Debug - About to check for early TTS processing");
 
       // Handle different intents
+      print(
+          "Voice Bloc Debug - About to check intent handlers for: $intentName");
       if (intentName == "recent_txn" && orchestratorData != null) {
         // Handle recent transactions - show popup dialog
 
@@ -139,6 +244,128 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             ShowTransactionsDialog(translatedMessage, transactions, sessionId));
         add(Reset());
         return;
+      }
+
+      print(
+          "Voice Bloc Debug - After recent_txn check, checking beneficiaries for: $intentName");
+      // Handle list beneficiaries intent - check multiple possible intent names
+      print(
+          "Voice Bloc Debug - Checking list_beneficiaries condition: intentName='$intentName', orchestratorData null=${orchestratorData == null}");
+      if ((intentName == "list_beneficiaries" ||
+              intentName == "show_beneficiaries" ||
+              intentName == "beneficiaries_list" ||
+              intentName == "get_beneficiaries") &&
+          orchestratorData != null) {
+        print("Voice Bloc Debug - Processing list_beneficiaries intent");
+
+        // Get beneficiaries from orchestrator data
+        List<Map<String, dynamic>> beneficiaries = [];
+        if (orchestratorData["data"] != null &&
+            orchestratorData["data"]["beneficiaries"] != null) {
+          beneficiaries = List<Map<String, dynamic>>.from(
+              orchestratorData["data"]["beneficiaries"]);
+          print(
+              "Voice Bloc Debug - Found ${beneficiaries.length} beneficiaries");
+        } else {
+          print(
+              "Voice Bloc Debug - No beneficiaries found in orchestrator data");
+        }
+
+        // Get message for beneficiaries (use English from backend)
+        String originalMessage = orchestratorData["message"] ??
+            orchestratorData["data"]?["message"] ??
+            "Here are your beneficiaries";
+
+        print("Voice Bloc Debug - Original message: $originalMessage");
+
+        // Translate the message to user's language
+        final beneficiaryCount = beneficiaries.length;
+        final context = {'count': beneficiaryCount.toString()};
+        String translatedMessage = TranslationService.translateApiResponse(
+            originalMessage, _currentLocale, context);
+
+        print("Voice Bloc Debug - Translated message: $translatedMessage");
+
+        // Speak the translated message
+        try {
+          await tts.speak(translatedMessage, langCode: ttsLanguage);
+        } catch (e) {
+          print("TTS Error: $e");
+        }
+
+        // Show beneficiaries dialog
+        print("Voice Bloc Debug - Emitting ShowBeneficiariesDialog");
+        emit(ShowBeneficiariesDialog(
+            translatedMessage, beneficiaries, sessionId));
+        add(Reset());
+        return;
+      }
+
+      // Handle OTP status for transfer money
+      if (intentName == "transfer_money" && orchestratorData != null) {
+        // Check if the response indicates OTP is required (regardless of success status)
+        if (orchestratorData["data"] != null &&
+            orchestratorData["data"]["status"] == "otp") {
+          final message = orchestratorData["data"]["message"] ??
+              "Please confirm the transaction with OTP";
+
+          // Extract recipient and amount from intent_data.entities
+          final recipient = intentData?["entities"]?["recipient"]?.toString() ??
+              orchestratorData["data"]["recipient"] ??
+              "Unknown";
+          final amount = (intentData?["entities"]?["amount"]?.toDouble() ??
+              orchestratorData["data"]["amount"]?.toDouble() ??
+              0.0);
+
+          // Translate the message to user's language
+          String translatedMessage = TranslationService.translateApiResponse(
+              message,
+              _currentLocale,
+              {'amount': amount.toString(), 'recipient': recipient});
+
+          // Speak the translated message
+          try {
+            await tts.speak(translatedMessage, langCode: ttsLanguage);
+          } catch (e) {
+            print("TTS Error: $e");
+          }
+
+          // Show OTP dialog
+          emit(ShowOtpDialog(translatedMessage, sessionId, recipient, amount));
+          add(Reset());
+          return;
+        }
+
+        // Check if the response indicates duplicate beneficiaries (regardless of success status)
+        if (orchestratorData["data"] != null &&
+            orchestratorData["data"]["status"] == "duplicate") {
+          final message = orchestratorData["data"]["message"] ??
+              "Multiple beneficiaries found. Please select one.";
+          final beneficiaries = List<Map<String, dynamic>>.from(
+              orchestratorData["data"]["beneficiaries"] ?? []);
+
+          // Set duplicate selection mode and store session ID
+          _isDuplicateSelection = true;
+          _duplicateSessionId = sessionId;
+          await SharedPreferencesService.saveSessionId(sessionId);
+
+          // Translate the message to user's language
+          String translatedMessage = TranslationService.translateApiResponse(
+              message, _currentLocale, {});
+
+          // Speak the translated message
+          try {
+            await tts.speak(translatedMessage, langCode: ttsLanguage);
+          } catch (e) {
+            print("TTS Error: $e");
+          }
+
+          // Show duplicate beneficiaries dialog
+          emit(
+              ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries));
+          // Don't reset here - we need to maintain duplicate selection mode
+          return;
+        }
       }
 
       // Handle unknown intents - show error message
@@ -194,6 +421,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       }
 
       // Handle other intents (transfer money, check balance, etc.) - skip unknown intents
+      print(
+          "Voice Bloc Debug - Reached general handler for intent: $intentName");
       String? originalMessage;
 
       if (orchestratorData != null && intentName != "unknown") {
@@ -300,6 +529,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       }
 
       // NO FALLBACKS - JUST RESET
+      print("Voice Bloc Debug - No handlers matched, resetting to idle");
       add(Reset());
     });
   }

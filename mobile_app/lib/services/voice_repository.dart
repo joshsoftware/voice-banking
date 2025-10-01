@@ -20,19 +20,20 @@ class VoiceRepository {
   Future<void> start() async {
     try {
       print("Voice Repository - Checking microphone permission...");
-      
+
       // Check permission first
       bool hasPermission = await _rec.hasPermission();
       print("Voice Repository - Permission status: $hasPermission");
-      
+
       if (!hasPermission) {
-        throw Exception("Microphone permission is required. Please enable it in Settings > Privacy & Security > Microphone.");
+        throw Exception(
+            "Microphone permission is required. Please enable it in Settings > Privacy & Security > Microphone.");
       }
-      
+
       // Try to start recording with basic configuration
       final path = await getFilePath();
       print("Voice Repository - Starting recording at path: $path");
-      
+
       // Use basic configuration that should work on iOS
       await _rec.start(
           const RecordConfig(
@@ -40,7 +41,7 @@ class VoiceRepository {
             sampleRate: 16000,
           ),
           path: path);
-      
+
       print("Voice Repository - Recording started successfully");
     } catch (e) {
       print("Voice Repository - Error starting recording: $e");
@@ -53,11 +54,11 @@ class VoiceRepository {
       print("Voice Repository - Stopping recording...");
       final path = await _rec.stop();
       print("Voice Repository - Recording stopped, path: $path");
-      
+
       if (path == null) {
         throw Exception("No recording file found");
       }
-      
+
       final file = File(path);
 
       // Get phone number from shared preferences
@@ -163,6 +164,115 @@ class VoiceRepository {
         'message': 'Here are your 5 most recent transactions.',
         'lang': locale ?? 'en'
       };
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyOtpWithTranscribe(
+      {required String otp,
+      required String sessionId,
+      required String locale}) async {
+    try {
+      print("Voice Repository - Verifying OTP with transcribe API...");
+
+      // Get phone number from shared preferences
+      final phone = SharedPreferencesService.getMobileNumber();
+      if (phone == null) {
+        throw Exception("Phone number not found in shared preferences");
+      }
+
+      // Call the transcribe API with OTP in request body
+      // Use FormData to match the original API call format
+      final form = FormData.fromMap({
+        'session_id': sessionId.toString(),
+        'locale': locale,
+        'phone': phone,
+        'otp': int.tryParse(otp) ?? otp, // Try sending as integer first
+      });
+
+      print("Voice Repository - OTP verification request data:");
+      print("  session_id: ${sessionId.toString()}");
+      print("  locale: $locale");
+      print("  phone: $phone");
+      print(
+          "  otp: ${int.tryParse(otp) ?? otp} (type: ${(int.tryParse(otp) ?? otp).runtimeType})");
+
+      final res = await dio.post('/voice/transcribe-intent', data: form);
+
+      print("Voice Repository - OTP verification API response received");
+      res.data['lang'] = locale;
+      return res.data;
+    } catch (e) {
+      print("Voice Repository Error - OTP verification API call failed: $e");
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> stopAndTranscribeWithSessionId(
+      {required String sessionId, required String locale}) async {
+    try {
+      print("Voice Repository - Stopping recording for duplicate selection...");
+      final path = await _rec.stop();
+      print("Voice Repository - Recording stopped, path: $path");
+
+      if (path == null) {
+        throw Exception("No recording file found");
+      }
+
+      final file = File(path);
+
+      // Get phone number from shared preferences
+      final phone = SharedPreferencesService.getMobileNumber();
+      if (phone == null) {
+        throw Exception("Phone number not found in shared preferences");
+      }
+
+      print("Voice Repository - Sending audio with session ID to API...");
+      final form = FormData.fromMap({
+        'audio':
+            await MultipartFile.fromFile(file.path, filename: 'recording.wav'),
+        'session_id': sessionId.toString(),
+        'locale': locale,
+        'phone': phone,
+      });
+
+      final res = await dio.post('/voice/transcribe-intent', data: form);
+      print("Voice Repository - Duplicate selection API response received");
+
+      res.data['lang'] = locale;
+      return res.data;
+    } catch (e) {
+      print("Voice Repository Error - Duplicate selection API call failed: $e");
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> selectDuplicateBeneficiary(
+      {required String sessionId, required String locale}) async {
+    try {
+      print("Voice Repository - Selecting duplicate beneficiary...");
+
+      // Get phone number from shared preferences
+      final phone = SharedPreferencesService.getMobileNumber();
+      if (phone == null) {
+        throw Exception("Phone number not found in shared preferences");
+      }
+
+      // Call the transcribe API with session ID in request body for duplicate selection
+      // Use FormData to match the original API call format
+      final form = FormData.fromMap({
+        'session_id': sessionId.toString(),
+        'locale': locale,
+        'phone': phone,
+      });
+
+      final res = await dio.post('/voice/transcribe-intent', data: form);
+
+      print("Voice Repository - Duplicate selection API response received");
+      res.data['lang'] = locale;
+      return res.data;
+    } catch (e) {
+      print("Voice Repository Error - Duplicate selection API call failed: $e");
+      rethrow;
     }
   }
 }
