@@ -80,7 +80,12 @@ class _OtpScreenState extends State<OtpScreen> {
         }
 
         if (balance != null) {
-          await SharedPreferencesService.saveBalance(balance);
+          // Format balance to 2 decimal places before saving
+          print("DEBUG - Raw balance from API: '$balance'");
+          final balanceValue = double.tryParse(balance) ?? 0.0;
+          final formattedBalance = balanceValue.toStringAsFixed(2);
+          print("DEBUG - Formatted balance for saving: '$formattedBalance'");
+          await SharedPreferencesService.saveBalance(formattedBalance);
         }
 
         await SharedPreferencesService.setLoggedIn(true);

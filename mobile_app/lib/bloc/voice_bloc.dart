@@ -221,9 +221,11 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               orchestratorData["data"]["transactions"]);
         }
 
-        // Get message for transactions (use English from backend)
+        // Get message for transactions (use actual API response)
         String originalMessage = orchestratorData["message"] ??
             orchestratorData["data"]?["message"] ??
+            e.data["translation"] ??
+            e.data["message"] ??
             "Here are your recent transactions";
 
         // Translate the message to user's language
@@ -271,9 +273,11 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               "Voice Bloc Debug - No beneficiaries found in orchestrator data");
         }
 
-        // Get message for beneficiaries (use English from backend)
+        // Get message for beneficiaries (use actual API response)
         String originalMessage = orchestratorData["message"] ??
             orchestratorData["data"]?["message"] ??
+            e.data["translation"] ??
+            e.data["message"] ??
             "Here are your beneficiaries";
 
         print("Voice Bloc Debug - Original message: $originalMessage");
@@ -438,6 +442,16 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           originalMessage =
               orchestratorData["data"]["message"].toString().trim();
         }
+        // Case 3: fallback to translation field
+        else if (e.data["translation"] != null &&
+            e.data["translation"].toString().trim().isNotEmpty) {
+          originalMessage = e.data["translation"].toString().trim();
+        }
+        // Case 4: fallback to main message field
+        else if (e.data["message"] != null &&
+            e.data["message"].toString().trim().isNotEmpty) {
+          originalMessage = e.data["message"].toString().trim();
+        }
 
         // Update balance and customer name from orchestrator data if available
         if (orchestratorData["data"] != null) {
@@ -445,8 +459,14 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           final customerName = orchestratorData["data"]["customer_name"];
 
           if (balance != null) {
-            // Store balance in shared preferences for UI updates
-            await SharedPreferencesService.saveBalance(balance.toString());
+            // Store balance in shared preferences for UI updates (format to 2 decimal places)
+            print(
+                "DEBUG - Raw balance from voice bloc: '${balance.toString()}'");
+            final balanceValue = double.tryParse(balance.toString()) ?? 0.0;
+            final formattedBalance = balanceValue.toStringAsFixed(2);
+            print(
+                "DEBUG - Formatted balance for saving in voice bloc: '$formattedBalance'");
+            await SharedPreferencesService.saveBalance(formattedBalance);
           }
 
           if (customerName != null &&
@@ -484,7 +504,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         if (intentName == "check_balance" && orchestratorData["data"] != null) {
           final balance = orchestratorData["data"]["balance"];
           if (balance != null) {
-            context['amount'] = balance.toString();
+            final balanceValue = double.tryParse(balance.toString()) ?? 0.0;
+            context['amount'] = balanceValue.toStringAsFixed(2);
           }
         } else if (intentName == "transfer_money" &&
             orchestratorData["data"] != null) {

@@ -69,8 +69,17 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   void _loadBalanceFromPrefs() {
     // Load balance from shared preferences (set by voice transcribe-intent API)
     final balance = SharedPreferencesService.getBalance();
+    print("DEBUG - Raw balance from SharedPreferences: '$balance'");
     setState(() {
-      _balance = balance != null ? "₹${balance}" : "₹0.00";
+      if (balance != null) {
+        // Parse the balance as a double and format to 2 decimal places
+        final balanceValue = double.tryParse(balance) ?? 0.0;
+        _balance = "₹${balanceValue.toStringAsFixed(2)}";
+        print("DEBUG - Formatted balance: '$_balance'");
+      } else {
+        _balance = "₹0.00";
+        print("DEBUG - No balance found, using default: '$_balance'");
+      }
     });
   }
 
@@ -1074,6 +1083,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     final TextEditingController otpController = TextEditingController();
     final formKey = GlobalKey<FormState>();
     bool isLoading = false;
+    final size = MediaQuery.of(context).size;
+    final isSmallScreen = size.height < 700;
+    final isVerySmallScreen = size.height < 600;
 
     showDialog(
       context: context,
@@ -1087,242 +1099,443 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               ),
               child: Container(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.6,
-                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                  maxHeight: isVerySmallScreen
+                      ? MediaQuery.of(context).size.height * 0.85
+                      : MediaQuery.of(context).size.height * 0.75,
+                  maxWidth: MediaQuery.of(context).size.width * 0.95,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Header
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.orange[600]!, Colors.orange[800]!],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.security,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              'OTP Verification',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Message
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      color: Colors.grey[100],
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey[800],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    // Transaction Details
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Recipient:',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              Text(
-                                recipient,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[800],
-                                ),
-                              ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Header
+                      Container(
+                        padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color(0xFF667eea),
+                              const Color(0xFF764ba2)
                             ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Amount:',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              Text(
-                                '₹${amount.toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green[600],
-                                ),
-                              ),
-                            ],
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
                           ),
-                        ],
-                      ),
-                    ),
-
-                    // OTP Input
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Form(
-                        key: formKey,
-                        child: Column(
+                        ),
+                        child: Row(
                           children: [
-                            TextFormField(
-                              controller: otpController,
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.center,
-                              maxLength: 6,
-                              decoration: InputDecoration(
-                                labelText: 'Enter OTP',
-                                hintText: '000000',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                prefixIcon: Icon(Icons.security,
-                                    color: Colors.orange[600]),
+                            Container(
+                              padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter OTP';
-                                }
-                                if (value.length != 6) {
-                                  return 'OTP must be 6 digits';
-                                }
-                                return null;
-                              },
+                              child: Icon(
+                                Icons.security,
+                                color: Colors.white,
+                                size: isSmallScreen ? 20 : 24,
+                              ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(width: isSmallScreen ? 12 : 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'OTP Verification',
+                                    style: TextStyle(
+                                      fontSize: isSmallScreen ? 18 : 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  if (!isVerySmallScreen) ...[
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Secure your transaction',
+                                      style: TextStyle(
+                                        fontSize: isSmallScreen ? 12 : 14,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ),
 
-                    // Buttons
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: isLoading
-                                  ? null
-                                  : () {
-                                      Navigator.of(context).pop();
-                                    },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                      // Transaction Details
+                      Container(
+                        margin: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                        padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey[200]!),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: isLoading
-                                  ? null
-                                  : () async {
-                                      if (formKey.currentState!.validate()) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-
-                                        try {
-                                          // Call the voice bloc to verify OTP
-                                          final bloc =
-                                              context.read<VoiceBloc>();
-                                          bloc.add(VerifyOtp(
-                                            otp: otpController.text.trim(),
-                                            sessionId: sessionId,
-                                            locale:
-                                                Localizations.localeOf(context)
-                                                    .languageCode,
-                                          ));
-
-                                          Navigator.of(context).pop();
-                                        } catch (e) {
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'Error: ${e.toString()}'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange[600],
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF667eea)
+                                        .withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: const Color(0xFF667eea),
+                                    size: 20,
+                                  ),
                                 ),
-                              ),
-                              child: isLoading
-                                  ? SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Colors.white),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Recipient',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey[600],
+                                        ),
                                       ),
-                                    )
-                                  : Text(
-                                      'Verify OTP',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        recipient,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: isSmallScreen ? 12 : 16),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.account_balance_wallet,
+                                    color: Colors.green[600],
+                                    size: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Amount',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        '₹${amount.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+
+                      // OTP Input
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: isSmallScreen ? 12 : 16),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              Container(
+                                padding:
+                                    EdgeInsets.all(isSmallScreen ? 16 : 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: Colors.grey[200]!),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.security,
+                                          color: const Color(0xFF667eea),
+                                          size: 24,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          'Enter OTP',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[800],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: isSmallScreen ? 12 : 16),
+                                    TextFormField(
+                                      controller: otpController,
+                                      keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.center,
+                                      maxLength: 6,
+                                      style: TextStyle(
+                                        fontSize: isSmallScreen ? 20 : 24,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: isSmallScreen ? 6 : 8,
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText: '000000',
+                                        hintStyle: TextStyle(
+                                          fontSize: isSmallScreen ? 20 : 24,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: isSmallScreen ? 6 : 8,
+                                          color: Colors.grey[400],
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                            color: const Color(0xFF667eea),
+                                            width: 2,
+                                          ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                            color: Colors.grey[300]!,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                            color: const Color(0xFF667eea),
+                                            width: 2,
+                                          ),
+                                        ),
+                                        counterText: '',
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 16,
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter OTP';
+                                        }
+                                        if (value.length != 6) {
+                                          return 'OTP must be 6 digits';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Enter the 6-digit OTP sent to your mobile',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: isSmallScreen ? 12 : 16),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Buttons
+                      Container(
+                        padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: isSmallScreen ? 45 : 50,
+                                child: OutlinedButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () {
+                                          Navigator.of(context).pop();
+                                        },
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.grey[400]!,
+                                      width: 1.5,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: isSmallScreen ? 12 : 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: isSmallScreen ? 8 : 12),
+                            Expanded(
+                              child: Container(
+                                height: isSmallScreen ? 45 : 50,
+                                child: ElevatedButton(
+                                  onPressed: isLoading
+                                      ? null
+                                      : () async {
+                                          if (formKey.currentState!
+                                              .validate()) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+
+                                            try {
+                                              // Call the voice bloc to verify OTP
+                                              final bloc =
+                                                  context.read<VoiceBloc>();
+                                              bloc.add(VerifyOtp(
+                                                otp: otpController.text.trim(),
+                                                sessionId: sessionId,
+                                                locale: Localizations.localeOf(
+                                                        context)
+                                                    .languageCode,
+                                              ));
+
+                                              Navigator.of(context).pop();
+                                            } catch (e) {
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Error: ${e.toString()}'),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF667eea),
+                                    foregroundColor: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: isLoading
+                                      ? SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.white),
+                                          ),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.verified_user,
+                                              size: isSmallScreen ? 16 : 18,
+                                            ),
+                                            SizedBox(
+                                                width: isSmallScreen ? 4 : 6),
+                                            Flexible(
+                                              child: Text(
+                                                isSmallScreen
+                                                    ? 'Verify'
+                                                    : 'Verify OTP',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      isSmallScreen ? 12 : 14,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -1380,6 +1593,30 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // Close dialog and start voice selection
+                          Navigator.of(context).pop();
+
+                          // Show instruction to speak the name
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Please speak the beneficiary name'),
+                              backgroundColor: Colors.blue[600],
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+
+                          // Start voice recording for duplicate selection
+                          final bloc = context.read<VoiceBloc>();
+                          bloc.add(StartListening());
+                        },
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -1488,7 +1725,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'Tap on a beneficiary and then speak their name to confirm',
+                              'Close the dialog to speak the name directly, or tap a beneficiary to confirm',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[600],

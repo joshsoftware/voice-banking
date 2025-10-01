@@ -154,21 +154,35 @@ class TranslationService {
     }
 
     // Pattern matching for different response types
-    if (message.contains('balance') && message.contains('rupees')) {
+    // Only translate if the message is a simple key or very basic response
+    // Don't override complex API messages that are already properly formatted
+
+    if (message.contains('balance') &&
+        message.contains('rupees') &&
+        !message.contains('i can help you with')) {
       return translateResponse('balance_success', locale, parameters);
-    } else if (message.contains('transactions') && message.contains('recent')) {
+    } else if (message.contains('here are your') &&
+        message.contains('transactions') &&
+        message.contains('recent')) {
+      // Only translate the specific "Here are your X recent transactions" pattern
       return translateResponse('transactions_found', locale, parameters);
     } else if (message.contains('no transactions') ||
         message.contains('not found')) {
       return translateResponse('no_transactions', locale, parameters);
-    } else if (message.contains('transfer') && message.contains('initiated')) {
+    } else if (message.contains('transfer') &&
+        message.contains('initiated') &&
+        !message.contains('i can help you with')) {
       return translateResponse('transfer_success', locale, parameters);
     } else if (message.contains('transfer') &&
-        (message.contains('failed') || message.contains('error'))) {
+        (message.contains('failed') || message.contains('error')) &&
+        !message.contains('i can help you with')) {
       return translateResponse('transfer_failed', locale, parameters);
     } else if (message.contains('insufficient funds')) {
       return translateResponse('error_insufficient_funds', locale, parameters);
-    } else if (message.contains('error') || message.contains('sorry')) {
+    } else if ((message.contains('error') || message.contains('sorry')) &&
+        !message.contains('i can help you with') &&
+        !message.contains('didn\'t understand')) {
+      // Don't override complex error messages that are already well-formatted
       return translateResponse('error_generic', locale, parameters);
     }
 
