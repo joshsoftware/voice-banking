@@ -229,369 +229,374 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        // title: Text(
-        //   loc.appTitle,
-        //   style: const TextStyle(
-        //     fontWeight: FontWeight.bold,
-        //     color: Colors.white,
-        //   ),
-        // ),
-        backgroundColor: const Color(0xFF667eea),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline, color: Colors.white),
-            onPressed: () => Navigator.pushNamed(context, '/FAQ'),
-            tooltip: 'FAQ',
-          ),
-          LanguageToggleWidget(),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onSelected: (String value) {
-              if (value == 'logout') {
-                _logout();
-              }
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'logout',
-                child: Row(
-                  children: [
-                    Icon(Icons.logout, color: Colors.red[600]),
-                    const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.of(context)!.logout,
-                      style: TextStyle(color: Colors.red[600]),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              // const Color(0xFF667eea), // Soft blue-purple
-              // const Color(0xFF764ba2), // Purple
-              // const Color(0xFFf093fb), // Pink
-              // const Color(0xFFf5576c), // Coral
-              // const Color(0xFF4facfe), // Light blue
-              const Color(0xFF667eea),
-              const Color(0xFF667eea),
-              const Color(0xFF667eea), // Soft blue-purple
-              const Color(0xFF764ba2), // Purple
-              const Color(0xFFf093fb), // Pink
-              //const Color(0xFFf5576c), // Coral
-            ],
-            stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header Section
-              Container(
-                padding: isSmallScreen
-                    ? EdgeInsets.fromLTRB(16, 0, 16, 16)
-                    : EdgeInsets.fromLTRB(24, 10, 24,
-                        16), //EdgeInsets.all(isSmallScreen ? 16 : 20),
-                child: Column(
-                  children: [
-                    // SizedBox(height: isSmallScreen ? 10 : 20),
-
-                    // Welcome Message
-                    Text(
-                      _customerName != null
-                          ? "${AppLocalizations.of(context)!.welcomeBack}, $_customerName!"
-                          : AppLocalizations.of(context)!.welcomeBack,
-                      style: TextStyle(
-                        fontSize: isSmallScreen ? 18 : 22,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white,
+        backgroundColor: Colors.grey[50],
+        appBar: AppBar(
+          // title: Text(
+          //   loc.appTitle,
+          //   style: const TextStyle(
+          //     fontWeight: FontWeight.bold,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          backgroundColor: const Color(0xFF667eea),
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline, color: Colors.white),
+              onPressed: () => Navigator.pushNamed(context, '/FAQ'),
+              tooltip: 'FAQ',
+            ),
+            LanguageToggleWidget(),
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert, color: Colors.white),
+              onSelected: (String value) {
+                if (value == 'logout') {
+                  _logout();
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout, color: Colors.red[600]),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)!.logout,
+                        style: TextStyle(color: Colors.red[600]),
                       ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      AppLocalizations.of(context)!.voiceBankingDashboard,
-                      style: TextStyle(
-                        fontSize: isSmallScreen ? 14 : 16,
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Main Content
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
+                    ],
                   ),
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Balance Card
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(isSmallScreen ? 20 : 24),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.green[400]!, Colors.green[600]!],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                ),
+              ],
+            ),
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                // const Color(0xFF667eea), // Soft blue-purple
+                // const Color(0xFF764ba2), // Purple
+                // const Color(0xFFf093fb), // Pink
+                // const Color(0xFFf5576c), // Coral
+                // const Color(0xFF4facfe), // Light blue
+                const Color(0xFF667eea),
+                const Color(0xFF667eea),
+                const Color(0xFF667eea), // Soft blue-purple
+                const Color(0xFF764ba2), // Purple
+                const Color(0xFFf093fb), // Pink
+                //const Color(0xFFf5576c), // Coral
+              ],
+              stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                // Header Section
+                Container(
+                  padding: isSmallScreen
+                      ? EdgeInsets.fromLTRB(16, 0, 16, 16)
+                      : EdgeInsets.fromLTRB(24, 10, 24,
+                          16), //EdgeInsets.all(isSmallScreen ? 16 : 20),
+                  child: Column(
+                    children: [
+                      // SizedBox(height: isSmallScreen ? 10 : 20),
+
+                      // Welcome Message
+                      Text(
+                        _customerName != null
+                            ? "${AppLocalizations.of(context)!.welcomeBack}, $_customerName!"
+                            : AppLocalizations.of(context)!.welcomeBack,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 18 : 22,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        AppLocalizations.of(context)!.voiceBankingDashboard,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 16,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Main Content
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Balance Card
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(isSmallScreen ? 20 : 24),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.green[400]!,
+                                  Colors.green[600]!
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.green.withOpacity(0.3),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.green.withOpacity(0.3),
-                                blurRadius: 15,
-                                offset: const Offset(0, 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.account_balance_wallet,
+                                      color: Colors.white,
+                                      size: isSmallScreen ? 20 : 24,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      AppLocalizations.of(context)!.curBalance,
+                                      style: TextStyle(
+                                        fontSize: isSmallScreen ? 14 : 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  _balance ?? "₹0.00",
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 28 : 36,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .availableBalance,
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 12 : 14,
+                                    color: Colors.white.withOpacity(0.8),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: isSmallScreen ? 10 : 14),
+
+                          // Quick Actions
+                          // Text(
+                          //   'Quick Actions',
+                          //   style: TextStyle(
+                          //     fontSize: isSmallScreen ? 18 : 20,
+                          //     fontWeight: FontWeight.bold,
+                          //     color: Colors.grey[800],
+                          //   ),
+                          // ),
+
+                          // const SizedBox(height: 12),
+
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: _buildQuickAction(
+                          //         Icons.send,
+                          //         'Send Money',
+                          //         Colors.blue,
+                          //         () => _showSnackBar('Send Money feature coming soon!'),
+                          //       ),
+                          //     ),
+                          //     const SizedBox(width: 12),
+                          //     Expanded(
+                          //       child: _buildQuickAction(
+                          //         Icons.qr_code_scanner,
+                          //         'Scan & Pay',
+                          //         Colors.purple,
+                          //         () => _showSnackBar('Scan & Pay feature coming soon!'),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+
+                          //const SizedBox(height: 12),
+
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: _buildQuickAction(
+                          //         Icons.account_balance,
+                          //         'Pay Bills',
+                          //         Colors.orange,
+                          //         () => _showSnackBar('Pay Bills feature coming soon!'),
+                          //       ),
+                          //     ),
+                          //     const SizedBox(width: 12),
+                          //     Expanded(
+                          //       child: _buildQuickAction(
+                          //         Icons.history,
+                          //         'Transaction History',
+                          //         Colors.teal,
+                          //         () => _scrollController.animateTo(
+                          //           _scrollController.position.maxScrollExtent,
+                          //           duration: const Duration(seconds: 1),
+                          //           curve: Curves.easeInOut,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+
+                          // SizedBox(height: isSmallScreen ? 24 : 30),
+
+                          // Recent Transactions Header
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  AppLocalizations.of(context)!.recTxns,
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 18 : 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pushNamed(
+                                    context, '/AllTransactions'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.viewAll,
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 12 : 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue[600],
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.account_balance_wallet,
-                                    color: Colors.white,
-                                    size: isSmallScreen ? 20 : 24,
+
+                          const SizedBox(height: 12),
+
+                          // Transactions List
+                          Builder(
+                            builder: (context) {
+                              if (_isLoadingTransactions) {
+                                return Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: CircularProgressIndicator(),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    AppLocalizations.of(context)!.curBalance,
+                                );
+                              } else if (_transactions.isEmpty) {
+                                return Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .noTransactionsFound,
                                     style: TextStyle(
                                       fontSize: isSmallScreen ? 14 : 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white.withOpacity(0.9),
+                                      color: Colors.grey[600],
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                _balance ?? "₹0.00",
-                                style: TextStyle(
-                                  fontSize: isSmallScreen ? 28 : 36,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                AppLocalizations.of(context)!.availableBalance,
-                                style: TextStyle(
-                                  fontSize: isSmallScreen ? 12 : 14,
-                                  color: Colors.white.withOpacity(0.8),
-                                ),
-                              ),
-                            ],
+                                );
+                              } else {
+                                return Column(
+                                  children: _transactions
+                                      .map((tx) => _buildTransactionItem(
+                                          tx, isSmallScreen))
+                                      .toList(),
+                                );
+                              }
+                            },
                           ),
-                        ),
-
-                        SizedBox(height: isSmallScreen ? 10 : 14),
-
-                        // Quick Actions
-                        // Text(
-                        //   'Quick Actions',
-                        //   style: TextStyle(
-                        //     fontSize: isSmallScreen ? 18 : 20,
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.grey[800],
-                        //   ),
-                        // ),
-
-                        // const SizedBox(height: 12),
-
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.send,
-                        //         'Send Money',
-                        //         Colors.blue,
-                        //         () => _showSnackBar('Send Money feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //     const SizedBox(width: 12),
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.qr_code_scanner,
-                        //         'Scan & Pay',
-                        //         Colors.purple,
-                        //         () => _showSnackBar('Scan & Pay feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        //const SizedBox(height: 12),
-
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.account_balance,
-                        //         'Pay Bills',
-                        //         Colors.orange,
-                        //         () => _showSnackBar('Pay Bills feature coming soon!'),
-                        //       ),
-                        //     ),
-                        //     const SizedBox(width: 12),
-                        //     Expanded(
-                        //       child: _buildQuickAction(
-                        //         Icons.history,
-                        //         'Transaction History',
-                        //         Colors.teal,
-                        //         () => _scrollController.animateTo(
-                        //           _scrollController.position.maxScrollExtent,
-                        //           duration: const Duration(seconds: 1),
-                        //           curve: Curves.easeInOut,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        // SizedBox(height: isSmallScreen ? 24 : 30),
-
-                        // Recent Transactions Header
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                AppLocalizations.of(context)!.recTxns,
-                                style: TextStyle(
-                                  fontSize: isSmallScreen ? 18 : 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[800],
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pushNamed(
-                                  context, '/AllTransactions'),
-                              child: Text(
-                                AppLocalizations.of(context)!.viewAll,
-                                style: TextStyle(
-                                  fontSize: isSmallScreen ? 12 : 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue[600],
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // Transactions List
-                        Builder(
-                          builder: (context) {
-                            if (_isLoadingTransactions) {
-                              return Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            } else if (_transactions.isEmpty) {
-                              return Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Text(
-                                  AppLocalizations.of(context)!
-                                      .noTransactionsFound,
-                                  style: TextStyle(
-                                    fontSize: isSmallScreen ? 14 : 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            } else {
-                              return Column(
-                                children: _transactions
-                                    .map((tx) => _buildTransactionItem(
-                                        tx, isSmallScreen))
-                                    .toList(),
-                              );
-                            }
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
 
-      // Enhanced Floating Action Button
-      floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
-        listener: (context, state) {
-          if (state is ShowTransactionsDialog) {
-            _showTransactionsDialog(
-                context, state.message, state.transactions, state.sessionId);
-          } else if (state is ShowOtpDialog) {
-            _showOtpDialog(context, state.message, state.sessionId,
-                state.recipient, state.amount);
-          } else if (state is ShowDuplicateDialog) {
-            _showDuplicateDialog(
-                context, state.message, state.sessionId, state.beneficiaries,
-                originalAmount: state.originalAmount);
-          } else if (state is ShowBeneficiariesDialog) {
-            _showBeneficiariesDialog(
-                context, state.message, state.beneficiaries, state.sessionId);
-          } else if (state is Executing) {
-            // Refresh balance, customer name, and recent transactions from shared preferences (updated by voice bloc)
-            _loadBalanceFromPrefs();
-            _loadCustomerName();
-            _loadRecentTransactionsFromPrefs();
-          } else if (state is Listening) {
-            setState(() {
-              _isRecording = true;
-              _isHolding = false; // Stop holding when recording starts
-            });
-          } else if (state is Transcribing || state is Idle) {
-            setState(() {
-              _isRecording = false;
-              _isHolding = false;
-              _holdProgress = 0.0;
-            });
-          }
-        },
-        child: BlocBuilder<VoiceBloc, VoiceState>(
-          builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Main Voice Button
-                _buildAnimatedVoiceButton(state, context),
-              ],
-            );
+        // Enhanced Floating Action Button
+        floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
+          listener: (context, state) {
+            if (state is ShowTransactionsDialog) {
+              _showTransactionsDialog(
+                  context, state.message, state.transactions, state.sessionId);
+            } else if (state is ShowOtpDialog) {
+              _showOtpDialog(context, state.message, state.sessionId,
+                  state.recipient, state.amount);
+            } else if (state is ShowDuplicateDialog) {
+              _showDuplicateDialog(
+                  context, state.message, state.sessionId, state.beneficiaries,
+                  originalAmount: state.originalAmount);
+            } else if (state is ShowBeneficiariesDialog) {
+              _showBeneficiariesDialog(
+                  context, state.message, state.beneficiaries, state.sessionId);
+            } else if (state is Executing) {
+              // Refresh balance, customer name, and recent transactions from shared preferences (updated by voice bloc)
+              _loadBalanceFromPrefs();
+              _loadCustomerName();
+              _loadRecentTransactionsFromPrefs();
+            } else if (state is Listening) {
+              setState(() {
+                _isRecording = true;
+                _isHolding = false; // Stop holding when recording starts
+              });
+            } else if (state is Transcribing || state is Idle) {
+              setState(() {
+                _isRecording = false;
+                _isHolding = false;
+                _holdProgress = 0.0;
+              });
+            }
           },
+          child: BlocBuilder<VoiceBloc, VoiceState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Main Voice Button
+                  _buildAnimatedVoiceButton(state, context),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -1341,11 +1346,14 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
                                           try {
                                             // Call the voice bloc to verify OTP
-                                            final bloc = context.read<VoiceBloc>();
+                                            final bloc =
+                                                context.read<VoiceBloc>();
                                             bloc.add(VerifyOtp(
                                               otp: otpController.text.trim(),
                                               sessionId: sessionId,
-                                              locale: Localizations.localeOf(context).languageCode,
+                                              locale: Localizations.localeOf(
+                                                      context)
+                                                  .languageCode,
                                             ));
 
                                             Navigator.of(context).pop();
@@ -1353,9 +1361,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                             setState(() {
                                               isLoading = false;
                                             });
-                                            ScaffoldMessenger.of(context).showSnackBar(
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
                                               SnackBar(
-                                                content: Text('Error: ${e.toString()}'),
+                                                content: Text(
+                                                    'Error: ${e.toString()}'),
                                                 backgroundColor: Colors.red,
                                               ),
                                             );
