@@ -45,7 +45,9 @@ class ShowDuplicateDialog extends VoiceState {
   final String message;
   final String sessionId;
   final List<Map<String, dynamic>> beneficiaries;
-  ShowDuplicateDialog(this.message, this.sessionId, this.beneficiaries);
+  final double? originalAmount;
+  ShowDuplicateDialog(this.message, this.sessionId, this.beneficiaries,
+      {this.originalAmount});
 }
 
 class ShowBeneficiariesDialog extends VoiceState {
@@ -84,9 +86,6 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   final BankingAPI bank = BankingAPI();
   final TTSService tts = TTSService();
   String _currentLocale = 'en'; // Track current locale
-  bool _isDuplicateSelection =
-      false; // Track if we're in duplicate selection mode
-  String? _duplicateSessionId; // Store session ID for duplicate selection
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
@@ -104,32 +103,9 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       emit(Transcribing());
       _currentLocale = e.locale; // Store current locale
 
-      // Check if we're in duplicate selection mode
-      print(
-          "Voice Bloc Debug - Duplicate selection mode: $_isDuplicateSelection");
-      print("Voice Bloc Debug - Duplicate session ID: $_duplicateSessionId");
-
-      if (_isDuplicateSelection && _duplicateSessionId != null) {
-        try {
-          print("Voice Bloc Debug - Processing duplicate selection with audio");
-          // For duplicate selection, we need to send the audio file with session ID
-          final data = await repo.stopAndTranscribeWithSessionId(
-              sessionId: _duplicateSessionId!, locale: e.locale);
-          // Reset duplicate selection mode
-          _isDuplicateSelection = false;
-          _duplicateSessionId = null;
-          add(GotTranscript(data, e.locale));
-        } catch (error) {
-          print("Duplicate Selection Error: $error");
-          emit(Executing("Beneficiary selection failed. Please try again.",
-              VoiceIntent(VoiceIntentType.unknown)));
-          add(Reset());
-        }
-      } else {
-        print("Voice Bloc Debug - Processing normal voice input");
-        final data = await repo.stopAndTranscribe(locale: e.locale);
-        add(GotTranscript(data, e.locale));
-      }
+      print("Voice Bloc Debug - Processing normal voice input");
+      final data = await repo.stopAndTranscribe(locale: e.locale);
+      add(GotTranscript(data, e.locale));
     });
 
     on<Reset>((e, emit) {
@@ -348,9 +324,12 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           final beneficiaries = List<Map<String, dynamic>>.from(
               orchestratorData["data"]["beneficiaries"] ?? []);
 
-          // Set duplicate selection mode and store session ID
-          _isDuplicateSelection = true;
-          _duplicateSessionId = sessionId;
+          // Extract original amount from intent data
+          final originalAmount = intentData?["entities"]?["amount"]?.toDouble();
+          print(
+              "Voice Bloc Debug - Extracted original amount: $originalAmount");
+
+          // Store session ID for later use
           await SharedPreferencesService.saveSessionId(sessionId);
 
           // Translate the message to user's language
@@ -365,9 +344,9 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           }
 
           // Show duplicate beneficiaries dialog
-          emit(
-              ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries));
-          // Don't reset here - we need to maintain duplicate selection mode
+          emit(ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries,
+              originalAmount: originalAmount));
+          add(Reset());
           return;
         }
       }

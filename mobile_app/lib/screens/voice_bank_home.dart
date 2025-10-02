@@ -554,7 +554,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                 state.recipient, state.amount);
           } else if (state is ShowDuplicateDialog) {
             _showDuplicateDialog(
-                context, state.message, state.sessionId, state.beneficiaries);
+                context, state.message, state.sessionId, state.beneficiaries,
+                originalAmount: state.originalAmount);
           } else if (state is ShowBeneficiariesDialog) {
             _showBeneficiariesDialog(
                 context, state.message, state.beneficiaries, state.sessionId);
@@ -1546,7 +1547,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   void _showDuplicateDialog(BuildContext context, String message,
-      String sessionId, List<Map<String, dynamic>> beneficiaries) {
+      String sessionId, List<Map<String, dynamic>> beneficiaries,
+      {double? originalAmount}) {
+    print("Duplicate Dialog Debug - originalAmount received: $originalAmount");
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -1587,7 +1590,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Select Beneficiary',
+                          'Duplicate Beneficiaries',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -1597,22 +1600,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                       ),
                       IconButton(
                         onPressed: () {
-                          // Close dialog and start voice selection
                           Navigator.of(context).pop();
-
-                          // Show instruction to speak the name
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('Please speak the beneficiary name'),
-                              backgroundColor: Colors.blue[600],
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-
-                          // Start voice recording for duplicate selection
-                          final bloc = context.read<VoiceBloc>();
-                          bloc.add(StartListening());
                         },
                         icon: Icon(
                           Icons.close,
@@ -1648,6 +1636,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                       final beneficiary = beneficiaries[index];
                       final name = beneficiary['name'] ?? 'Unknown';
                       final accountNumber = beneficiary['account_number'] ?? '';
+                      final bankName = beneficiary['bank_name'] ?? '';
+                      final ifscCode = beneficiary['ifsc_code'] ?? '';
 
                       return Container(
                         margin: const EdgeInsets.symmetric(
@@ -1673,35 +1663,100 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                 color: Colors.grey[800],
                               ),
                             ),
-                            subtitle: Text(
-                              'Account: $accountNumber',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                              ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Account: $accountNumber',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                if (bankName.isNotEmpty)
+                                  Text(
+                                    '$bankName • $ifscCode',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                              ],
                             ),
                             trailing: Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.grey[400],
                               size: 16,
                             ),
-                            onTap: () {
-                              // Close dialog and start voice selection
+                            onTap: () async {
+                              // Store references before closing dialog
+                              final bloc = context.read<VoiceBloc>();
+                              final voiceRepo = bloc.repo;
+                              final currentLocale =
+                                  Localizations.localeOf(context).languageCode;
+                              final scaffoldMessenger =
+                                  ScaffoldMessenger.of(context);
+
+                              // Close dialog first
                               Navigator.of(context).pop();
 
-                              // Show instruction to speak the name
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              // Show loading indicator
+                              scaffoldMessenger.showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('Please speak the name: "$name"'),
+                                  content: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.white),
+                                        ),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text(
+                                          'Processing beneficiary selection...'),
+                                    ],
+                                  ),
                                   backgroundColor: Colors.blue[600],
-                                  duration: Duration(seconds: 3),
+                                  duration: Duration(seconds: 2),
                                 ),
                               );
 
-                              // Start voice recording for duplicate selection
-                              final bloc = context.read<VoiceBloc>();
-                              bloc.add(StartListening());
+                              // Call the voice repository to select duplicate beneficiary
+                              try {
+                                print(
+                                    "Beneficiary Selection Debug - Selecting beneficiary: $name");
+                                // Call the selectDuplicateBeneficiary method with only required parameters
+                                final response =
+                                    await voiceRepo.selectDuplicateBeneficiary(
+                                  sessionId: sessionId,
+                                  locale: currentLocale,
+                                  beneficiaryName: name,
+                                );
+
+                                // Process the response through the voice bloc
+                                bloc.add(
+                                    GotTranscript(response, currentLocale));
+                              } catch (error) {
+                                print(
+                                    "Error selecting duplicate beneficiary: $error");
+
+                                // Show error message
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Error selecting beneficiary. Please try again.'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+
+                                // Reset the voice bloc to idle state
+                                bloc.add(Reset());
+                              }
                             },
                           ),
                         ),
@@ -1718,14 +1773,14 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                       Row(
                         children: [
                           Icon(
-                            Icons.mic,
+                            Icons.touch_app,
                             color: Colors.blue[600],
                             size: 20,
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'Close the dialog to speak the name directly, or tap a beneficiary to confirm',
+                              'Tap on a beneficiary to select and continue with the transaction',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[600],
