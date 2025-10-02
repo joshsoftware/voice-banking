@@ -30,4 +30,4 @@ generate:
     output-localization-file: app_localizations.dart
 
 # Version information for App Store
-version: 1.0.0+5
+version: 1.0.1+6
