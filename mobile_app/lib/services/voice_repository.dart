@@ -9,8 +9,58 @@ class VoiceRepository {
   final _rec = AudioRecorder();
 
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000"));
-  final Dio dio =
-      Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com"));
+  late final Dio dio;
+
+  VoiceRepository() {
+    // Initialize Dio with proper configuration
+    dio = Dio(BaseOptions(
+      baseUrl: "https://loglytics.joshsoftware.com",
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      // Add connection pooling settings
+      persistentConnection: true,
+      maxRedirects: 3,
+    ));
+
+    // Add interceptors for better connection management
+    dio.interceptors.add(LogInterceptor(
+      requestBody: false,
+      responseBody: false,
+      logPrint: (obj) => print('Dio: $obj'),
+    ));
+  }
+
+  void dispose() {
+    dio.close();
+  }
+
+  // Method to reset the HTTP client connection
+  void resetConnection() {
+    try {
+      dio.close();
+    } catch (e) {
+      print("Error closing Dio client: $e");
+    }
+  }
+
+  // Method to create a fresh HTTP client
+  Dio _createFreshDio() {
+    return Dio(BaseOptions(
+      baseUrl: "https://loglytics.joshsoftware.com",
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      persistentConnection: true,
+      maxRedirects: 3,
+    ));
+  }
 
   Future<String> getFilePath() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -19,11 +69,8 @@ class VoiceRepository {
 
   Future<void> start() async {
     try {
-      print("Voice Repository - Checking microphone permission...");
-
       // Check permission first
       bool hasPermission = await _rec.hasPermission();
-      print("Voice Repository - Permission status: $hasPermission");
 
       if (!hasPermission) {
         throw Exception(
@@ -32,7 +79,6 @@ class VoiceRepository {
 
       // Try to start recording with basic configuration
       final path = await getFilePath();
-      print("Voice Repository - Starting recording at path: $path");
 
       // Use basic configuration that should work on iOS
       await _rec.start(
@@ -41,8 +87,6 @@ class VoiceRepository {
             sampleRate: 16000,
           ),
           path: path);
-
-      print("Voice Repository - Recording started successfully");
     } catch (e) {
       print("Voice Repository - Error starting recording: $e");
       rethrow;
@@ -51,9 +95,7 @@ class VoiceRepository {
 
   Future<Map<String, dynamic>> stopAndTranscribe({locale = 'en'}) async {
     try {
-      print("Voice Repository - Stopping recording...");
       final path = await _rec.stop();
-      print("Voice Repository - Recording stopped, path: $path");
 
       if (path == null) {
         throw Exception("No recording file found");
@@ -67,7 +109,6 @@ class VoiceRepository {
         throw Exception("Phone number not found in shared preferences");
       }
 
-      print("Voice Repository - Sending audio to API...");
       final form = FormData.fromMap({
         'audio':
             await MultipartFile.fromFile(file.path, filename: 'recording.wav'),
@@ -76,95 +117,29 @@ class VoiceRepository {
         'phone': phone,
       });
 
-      final res = await dio.post('/voice/transcribe-intent', data: form);
-      print("Voice Repository - API response received");
+      // Use a fresh HTTP client for each request to avoid connection issues
+      final freshDio = _createFreshDio();
+      final res = await freshDio.post('/voice/transcribe-intent', data: form);
+      freshDio.close(); // Close the fresh client after use
 
       res.data['lang'] = locale ?? 'en';
       return res.data;
+    } on DioException catch (e) {
+      print("Voice Repository Error - DioException: ${e.type} - ${e.message}");
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw Exception(
+            "Network timeout. Please check your connection and try again.");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception(
+            "Connection error. Please check your internet connection.");
+      } else {
+        throw Exception("Network error: ${e.message}");
+      }
     } catch (e) {
       print("Voice Repository Error - API call failed: $e");
-
-      // Return a mock response for testing when API fails
-      return {
-        'session_id': const Uuid().v4(),
-        'translation': 'Show me my last 5 transactions.',
-        'intent_data': {
-          'intent': 'recent_txn',
-          'entities': {},
-          'language': locale ?? 'en',
-          'action': 'respond'
-        },
-        'orchestrator_data': {
-          'success': 'true',
-          'message': 'Here are your recent transactions',
-          'data': {
-            'transactions': [
-              {
-                'id': 44,
-                'transaction_type': 'debit',
-                'recipient': 'amazon',
-                'reference_id': 'TXN-1-10-7-20251007',
-                'payment_method': 'upi',
-                'to_account_id': null,
-                'amount': 516.0,
-                'transaction_date': '2025-10-07T00:00:00',
-                'category': 'e-commerce',
-                'from_account_id': 1
-              },
-              {
-                'id': 43,
-                'transaction_type': 'debit',
-                'recipient': 'mobile',
-                'reference_id': 'TXN-1-10-6-20251006',
-                'payment_method': 'upi',
-                'to_account_id': null,
-                'amount': 2738.0,
-                'transaction_date': '2025-10-06T00:00:00',
-                'category': 'utility',
-                'from_account_id': 1
-              },
-              {
-                'id': 42,
-                'transaction_type': 'credit',
-                'recipient': 'myntra',
-                'reference_id': 'TXN-1-10-5-20251005',
-                'payment_method': 'upi',
-                'to_account_id': null,
-                'amount': 1066.0,
-                'transaction_date': '2025-10-05T00:00:00',
-                'category': 'e-commerce',
-                'from_account_id': 1
-              },
-              {
-                'id': 41,
-                'transaction_type': 'debit',
-                'recipient': 'zomato',
-                'reference_id': 'TXN-1-10-4-20251004',
-                'payment_method': 'upi',
-                'to_account_id': null,
-                'amount': 2570.0,
-                'transaction_date': '2025-10-04T00:00:00',
-                'category': 'food',
-                'from_account_id': 1
-              },
-              {
-                'id': 40,
-                'transaction_type': 'debit',
-                'recipient': 'electricity',
-                'reference_id': 'TXN-1-10-3-20251003',
-                'payment_method': 'upi',
-                'to_account_id': null,
-                'amount': 2927.0,
-                'transaction_date': '2025-10-03T00:00:00',
-                'category': 'utility',
-                'from_account_id': 1
-              }
-            ]
-          }
-        },
-        'message': 'Here are your 5 most recent transactions.',
-        'lang': locale ?? 'en'
-      };
+      rethrow;
     }
   }
 
@@ -173,95 +148,39 @@ class VoiceRepository {
       required String sessionId,
       required String locale}) async {
     try {
-      print("Voice Repository - Verifying OTP with transcribe API...");
-
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
       if (phone == null) {
         throw Exception("Phone number not found in shared preferences");
       }
 
-      // For OTP verification, we need to create a minimal audio file or use a different approach
-      // Since the transcribe-intent endpoint expects audio, let's create a minimal audio file
-      // or modify the request to work without audio
-
-      // Create a minimal audio file (empty or with minimal content)
-      final tempDir = Directory.systemTemp;
-      final tempFile = File('${tempDir.path}/otp_verification.wav');
-
-      // Create a minimal WAV file header (44 bytes) for OTP verification
-      final wavHeader = List<int>.from([
-        0x52, 0x49, 0x46, 0x46, // "RIFF"
-        0x24, 0x00, 0x00, 0x00, // File size - 8
-        0x57, 0x41, 0x56, 0x45, // "WAVE"
-        0x66, 0x6D, 0x74, 0x20, // "fmt "
-        0x10, 0x00, 0x00, 0x00, // Subchunk1Size
-        0x01, 0x00, // AudioFormat (PCM)
-        0x01, 0x00, // NumChannels
-        0x44, 0xAC, 0x00, 0x00, // SampleRate
-        0x88, 0x58, 0x01, 0x00, // ByteRate
-        0x02, 0x00, // BlockAlign
-        0x10, 0x00, // BitsPerSample
-        0x64, 0x61, 0x74, 0x61, // "data"
-        0x00, 0x00, 0x00, 0x00 // Subchunk2Size
-      ]);
-
-      await tempFile.writeAsBytes(wavHeader);
-
-      // Call the transcribe API with OTP and minimal audio file
-      final form = FormData.fromMap({
-        'audio': await MultipartFile.fromFile(tempFile.path,
-            filename: 'otp_verification.wav'),
+      // Call the API with only the required fields: session_id, phone, otp
+      final formData = <String, dynamic>{
         'session_id': sessionId.toString(),
-        'locale': locale,
         'phone': phone,
-        'otp': int.tryParse(otp) ?? otp, // Try sending as integer first
-      });
+        'otp': int.tryParse(otp) ?? otp,
+        'locale': locale,
+      };
 
-      print("Voice Repository - OTP verification request data:");
-      print("  session_id: ${sessionId.toString()}");
-      print("  locale: $locale");
-      print("  phone: $phone");
-      print(
-          "  otp: ${int.tryParse(otp) ?? otp} (type: ${(int.tryParse(otp) ?? otp).runtimeType})");
+      final form = FormData.fromMap(formData);
 
-      final res = await dio.post('/voice/transcribe-intent', data: form);
-
-      print("Voice Repository - OTP verification API response received");
+      // Use a fresh HTTP client for each request to avoid connection issues
+      final freshDio = _createFreshDio();
+      final res = await freshDio.post('/voice/transcribe-intent', data: form);
+      freshDio.close(); // Close the fresh client after use
       res.data['lang'] = locale;
-
-      // Clean up temporary file
-      try {
-        await tempFile.delete();
-      } catch (e) {
-        print("Warning: Could not delete temporary file: $e");
-      }
 
       return res.data;
     } catch (e) {
       print("Voice Repository Error - OTP verification API call failed: $e");
-
-      // If the API call fails, return a mock response indicating OTP verification failure
-      return {
-        'success': false,
-        'message': 'Invalid OTP. Please try again.',
-        'orchestrator_data': {
-          'message': 'Invalid OTP. Please try again.',
-          'data': null
-        },
-        'intent_data': {'intent': 'unknown', 'language': locale},
-        'session_id': sessionId,
-        'lang': locale
-      };
+      rethrow;
     }
   }
 
   Future<Map<String, dynamic>> stopAndTranscribeWithSessionId(
       {required String sessionId, required String locale}) async {
     try {
-      print("Voice Repository - Stopping recording for duplicate selection...");
       final path = await _rec.stop();
-      print("Voice Repository - Recording stopped, path: $path");
 
       if (path == null) {
         throw Exception("No recording file found");
@@ -275,7 +194,6 @@ class VoiceRepository {
         throw Exception("Phone number not found in shared preferences");
       }
 
-      print("Voice Repository - Sending audio with session ID to API...");
       final form = FormData.fromMap({
         'audio':
             await MultipartFile.fromFile(file.path, filename: 'recording.wav'),
@@ -284,11 +202,26 @@ class VoiceRepository {
         'phone': phone,
       });
 
-      final res = await dio.post('/voice/transcribe-intent', data: form);
-      print("Voice Repository - Duplicate selection API response received");
+      // Use a fresh HTTP client for each request to avoid connection issues
+      final freshDio = _createFreshDio();
+      final res = await freshDio.post('/voice/transcribe-intent', data: form);
+      freshDio.close(); // Close the fresh client after use
 
       res.data['lang'] = locale;
       return res.data;
+    } on DioException catch (e) {
+      print("Voice Repository Error - DioException: ${e.type} - ${e.message}");
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw Exception(
+            "Network timeout. Please check your connection and try again.");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception(
+            "Connection error. Please check your internet connection.");
+      } else {
+        throw Exception("Network error: ${e.message}");
+      }
     } catch (e) {
       print("Voice Repository Error - Duplicate selection API call failed: $e");
       rethrow;
@@ -302,8 +235,6 @@ class VoiceRepository {
       String? beneficiaryName,
       double? originalAmount}) async {
     try {
-      print("Voice Repository - Selecting duplicate beneficiary...");
-
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
       if (phone == null) {
@@ -321,49 +252,29 @@ class VoiceRepository {
 
       final form = FormData.fromMap(formData);
 
-      print("Voice Repository - Beneficiary selection request data:");
-      print("  session_id: ${sessionId.toString()}");
-      print("  phone: $phone");
-      print("  beneficiary_name: $beneficiaryName");
-
-      final res = await dio.post('/voice/transcribe-intent', data: form);
-
-      print("Voice Repository - Duplicate selection API response received");
+      // Use a fresh HTTP client for each request to avoid connection issues
+      final freshDio = _createFreshDio();
+      final res = await freshDio.post('/voice/transcribe-intent', data: form);
+      freshDio.close(); // Close the fresh client after use
       res.data['lang'] = locale;
 
       return res.data;
+    } on DioException catch (e) {
+      print("Voice Repository Error - DioException: ${e.type} - ${e.message}");
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw Exception(
+            "Network timeout. Please check your connection and try again.");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception(
+            "Connection error. Please check your internet connection.");
+      } else {
+        throw Exception("Network error: ${e.message}");
+      }
     } catch (e) {
       print("Voice Repository Error - Duplicate selection API call failed: $e");
-
-      // Return a mock response for testing when API fails
-      return {
-        'session_id': sessionId,
-        'translation': 'Beneficiary selected: $beneficiaryName',
-        'intent_data': {
-          'intent': 'transfer_money',
-          'entities': {
-            'recipient': beneficiaryName ?? '',
-            'amount': 10.0, // Default amount for testing
-            'currency': 'INR',
-          },
-          'language': locale,
-          'action': 'respond'
-        },
-        'orchestrator_data': {
-          'success': 'true',
-          'message':
-              'Beneficiary selected successfully. Proceeding with transfer.',
-          'data': {
-            'status': 'otp',
-            'recipient': beneficiaryName ?? '',
-            'amount': 10.0, // Default amount for testing
-            'message': 'Please confirm the transaction with OTP'
-          }
-        },
-        'message':
-            'Beneficiary selected successfully. Please confirm with OTP.',
-        'lang': locale
-      };
+      rethrow;
     }
   }
 }
