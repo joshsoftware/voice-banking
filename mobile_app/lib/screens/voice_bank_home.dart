@@ -223,7 +223,12 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.height < 700;
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        // Dismiss keyboard when tapping outside input fields
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         // title: Text(
@@ -1326,6 +1331,36 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                     TextFormField(
                                       controller: otpController,
                                       keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.done,
+                                      onFieldSubmitted: (_) {
+                                        if (formKey.currentState!.validate()) {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+
+                                          try {
+                                            // Call the voice bloc to verify OTP
+                                            final bloc = context.read<VoiceBloc>();
+                                            bloc.add(VerifyOtp(
+                                              otp: otpController.text.trim(),
+                                              sessionId: sessionId,
+                                              locale: Localizations.localeOf(context).languageCode,
+                                            ));
+
+                                            Navigator.of(context).pop();
+                                          } catch (e) {
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Error: ${e.toString()}'),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
                                       textAlign: TextAlign.center,
                                       maxLength: 6,
                                       style: TextStyle(

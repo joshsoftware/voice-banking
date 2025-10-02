@@ -207,7 +207,12 @@ class _OtpScreenState extends State<OtpScreen> {
     final size = MediaQuery.of(context).size;
     final isSmallScreen = size.height < 700;
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        // Dismiss keyboard when tapping outside input fields
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: const Color(0xFF667eea),
@@ -522,6 +527,7 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }
