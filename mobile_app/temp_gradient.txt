@@ -1,0 +1,14 @@
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFF667eea), // Soft blue-purple
+              const Color(0xFF764ba2), // Purple
+              const Color(0xFFf093fb), // Pink
+              const Color(0xFFf5576c), // Coral
+            ],
+            stops: const [0.0, 0.3, 0.7, 1.0],
+          ),
+        ),

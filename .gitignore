@@ -1,45 +1,168 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
+# Voice Banking Project Root .gitignore
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
 .idea/
+*.swp
+*.swo
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
+# Logs
+*.log
+logs/
 
-# Symbolication related
-app.*.symbols
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
 
-# Obfuscation related
-app.*.map.json
+# API keys and secrets
+**/config/secrets.py
+**/config/api_keys.py
+**/secrets.json
+**/credentials.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
-.fvm
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Flutter mobile app
+mobile_app/build/
+mobile_app/.dart_tool/
+mobile_app/.packages
+mobile_app/.pub-cache/
+mobile_app/.pub/
+mobile_app/ios/Pods/
+mobile_app/ios/.symlinks/
+mobile_app/ios/Flutter/App.framework
+mobile_app/ios/Flutter/Flutter.framework
+mobile_app/ios/Flutter/Flutter.podspec
+mobile_app/ios/Flutter/Generated.xcconfig
+mobile_app/ios/Flutter/ephemeral/
+mobile_app/ios/Flutter/app.flx
+mobile_app/ios/Flutter/app.zip
+mobile_app/ios/Flutter/flutter_assets/
+mobile_app/ios/Flutter/flutter_export_environment.sh
+mobile_app/ios/ServiceDefinitions.json
+mobile_app/ios/Runner/GeneratedPluginRegistrant.*
+mobile_app/android/app/debug
+mobile_app/android/app/profile
+mobile_app/android/app/release
+mobile_app/android/.gradle
+mobile_app/android/captures
+mobile_app/android/gradlew
+mobile_app/android/gradlew.bat
+mobile_app/android/local.properties
+mobile_app/android/**/GeneratedPluginRegistrant.java
+mobile_app/android/key.properties
+mobile_app/android/app/upload-keystore.jks
+mobile_app/android/app/voice-banking-keystore.jks
+
+# STT Service
+stt_service/__pycache__/
+stt_service/*.pyc
+stt_service/venv/
+stt_service/env/
+stt_service/.env
+stt_service/logs/
+stt_service/temp/
+stt_service/*.log
+
+# Documentation
+doc/
+docs/
+*.md.bak
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# iOS Build Artifacts - Large files that shouldn't be committed
+mobile_app/ios/Runner.xcarchive/
+mobile_app/ios/build/
+mobile_app/ios/*.xcarchive/
+mobile_app/ios/*.ipa
+mobile_app/ios/ExportOptions.plist
+mobile_app/ios/DistributionSummary.plist
+mobile_app/ios/Packaging.log
+
+# iOS dSYM files (debug symbols) - often very large
+mobile_app/ios/**/*.dSYM/
+mobile_app/ios/**/Flutter.framework.dSYM/
+mobile_app/ios/**/Runner.app.dSYM/
+
+# Xcode build artifacts
+mobile_app/ios/DerivedData/
+mobile_app/ios/.build/
+mobile_app/ios/*.xcodeproj/xcuserdata/
+mobile_app/ios/*.xcworkspace/xcuserdata/
+
+# iOS Simulator builds
+mobile_app/ios/ios/
+mobile_app/ios/Flutter/ios_framework/
