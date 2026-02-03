@@ -94,6 +94,7 @@
   "transferSuccess": "Transfer of {amount} rupees to {recipient} has been initiated successfully.",
   "transferFailed": "Transfer failed. Please try again.",
   "errorGeneric": "Sorry, I encountered an error. Please try again.",
-  "errorInsufficientFunds": "Insufficient funds. Please check your balance."
+  "errorInsufficientFunds": "Insufficient funds. Please check your balance.",
+  "pleaseSaySomething": "Please say something"
 }
 
