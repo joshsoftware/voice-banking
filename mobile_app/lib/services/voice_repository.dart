@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:record/record.dart';
@@ -5,8 +6,23 @@ import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'shared_preferences_service.dart';
 
+/// Thrown when the recorded audio is empty/silent (no speech detected).
+class EmptyRecordingException implements Exception {
+  EmptyRecordingException();
+}
+
 class VoiceRepository {
   final _rec = AudioRecorder();
+
+  /// Whether sustained speech (not just background noise) was detected.
+  bool _hasSpoken = false;
+  StreamSubscription<Amplitude>? _amplitudeSubscription;
+  /// Number of consecutive amplitude samples above threshold (filters brief noise spikes).
+  int _consecutiveAboveThreshold = 0;
+  /// dB threshold: only amplitude above this is considered speech. Higher = ignore more background noise.
+  static const double _speechThreshold = -20;
+  /// Require this many consecutive samples above threshold to count as speech (avoids clicks/fan spikes).
+  static const int _minConsecutiveForSpeech = 2;
 
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000"));
   late final Dio dio;
@@ -87,6 +103,23 @@ class VoiceRepository {
             sampleRate: 16000,
           ),
           path: path);
+
+      // Listen to amplitude during recording; ignore background noise via higher threshold + sustained level
+      _hasSpoken = false;
+      _consecutiveAboveThreshold = 0;
+      _amplitudeSubscription?.cancel();
+      _amplitudeSubscription = _rec
+          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .listen((amp) {
+        if (amp.current > _speechThreshold) {
+          _consecutiveAboveThreshold++;
+          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
+            _hasSpoken = true;
+          }
+        } else {
+          _consecutiveAboveThreshold = 0;
+        }
+      });
     } catch (e) {
       print("Voice Repository - Error starting recording: $e");
       rethrow;
@@ -97,11 +130,29 @@ class VoiceRepository {
     try {
       final path = await _rec.stop();
 
+      // Cancel amplitude listener
+      await _amplitudeSubscription?.cancel();
+      _amplitudeSubscription = null;
+
       if (path == null) {
         throw Exception("No recording file found");
       }
 
       final file = File(path);
+
+      // First check: reject if file is missing or has zero size
+      if (!await file.exists()) {
+        throw EmptyRecordingException();
+      }
+      final fileSize = await file.length();
+      if (fileSize == 0) {
+        throw EmptyRecordingException();
+      }
+
+      // Reject if no speech was detected during recording (amplitude never above threshold)
+      if (!_hasSpoken) {
+        throw EmptyRecordingException();
+      }
 
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();

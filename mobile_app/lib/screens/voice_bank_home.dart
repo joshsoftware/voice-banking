@@ -573,6 +573,23 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               _loadBalanceFromPrefs();
               _loadCustomerName();
               _loadRecentTransactionsFromPrefs();
+            } else if (state is RecordingEmpty) {
+              setState(() {
+                _isRecording = false;
+                _isHolding = false;
+                _holdProgress = 0.0;
+              });
+              // Message uses l10n key pleaseSaySomething after running: flutter gen-l10n
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Please say something'),
+                  backgroundColor: Colors.orange,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
             } else if (state is Listening) {
               setState(() {
                 _isRecording = true;

@@ -57,6 +57,9 @@ class ShowBeneficiariesDialog extends VoiceState {
   ShowBeneficiariesDialog(this.message, this.beneficiaries, this.sessionId);
 }
 
+/// Emitted when the user recorded but said nothing (empty/silent audio).
+class RecordingEmpty extends VoiceState {}
+
 sealed class VoiceEvent {}
 
 class StartListening extends VoiceEvent {}
@@ -104,8 +107,23 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       _currentLocale = e.locale; // Store current locale
 
       print("Voice Bloc Debug - Processing normal voice input");
-      final data = await repo.stopAndTranscribe(locale: e.locale);
-      add(GotTranscript(data, e.locale));
+      try {
+        final data = await repo.stopAndTranscribe(locale: e.locale);
+        add(GotTranscript(data, e.locale));
+      } on EmptyRecordingException catch (_) {
+        final message = TranslationService.translateResponse(
+            'empty_recording', _currentLocale, null);
+        try {
+          await tts.speak(message, langCode: _currentLocale);
+        } catch (e) {
+          print("TTS Error on empty recording: $e");
+        }
+        emit(RecordingEmpty());
+        add(Reset());
+      } catch (err) {
+        print("Voice Bloc Error - Stop/transcribe failed: $err");
+        emit(Idle());
+      }
     });
 
     on<Reset>((e, emit) {
