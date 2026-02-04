@@ -3,6 +3,7 @@
   "loginPrompt": "अपना मोबाइल नंबर दर्ज करें",
   "otpPrompt": "ओटीपी दर्ज करें",
   "micHint": "बोलने के लिए माइक दबाएँ",
+  "tapToSpeak": "बोलने के लिए टैप करें",
   "listening": "सुन रहा हूँ...",
   "transcribing": "लिख रहा हूँ...",
   "executing": "आपका अनुरोध संसाधित हो रहा है...",
@@ -87,5 +88,13 @@
   "tipNaturalLanguage": "प्राकृतिक भाषा का उपयोग करें जैसे \"मेरा बैलेंस दिखाएं\"",
   "tipWaitForIndicator": "बोलने से पहले सुनने के संकेतक की प्रतीक्षा करें",
   "needMoreHelp": "और सहायता चाहिए?",
-  "contactSupportDescription": "अतिरिक्त सहायता के लिए हमारी सहायता टीम से संपर्क करें"
+  "contactSupportDescription": "अतिरिक्त सहायता के लिए हमारी सहायता टीम से संपर्क करें",
+  "balanceSuccess": "आपका वर्तमान बैलेंस {amount} रुपये है।",
+  "transactionsFound": "यहां आपके {count} सबसे हाल के लेनदेन हैं।",
+  "noTransactions": "कोई लेनदेन नहीं मिला।",
+  "transferSuccess": "{recipient} को {amount} रुपये का ट्रांसफर सफलतापूर्वक शुरू किया गया है।",
+  "transferFailed": "ट्रांसफर विफल। कृपया पुनः प्रयास करें।",
+  "errorGeneric": "क्षमा करें, एक त्रुटि हुई। कृपया पुनः प्रयास करें।",
+  "errorInsufficientFunds": "अपर्याप्त धन। कृपया अपना बैलेंस जांचें।",
+  "pleaseSaySomething": "कृपया कुछ बोलें"
 }
