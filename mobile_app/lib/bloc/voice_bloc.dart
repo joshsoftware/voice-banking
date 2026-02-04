@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/models.dart' as models;
 import '../services/voice_repository.dart';
@@ -62,7 +63,10 @@ class RecordingEmpty extends VoiceState {}
 
 sealed class VoiceEvent {}
 
-class StartListening extends VoiceEvent {}
+class StartListening extends VoiceEvent {
+  final String locale;
+  StartListening({required this.locale});
+}
 
 class StopListening extends VoiceEvent {
   final String locale;
@@ -77,6 +81,12 @@ class GotTranscript extends VoiceEvent {
 
 class Reset extends VoiceEvent {}
 
+/// Fired when user said nothing for initial silence duration (e.g. first 5s).
+class InitialSilence extends VoiceEvent {
+  final String locale;
+  InitialSilence({required this.locale});
+}
+
 class VerifyOtp extends VoiceEvent {
   final String otp;
   final String sessionId;
@@ -89,17 +99,38 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   final BankingAPI bank = BankingAPI();
   final TTSService tts = TTSService();
   String _currentLocale = 'en'; // Track current locale
+  /// BuildContext of the currently shown dialog (excluding logout). Cleared when dialog is closed or when user speaks and we pop it.
+  BuildContext? currentDialogContext;
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
       try {
-        await repo.start();
+        await repo.start(
+          onIdle: () => add(StopListening(locale: e.locale)),
+          idleDuration: const Duration(seconds: 2),
+          onInitialSilence: () => add(InitialSilence(locale: e.locale)),
+          initialSilenceDuration: const Duration(seconds: 12),
+          onSilenceReminder: () async {
+            final message = TranslationService.translateResponse(
+                'empty_recording', e.locale, null);
+            await tts.speak(message, langCode: e.locale);
+          },
+          silenceReminderDuration: const Duration(seconds: 5),
+        );
         emit(Listening());
       } catch (e) {
         print("Voice Bloc Error - Permission denied: $e");
-        // Show a snackbar or dialog to inform user about permission
         emit(Idle());
       }
+    });
+
+    on<InitialSilence>((e, emit) async {
+      try {
+        await repo.stopWithoutTranscribe();
+      } catch (err) {
+        print("Voice Bloc Error - stopWithoutTranscribe: $err");
+      }
+      emit(Idle());
     });
 
     on<StopListening>((e, emit) async {
@@ -108,16 +139,14 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
 
       print("Voice Bloc Debug - Processing normal voice input");
       try {
-        final data = await repo.stopAndTranscribe(locale: e.locale);
+        final data = await repo.stopAndTranscribe(locale: e.locale, ifNotEmptyCallback: () {
+          if (currentDialogContext != null && currentDialogContext!.mounted) {
+            Navigator.of(currentDialogContext!).pop();
+            currentDialogContext = null;
+          }
+        });
         add(GotTranscript(data, e.locale));
       } on EmptyRecordingException catch (_) {
-        final message = TranslationService.translateResponse(
-            'empty_recording', _currentLocale, null);
-        try {
-          await tts.speak(message, langCode: _currentLocale);
-        } catch (e) {
-          print("TTS Error on empty recording: $e");
-        }
         emit(RecordingEmpty());
         add(Reset());
       } catch (err) {
@@ -238,7 +267,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         // Show transactions dialog
         emit(
             ShowTransactionsDialog(translatedMessage, transactions, sessionId));
-        add(Reset());
+        add(StartListening(locale: _currentLocale));
         return;
       }
 
@@ -295,7 +324,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         print("Voice Bloc Debug - Emitting ShowBeneficiariesDialog");
         emit(ShowBeneficiariesDialog(
             translatedMessage, beneficiaries, sessionId));
-        add(Reset());
+        add(StartListening(locale: _currentLocale));
         return;
       }
 
@@ -364,7 +393,7 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           // Show duplicate beneficiaries dialog
           emit(ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries,
               originalAmount: originalAmount));
-          add(Reset());
+          add(StartListening(locale: _currentLocale));
           return;
         }
       }
@@ -413,7 +442,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           // Show the error message
           emit(Executing(
               translatedMessage, VoiceIntent(VoiceIntentType.unknown)));
-          add(Reset());
+          // After TTS completes, restart listening for continuous conversation
+          add(StartListening(locale: _currentLocale));
           return;
         } else {
           print(
@@ -542,7 +572,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         }
 
         emit(Executing(translatedMessage, VoiceIntent(intentType)));
-        add(Reset());
+        // After TTS completes, restart listening for continuous conversation
+        add(StartListening(locale: _currentLocale));
         return;
       }
 
