@@ -135,6 +135,12 @@ abstract class AppLocalizations {
   /// **'Tap the mic to speak'**
   String get micHint;
 
+  /// No description provided for @tapToSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to speak'**
+  String get tapToSpeak;
+
   /// No description provided for @listening.
   ///
   /// In en, this message translates to:
@@ -638,6 +644,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact our support team for additional assistance'**
   String get contactSupportDescription;
+
+  /// No description provided for @balanceSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current balance is {amount} rupees.'**
+  String balanceSuccess(Object amount);
+
+  /// No description provided for @transactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your {count} most recent transactions.'**
+  String transactionsFound(Object count);
+
+  /// No description provided for @noTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions found.'**
+  String get noTransactions;
+
+  /// No description provided for @transferSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer of {amount} rupees to {recipient} has been initiated successfully.'**
+  String transferSuccess(Object amount, Object recipient);
+
+  /// No description provided for @transferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed. Please try again.'**
+  String get transferFailed;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, I encountered an error. Please try again.'**
+  String get errorGeneric;
+
+  /// No description provided for @errorInsufficientFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient funds. Please check your balance.'**
+  String get errorInsufficientFunds;
+
+  /// No description provided for @pleaseSaySomething.
+  ///
+  /// In en, this message translates to:
+  /// **'Please say something'**
+  String get pleaseSaySomething;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

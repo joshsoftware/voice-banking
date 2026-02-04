@@ -21,6 +21,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get micHint => 'কথা বলার জন্য মাইক্রোফোনে ট্যাপ করুন';
 
   @override
+  String get tapToSpeak => 'বলতে ট্যাপ করুন';
+
+  @override
   String get listening => 'শোনা হচ্ছে...';
 
   @override
@@ -277,4 +280,34 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'অতিরিক্ত সহায়তার জন্য আমাদের সহায়তা দলকে যোগাযোগ করুন';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'আপনার বর্তমান জের $amount টাকা।';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'এখানে আপনার $countটি সাম্প্রতিক লেনদেন।';
+  }
+
+  @override
+  String get noTransactions => 'কোন লেনদেন পাওয়া যায়নি।';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipient-এ $amount টাকার ট্রান্সফার সফলভাবে শুরু হয়েছে।';
+  }
+
+  @override
+  String get transferFailed => 'ট্রান্সফার ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get errorGeneric => 'দুঃখিত, একটি ত্রুটি হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get errorInsufficientFunds => 'অপর্যাপ্ত তহবিল। অনুগ্রহ করে আপনার ব্যালেন্স পরীক্ষা করুন।';
+
+  @override
+  String get pleaseSaySomething => 'অনুগ্রহ করে কিছু বলুন';
 }
