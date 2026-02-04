@@ -23,6 +23,22 @@ class VoiceRepository {
   static const double _speechThreshold = -20;
   /// Require this many consecutive samples above threshold to count as speech (avoids clicks/fan spikes).
   static const int _minConsecutiveForSpeech = 2;
+  /// Last time amplitude was above threshold (speech detected).
+  DateTime? _lastSpeechTime;
+  /// Callback invoked when user is idle (silent) for [idleDuration] after having spoken.
+  void Function()? _onIdle;
+  Duration _idleDuration = const Duration(seconds: 2);
+  bool _idleTriggered = false;
+
+  /// Callback invoked when user says nothing for [initialSilenceDuration] after starting (e.g. 12s).
+  void Function()? _onInitialSilence;
+  Duration _initialSilenceDuration = const Duration(seconds: 12);
+  Timer? _initialSilenceTimer;
+
+  /// Callback invoked when user says nothing for [silenceReminderDuration] after starting (e.g. 5s) — remind to speak.
+  void Function()? _onSilenceReminder;
+  Duration _silenceReminderDuration = const Duration(seconds: 5);
+  Timer? _silenceReminderTimer;
 
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000"));
   late final Dio dio;
@@ -31,6 +47,7 @@ class VoiceRepository {
     // Initialize Dio with proper configuration
     dio = Dio(BaseOptions(
       baseUrl: "https://loglytics.joshsoftware.com",
+      // baseUrl: "http://localhost:8000",
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
@@ -67,6 +84,7 @@ class VoiceRepository {
   Dio _createFreshDio() {
     return Dio(BaseOptions(
       baseUrl: "https://loglytics.joshsoftware.com",
+      // baseUrl: "http://localhost:8000",
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       sendTimeout: const Duration(seconds: 30),
@@ -83,7 +101,14 @@ class VoiceRepository {
     return '${dir.path}/recording.wav';
   }
 
-  Future<void> start() async {
+  Future<void> start({
+    void Function()? onIdle,
+    Duration idleDuration = const Duration(seconds: 2),
+    void Function()? onInitialSilence,
+    Duration initialSilenceDuration = const Duration(seconds: 12),
+    void Function()? onSilenceReminder,
+    Duration silenceReminderDuration = const Duration(seconds: 5),
+  }) async {
     try {
       // Check permission first
       bool hasPermission = await _rec.hasPermission();
@@ -107,6 +132,39 @@ class VoiceRepository {
       // Listen to amplitude during recording; ignore background noise via higher threshold + sustained level
       _hasSpoken = false;
       _consecutiveAboveThreshold = 0;
+      _lastSpeechTime = null;
+      _onIdle = onIdle;
+      _idleDuration = idleDuration;
+      _idleTriggered = false;
+     
+
+      _onSilenceReminder = onSilenceReminder;
+      _silenceReminderDuration = silenceReminderDuration;
+      _silenceReminderTimer?.cancel();
+      _silenceReminderTimer = Timer(_silenceReminderDuration, () {
+        if (!_hasSpoken) {
+          _silenceReminderTimer?.cancel();
+          _silenceReminderTimer = null;
+          _onSilenceReminder?.call();
+        }
+      });
+      
+      _onInitialSilence = onInitialSilence;
+      _initialSilenceDuration = initialSilenceDuration;
+      _initialSilenceTimer?.cancel();
+      _initialSilenceTimer = null;
+      _initialSilenceTimer = Timer(_initialSilenceDuration, () {
+        if (!_hasSpoken) {
+          _initialSilenceTimer?.cancel();
+          _initialSilenceTimer = null;
+          _silenceReminderTimer?.cancel();
+          _silenceReminderTimer = null;
+          _amplitudeSubscription?.cancel();
+          _amplitudeSubscription = null;
+          _onInitialSilence?.call();
+        }
+      });
+      
       _amplitudeSubscription?.cancel();
       _amplitudeSubscription = _rec
           .onAmplitudeChanged(const Duration(milliseconds: 300))
@@ -115,9 +173,24 @@ class VoiceRepository {
           _consecutiveAboveThreshold++;
           if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
             _hasSpoken = true;
+            _lastSpeechTime = DateTime.now();
+            _initialSilenceTimer?.cancel();
+            _initialSilenceTimer = null;
+            _silenceReminderTimer?.cancel();
+            _silenceReminderTimer = null;
           }
         } else {
           _consecutiveAboveThreshold = 0;
+          // Check idle: user spoke before, now silent for idleDuration
+          if (_hasSpoken &&
+              !_idleTriggered &&
+              _lastSpeechTime != null &&
+              DateTime.now().difference(_lastSpeechTime!) >= _idleDuration) {
+            _idleTriggered = true;
+            _onIdle?.call();
+            _amplitudeSubscription?.cancel();
+            _amplitudeSubscription = null;
+          }
         }
       });
     } catch (e) {
@@ -126,8 +199,23 @@ class VoiceRepository {
     }
   }
 
-  Future<Map<String, dynamic>> stopAndTranscribe({locale = 'en'}) async {
+  /// Stops recording without sending to server. Use when initial silence timeout fires.
+  Future<void> stopWithoutTranscribe() async {
+    _initialSilenceTimer?.cancel();
+    _initialSilenceTimer = null;
+    _silenceReminderTimer?.cancel();
+    _silenceReminderTimer = null;
+    await _amplitudeSubscription?.cancel();
+    _amplitudeSubscription = null;
+    await _rec.stop();
+  }
+
+  Future<Map<String, dynamic>> stopAndTranscribe({locale = 'en', Function()? ifNotEmptyCallback}) async {
     try {
+      _initialSilenceTimer?.cancel();
+      _initialSilenceTimer = null;
+      _silenceReminderTimer?.cancel();
+      _silenceReminderTimer = null;
       final path = await _rec.stop();
 
       // Cancel amplitude listener
@@ -153,6 +241,8 @@ class VoiceRepository {
       if (!_hasSpoken) {
         throw EmptyRecordingException();
       }
+
+      ifNotEmptyCallback?.call();
 
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
