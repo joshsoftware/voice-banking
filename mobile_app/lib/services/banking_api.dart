@@ -6,7 +6,7 @@ class BankingAPI {
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000/bank/me"));
   final Dio dio =
   Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
-      // Dio(BaseOptions(baseUrl: "http://localhost:8000/bank/me"));
+      // Dio(BaseOptions(baseUrl: "http://192.168.1.237:8000/bank/me"));
 
   Future<double> getBalance() async {
     final phone = SharedPreferencesService.getMobileNumber();
