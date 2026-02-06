@@ -83,6 +83,9 @@ class AppLocalizationsTe extends AppLocalizations {
   String get cancel => 'రద్దు చేయి';
 
   @override
+  String get stopVoiceBankingConfirm => 'వాయిస్ బ్యాంకింగ్ ఆపాలా? అన్ని ప్రస్తుత వాయిస్ కార్యకలాపాలు రద్దు చేయబడతాయి.';
+
+  @override
   String get welcomeTo => 'స్వాగతం';
 
   @override

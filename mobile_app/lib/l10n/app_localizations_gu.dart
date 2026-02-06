@@ -83,6 +83,9 @@ class AppLocalizationsGu extends AppLocalizations {
   String get cancel => 'રદ કરો';
 
   @override
+  String get stopVoiceBankingConfirm => 'વૉઇસ બેંકિંગ બંધ કરો? તમામ વર્તમાન વૉઇસ પ્રવૃત્તિ રદ કરવામાં આવશે.';
+
+  @override
   String get welcomeTo => 'સ્વાગત છે';
 
   @override

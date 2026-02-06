@@ -83,6 +83,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get cancel => 'ரத்து செய்';
 
   @override
+  String get stopVoiceBankingConfirm => 'குரல் வங்கியை நிறுத்துவதா? அனைத்து தற்போதைய குரல் செயல்பாடுகளும் ரத்து செய்யப்படும்.';
+
+  @override
   String get welcomeTo => 'வரவேற்கிறோம்';
 
   @override

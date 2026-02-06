@@ -83,6 +83,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get stopVoiceBankingConfirm => 'Stop voice banking? All current voice activity will be cancelled.';
+
+  @override
   String get welcomeTo => 'Welcome to';
 
   @override

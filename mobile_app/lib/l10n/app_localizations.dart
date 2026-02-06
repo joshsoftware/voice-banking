@@ -255,6 +255,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @stopVoiceBankingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop voice banking? All current voice activity will be cancelled.'**
+  String get stopVoiceBankingConfirm;
+
   /// No description provided for @welcomeTo.
   ///
   /// In en, this message translates to:

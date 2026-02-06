@@ -83,6 +83,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get cancel => 'ರದ್ದುಗೊಳಿಸಿ';
 
   @override
+  String get stopVoiceBankingConfirm => 'ವಾಯ್ಸ್ ಬ್ಯಾಂಕಿಂಗ್ ನಿಲ್ಲಿಸುವುದೇ? ಎಲ್ಲಾ ಪ್ರಸ್ತುತ ವಾಯ್ಸ್ ಚಟುವಟಿಕೆ ರದ್ದುಗೊಳಿಸಲಾಗುತ್ತದೆ.';
+
+  @override
   String get welcomeTo => 'ಸ್ವಾಗತ';
 
   @override

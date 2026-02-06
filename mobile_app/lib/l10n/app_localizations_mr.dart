@@ -83,6 +83,9 @@ class AppLocalizationsMr extends AppLocalizations {
   String get cancel => 'रद्द करा';
 
   @override
+  String get stopVoiceBankingConfirm => 'व्हॉइस बँकिंग थांबवायचे? सर्व सध्याची व्हॉइस क्रिया रद्द होईल.';
+
+  @override
   String get welcomeTo => 'स्वागत';
 
   @override

@@ -83,6 +83,9 @@ class AppLocalizationsPa extends AppLocalizations {
   String get cancel => 'ਰੱਦ ਕਰੋ';
 
   @override
+  String get stopVoiceBankingConfirm => 'ਵੌਇਸ ਬੈਂਕਿੰਗ ਰੋਕੋ? ਸਾਰੀ ਮੌਜੂਦਾ ਵੌਇਸ ਗਤੀਵਿਧੀ ਰੱਦ ਹੋ ਜਾਵੇਗੀ।';
+
+  @override
   String get welcomeTo => 'ਸਵਾਗਤ';
 
   @override

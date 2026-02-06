@@ -83,6 +83,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cancel => 'বাতিল';
 
   @override
+  String get stopVoiceBankingConfirm => 'ভয়েস ব্যাংকিং বন্ধ করবেন? সমস্ত বর্তমান ভয়েস কার্যকলাপ বাতিল করা হবে।';
+
+  @override
   String get welcomeTo => 'স্বাগতম';
 
   @override

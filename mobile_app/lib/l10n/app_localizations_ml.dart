@@ -83,6 +83,9 @@ class AppLocalizationsMl extends AppLocalizations {
   String get cancel => 'റദ്ദാക്കുക';
 
   @override
+  String get stopVoiceBankingConfirm => 'വോയ്സ് ബാങ്കിംഗ് നിർത്തണോ? എല്ലാ നിലവിലെ വോയ്സ് പ്രവർത്തനങ്ങളും റദ്ദാക്കപ്പെടും.';
+
+  @override
   String get welcomeTo => 'സ്വാഗതം';
 
   @override
