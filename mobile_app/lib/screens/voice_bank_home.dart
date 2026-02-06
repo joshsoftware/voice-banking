@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
 import '../bloc/voice_bloc.dart';
@@ -160,6 +161,35 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       default:
         return Colors.grey;
     }
+  }
+
+  void _showStopVoiceBankingConfirmation(BuildContext context, VoiceBloc bloc) {
+    final loc = AppLocalizations.of(context)!;
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.stop),
+          content: Text(loc.stopVoiceBankingConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(loc.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+                bloc.add(CancelVoiceSession());
+              },
+              child: Text(loc.stop),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _logout() async {
@@ -982,13 +1012,18 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         ],
       ),
       child: FloatingActionButton.extended(
-        onPressed: state is Idle
-            ? () {
-                final bloc = context.read<VoiceBloc>();
-                bloc.add(StartListening(
-                    locale: Localizations.localeOf(context).languageCode));
-              }
-            : null,
+        onPressed: () {
+          final bloc = context.read<VoiceBloc>();
+          if (state is Idle) {
+            final sessionId = const Uuid().v4();
+            bloc.add(StartListening(
+              locale: Localizations.localeOf(context).languageCode,
+              sessionId: sessionId,
+            ));
+          } else {
+            _showStopVoiceBankingConfirmation(context, bloc);
+          }
+        },
         backgroundColor: _getButtonColor(state),
         icon: _buildButtonIcon(state),
         label: _buildButtonLabel(state, context),
