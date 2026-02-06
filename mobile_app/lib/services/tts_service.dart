@@ -34,6 +34,15 @@ class TTSService {
     }
   }
 
+  /// Stops any ongoing or queued speech. Call when user cancels voice session.
+  Future<void> stop() async {
+    try {
+      await _tts.stop();
+    } catch (e) {
+      print("TTS Stop Error: $e");
+    }
+  }
+
   Future<void> speak(String text, {String langCode = "en"}) async {
     try {
       await _tts.stop();

@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:record/record.dart';
-import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'shared_preferences_service.dart';
 
@@ -47,10 +47,10 @@ class VoiceRepository {
     // Initialize Dio with proper configuration
     dio = Dio(BaseOptions(
       baseUrl: "https://loglytics.joshsoftware.com",
-      // baseUrl: "http://localhost:8000",
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 30),
+      // baseUrl: "http://192.168.1.237:8000",
+      connectTimeout: const Duration(seconds: 300),
+      receiveTimeout: const Duration(seconds: 300),
+      sendTimeout: const Duration(seconds: 300),
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -84,10 +84,10 @@ class VoiceRepository {
   Dio _createFreshDio() {
     return Dio(BaseOptions(
       baseUrl: "https://loglytics.joshsoftware.com",
-      // baseUrl: "http://localhost:8000",
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 30),
+      // baseUrl: "http://192.168.1.237:8000",
+      connectTimeout: const Duration(seconds: 300),
+      receiveTimeout: const Duration(seconds: 300),
+      sendTimeout: const Duration(seconds: 300),
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -210,7 +210,10 @@ class VoiceRepository {
     await _rec.stop();
   }
 
-  Future<Map<String, dynamic>> stopAndTranscribe({locale = 'en', Function()? ifNotEmptyCallback}) async {
+  Future<Map<String, dynamic>> stopAndTranscribe(
+      {locale = 'en',
+      required String sessionId,
+      Function()? ifNotEmptyCallback}) async {
     try {
       _initialSilenceTimer?.cancel();
       _initialSilenceTimer = null;
@@ -253,13 +256,20 @@ class VoiceRepository {
       final form = FormData.fromMap({
         'audio':
             await MultipartFile.fromFile(file.path, filename: 'recording.wav'),
-        'session_id': const Uuid().v4(),
+        'session_id': sessionId,
         'locale': locale,
         'phone': phone,
       });
 
       // Use a fresh HTTP client for each request to avoid connection issues
       final freshDio = _createFreshDio();
+      freshDio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        logPrint: (obj) => log('Dio: $obj'),
+      ));
+      log('Form data: ${form.fields.toString()}');
+      log('Form data: ${form.files.toString()}');
       final res = await freshDio.post('/voice/transcribe-intent', data: form);
       freshDio.close(); // Close the fresh client after use
 
