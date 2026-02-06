@@ -23,6 +23,7 @@
   "voice": "Voice",
   "stop": "Stop",
   "cancel": "Cancel",
+  "stopVoiceBankingConfirm": "Stop voice banking? All current voice activity will be cancelled.",
   "welcomeTo": "Welcome to",
   "experienceBanking": "Experience banking with the power of voice",
   "enterMobileNumber": "Enter Mobile Number",

@@ -23,6 +23,7 @@
   "voice": "वॉइस",
   "stop": "रोकें",
   "cancel": "रद्द करें",
+  "stopVoiceBankingConfirm": "वॉइस बैंकिंग बंद करें? सभी वर्तमान वॉइस गतिविधि रद्द हो जाएगी।",
   "welcomeTo": "स्वागत है",
   "experienceBanking": "वॉइस की शक्ति से बैंकिंग का अनुभव करें",
   "enterMobileNumber": "मोबाइल नंबर दर्ज करें",
