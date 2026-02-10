@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/models.dart' as models;
 import '../services/voice_repository.dart';
@@ -57,13 +58,21 @@ class ShowBeneficiariesDialog extends VoiceState {
   ShowBeneficiariesDialog(this.message, this.beneficiaries, this.sessionId);
 }
 
+/// Emitted when the user recorded but said nothing (empty/silent audio).
+class RecordingEmpty extends VoiceState {}
+
 sealed class VoiceEvent {}
 
-class StartListening extends VoiceEvent {}
+class StartListening extends VoiceEvent {
+  final String locale;
+  final String sessionId;
+  StartListening({required this.locale, required this.sessionId});
+}
 
 class StopListening extends VoiceEvent {
   final String locale;
-  StopListening({required this.locale});
+  final String sessionId;
+  StopListening({required this.locale, required this.sessionId});
 }
 
 class GotTranscript extends VoiceEvent {
@@ -74,6 +83,12 @@ class GotTranscript extends VoiceEvent {
 
 class Reset extends VoiceEvent {}
 
+/// Fired when user said nothing for initial silence duration (e.g. first 5s).
+class InitialSilence extends VoiceEvent {
+  final String locale;
+  InitialSilence({required this.locale});
+}
+
 class VerifyOtp extends VoiceEvent {
   final String otp;
   final String sessionId;
@@ -81,22 +96,71 @@ class VerifyOtp extends VoiceEvent {
   VerifyOtp({required this.otp, required this.sessionId, required this.locale});
 }
 
+/// User confirmed they want to stop voice banking; stop recording, TTS, timers and reset to Idle.
+class CancelVoiceSession extends VoiceEvent {}
+
 class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   final VoiceRepository repo;
   final BankingAPI bank = BankingAPI();
   final TTSService tts = TTSService();
   String _currentLocale = 'en'; // Track current locale
+  /// BuildContext of the currently shown dialog (excluding logout). Cleared when dialog is closed or when user speaks and we pop it.
+  BuildContext? currentDialogContext;
+  /// Set when user cancels; skip any further TTS and reset to Idle.
+  bool _voiceSessionCancelled = false;
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
+      _voiceSessionCancelled = false;
       try {
-        await repo.start();
+        await repo.start(
+          onIdle: () => add(StopListening(locale: e.locale, sessionId: e.sessionId)),
+          idleDuration: const Duration(seconds: 2),
+          onInitialSilence: () => add(InitialSilence(locale: e.locale)),
+          initialSilenceDuration: const Duration(seconds: 12),
+          onSilenceReminder: () async {
+            if (_voiceSessionCancelled) return;
+            final message = TranslationService.translateResponse(
+                'empty_recording', e.locale, null);
+            if (_voiceSessionCancelled) return;
+            try {
+              await tts.speak(message, langCode: e.locale);
+            } catch (e) {
+              print("TTS Error: $e");
+            }
+            if (_voiceSessionCancelled) return;
+          },
+          silenceReminderDuration: const Duration(seconds: 5),
+        );
         emit(Listening());
       } catch (e) {
         print("Voice Bloc Error - Permission denied: $e");
-        // Show a snackbar or dialog to inform user about permission
         emit(Idle());
       }
+    });
+
+    on<InitialSilence>((e, emit) async {
+      try {
+        await repo.stopWithoutTranscribe();
+      } catch (err) {
+        print("Voice Bloc Error - stopWithoutTranscribe: $err");
+      }
+      emit(Idle());
+    });
+
+    on<CancelVoiceSession>((e, emit) async {
+      _voiceSessionCancelled = true;
+      try {
+        await repo.stopWithoutTranscribe();
+      } catch (err) {
+        print("Voice Bloc Error - stopWithoutTranscribe on cancel: $err");
+      }
+      try {
+        await tts.stop();
+      } catch (err) {
+        print("TTS stop on cancel: $err");
+      }
+      emit(Idle());
     });
 
     on<StopListening>((e, emit) async {
@@ -104,8 +168,25 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       _currentLocale = e.locale; // Store current locale
 
       print("Voice Bloc Debug - Processing normal voice input");
-      final data = await repo.stopAndTranscribe(locale: e.locale);
-      add(GotTranscript(data, e.locale));
+      try {
+        final data = await repo.stopAndTranscribe(
+          locale: e.locale,
+          sessionId: e.sessionId,
+          ifNotEmptyCallback: () {
+            if (currentDialogContext != null && currentDialogContext!.mounted) {
+              Navigator.of(currentDialogContext!).pop();
+              currentDialogContext = null;
+            }
+          },
+        );
+        add(GotTranscript(data, e.locale));
+      } on EmptyRecordingException catch (_) {
+        emit(RecordingEmpty());
+        add(Reset());
+      } catch (err) {
+        print("Voice Bloc Error - Stop/transcribe failed: $err");
+        emit(Idle());
+      }
     });
 
     on<Reset>((e, emit) {
@@ -211,16 +292,18 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             originalMessage, _currentLocale, context);
 
         // Speak the translated message
+        if (_voiceSessionCancelled) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
+        if (_voiceSessionCancelled) return;
 
         // Show transactions dialog
         emit(
             ShowTransactionsDialog(translatedMessage, transactions, sessionId));
-        add(Reset());
+        add(StartListening(locale: _currentLocale, sessionId: sessionId));
         return;
       }
 
@@ -267,17 +350,19 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         print("Voice Bloc Debug - Translated message: $translatedMessage");
 
         // Speak the translated message
+        if (_voiceSessionCancelled) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
+        if (_voiceSessionCancelled) return;
 
         // Show beneficiaries dialog
         print("Voice Bloc Debug - Emitting ShowBeneficiariesDialog");
         emit(ShowBeneficiariesDialog(
             translatedMessage, beneficiaries, sessionId));
-        add(Reset());
+        add(StartListening(locale: _currentLocale, sessionId: sessionId));
         return;
       }
 
@@ -304,11 +389,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               {'amount': amount.toString(), 'recipient': recipient});
 
           // Speak the translated message
+          if (_voiceSessionCancelled) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
+          if (_voiceSessionCancelled) return;
 
           // Show OTP dialog
           emit(ShowOtpDialog(translatedMessage, sessionId, recipient, amount));
@@ -337,16 +424,18 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               message, _currentLocale, {});
 
           // Speak the translated message
+          if (_voiceSessionCancelled) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
+          if (_voiceSessionCancelled) return;
 
           // Show duplicate beneficiaries dialog
           emit(ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries,
               originalAmount: originalAmount));
-          add(Reset());
+          add(StartListening(locale: _currentLocale, sessionId: sessionId));
           return;
         }
       }
@@ -386,16 +475,19 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           print("Voice Bloc Debug - Translated message: $translatedMessage");
 
           // Speak the translated message
+          if (_voiceSessionCancelled) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
+          if (_voiceSessionCancelled) return;
 
           // Show the error message
           emit(Executing(
               translatedMessage, VoiceIntent(VoiceIntentType.unknown)));
-          add(Reset());
+          // After TTS completes, restart listening for continuous conversation
+          add(StartListening(locale: _currentLocale, sessionId: sessionId));
           return;
         } else {
           print(
@@ -501,11 +593,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         String translatedMessage = TranslationService.translateApiResponse(
             originalMessage, _currentLocale, context);
 
+        if (_voiceSessionCancelled) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
+        if (_voiceSessionCancelled) return;
 
         // Determine intent type for execution state
         VoiceIntentType intentType = VoiceIntentType.unknown;
@@ -524,7 +618,8 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         }
 
         emit(Executing(translatedMessage, VoiceIntent(intentType)));
-        add(Reset());
+        // After TTS completes, restart listening for continuous conversation
+        add(StartListening(locale: _currentLocale, sessionId: sessionId));
         return;
       }
 

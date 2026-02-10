@@ -21,6 +21,9 @@ class AppLocalizationsGu extends AppLocalizations {
   String get micHint => 'બોલવા માટે માઇક પર ટેપ કરો';
 
   @override
+  String get tapToSpeak => 'બોલવા ટેપ કરો';
+
+  @override
   String get listening => 'સાંભળી રહ્યા છીએ...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get cancel => 'રદ કરો';
+
+  @override
+  String get stopVoiceBankingConfirm => 'વૉઇસ બેંકિંગ બંધ કરો? તમામ વર્તમાન વૉઇસ પ્રવૃત્તિ રદ કરવામાં આવશે.';
 
   @override
   String get welcomeTo => 'સ્વાગત છે';
@@ -277,4 +283,34 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'વધારાની સહાયતા માટે અમારી સહાયતા ટીમનો સંપર્ક કરો';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'તમારું વર્તમાન બેલન્સ $amount રૂપિયા છે.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'અહીં તમારા $count તાજેતરના લેનદેન છે.';
+  }
+
+  @override
+  String get noTransactions => 'કોઈ લેનદેન મળ્યા નથી.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipientને $amount રૂપિયાનું ટ્રાન્સફર સફળતાપૂર્વક શરૂ થયું છે.';
+  }
+
+  @override
+  String get transferFailed => 'ટ્રાન્સફર નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો.';
+
+  @override
+  String get errorGeneric => 'માફ કરો, ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.';
+
+  @override
+  String get errorInsufficientFunds => 'અપૂર્ણ નિધિ. કૃપા કરીને તમારું બેલન્સ તપાસો.';
+
+  @override
+  String get pleaseSaySomething => 'કૃપા કરીને કંઈક કહો';
 }

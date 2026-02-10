@@ -21,6 +21,9 @@ class AppLocalizationsTe extends AppLocalizations {
   String get micHint => 'మాట్లాడడానికి మైక్‌ను ట్యాప్ చేయండి';
 
   @override
+  String get tapToSpeak => 'మాట్లాడడానికి ట్యాప్ చేయండి';
+
+  @override
   String get listening => 'వింటోంది...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get cancel => 'రద్దు చేయి';
+
+  @override
+  String get stopVoiceBankingConfirm => 'వాయిస్ బ్యాంకింగ్ ఆపాలా? అన్ని ప్రస్తుత వాయిస్ కార్యకలాపాలు రద్దు చేయబడతాయి.';
 
   @override
   String get welcomeTo => 'స్వాగతం';
@@ -277,4 +283,34 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'అదనపు సహాయం కోసం మా మద్దతు బృందాన్ని సంప్రదించండి';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'మీ ప్రస్తుత బ్యాలెన్స్ $amount రూపాయలు.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'ఇక్కడ మీ $count ఇటీవలి లావాదేవీలు.';
+  }
+
+  @override
+  String get noTransactions => 'లావాదేవీలు ఏవీ కనుగొనబడలేదు.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipientకు $amount రూపాయల బదిలీ విజయవంతంగా ప్రారంభించబడింది.';
+  }
+
+  @override
+  String get transferFailed => 'బదిలీ విఫలమైంది. దయచేసి మళ్ళీ ప్రయత్నించండి.';
+
+  @override
+  String get errorGeneric => 'క్షమించండి, లోపం సంభవించింది. దయచేసి మళ్ళీ ప్రయత్నించండి.';
+
+  @override
+  String get errorInsufficientFunds => 'తగినంత నిధులు లేవు. దయచేసి మీ బ్యాలెన్స్ తనిఖీ చేయండి.';
+
+  @override
+  String get pleaseSaySomething => 'దయచేసి ఏదైనా చెప్పండి';
 }

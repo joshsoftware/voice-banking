@@ -3,7 +3,8 @@ import 'package:dio/dio.dart';
 
 void main() async {
   final dio =
-      Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
+  Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
+      // Dio(BaseOptions(baseUrl: "http://localhost:8000/bank/me"));
 
   try {
     print("Testing API call...");

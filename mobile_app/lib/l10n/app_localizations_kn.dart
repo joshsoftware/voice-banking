@@ -21,6 +21,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get micHint => 'ಮಾತನಾಡಲು ಮೈಕ್ ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ';
 
   @override
+  String get tapToSpeak => 'ಮಾತನಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ';
+
+  @override
   String get listening => 'ಕೇಳುತ್ತಿದೆ...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get cancel => 'ರದ್ದುಗೊಳಿಸಿ';
+
+  @override
+  String get stopVoiceBankingConfirm => 'ವಾಯ್ಸ್ ಬ್ಯಾಂಕಿಂಗ್ ನಿಲ್ಲಿಸುವುದೇ? ಎಲ್ಲಾ ಪ್ರಸ್ತುತ ವಾಯ್ಸ್ ಚಟುವಟಿಕೆ ರದ್ದುಗೊಳಿಸಲಾಗುತ್ತದೆ.';
 
   @override
   String get welcomeTo => 'ಸ್ವಾಗತ';
@@ -277,4 +283,34 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'ಹೆಚ್ಚುವರಿ ಸಹಾಯಕ್ಕಾಗಿ ನಮ್ಮ ಬೆಂಬಲ ತಂಡವನ್ನು ಸಂಪರ್ಕಿಸಿ';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಬ್ಯಾಲೆನ್ಸ್ $amount ರೂಪಾಯಿ.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'ಇಲ್ಲಿ ನಿಮ್ಮ $count ಇತ್ತೀಚಿನ ಲಾವಾದೇವಿಗಳು.';
+  }
+
+  @override
+  String get noTransactions => 'ಯಾವುದೇ ಲಾವಾದೇವಿಗಳು ಕಂಡುಬಂದಿಲ್ಲ.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipientಗೆ $amount ರೂಪಾಯಿ ವರ್ಗಾವಣೆ ಯಶಸ್ವಿಯಾಗಿ ಪ್ರಾರಂಭವಾಗಿದೆ.';
+  }
+
+  @override
+  String get transferFailed => 'ವರ್ಗಾವಣೆ ವಿಫಲವಾಯಿತು. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get errorGeneric => 'ಕ್ಷಮಿಸಿ, ದೋಷ ಸಂಭವಿಸಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get errorInsufficientFunds => 'ಸಾಕಷ್ಟು ನಿಧಿ ಇಲ್ಲ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಲೆನ್ಸ್ ಪರಿಶೀಲಿಸಿ.';
+
+  @override
+  String get pleaseSaySomething => 'ದಯವಿಟ್ಟು ಏನಾದರೂ ಹೇಳಿ';
 }
