@@ -3,6 +3,7 @@
   "loginPrompt": "ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ",
   "otpPrompt": "OTP ਦਰਜ ਕਰੋ",
   "micHint": "ਬੋਲਣ ਲਈ ਮਾਈਕ ਟੈਪ ਕਰੋ",
+  "tapToSpeak": "ਬੋਲਣ ਲਈ ਟੈਪ ਕਰੋ",
   "listening": "ਸੁਣ ਰਿਹਾ ਹੈ...",
   "transcribing": "ਲਿਖ ਰਿਹਾ ਹੈ...",
   "executing": "ਤੁਹਾਡੀ ਬੇਨਤੀ ਪ੍ਰਕਿਰਿਆ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ...",
@@ -22,6 +23,7 @@
   "voice": "ਵੌਇਸ",
   "stop": "ਰੋਕੋ",
   "cancel": "ਰੱਦ ਕਰੋ",
+  "stopVoiceBankingConfirm": "ਵੌਇਸ ਬੈਂਕਿੰਗ ਰੋਕੋ? ਸਾਰੀ ਮੌਜੂਦਾ ਵੌਇਸ ਗਤੀਵਿਧੀ ਰੱਦ ਹੋ ਜਾਵੇਗੀ।",
   "welcomeTo": "ਸਵਾਗਤ",
   "experienceBanking": "ਵੌਇਸ ਦੀ ਸ਼ਕਤੀ ਨਾਲ ਬੈਂਕਿੰਗ ਦਾ ਅਨੁਭਵ ਕਰੋ",
   "enterMobileNumber": "ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ",
@@ -87,5 +89,13 @@
   "tipNaturalLanguage": "ਕੁਦਰਤੀ ਭਾਸ਼ਾ ਵਰਤੋ ਜਿਵੇਂ \"ਮੇਰਾ ਬੈਲੇਂਸ ਦਿਖਾਓ\"",
   "tipWaitForIndicator": "ਬੋਲਣ ਤੋਂ ਪਹਿਲਾਂ ਸੁਣਨ ਦੇ ਸੰਕੇਤਕ ਲਈ ਉਡੀਕ ਕਰੋ",
   "needMoreHelp": "ਹੋਰ ਮਦਦ ਚਾਹੀਦੀ ਹੈ?",
-  "contactSupportDescription": "ਵਾਧੂ ਸਹਾਇਤਾ ਲਈ ਸਾਡੀ ਸਹਾਇਤਾ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ"
+  "contactSupportDescription": "ਵਾਧੂ ਸਹਾਇਤਾ ਲਈ ਸਾਡੀ ਸਹਾਇਤਾ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ",
+  "balanceSuccess": "ਤੁਹਾਡਾ ਮੌਜੂਦਾ ਬੈਲੇਂਸ {amount} ਰੁਪਏ ਹੈ।",
+  "transactionsFound": "ਇੱਥੇ ਤੁਹਾਡੇ {count} ਸਭ ਤੋਂ ਹਾਲ ਹੀ ਦੇ ਲੈਣ-ਦੇਣ ਹਨ।",
+  "noTransactions": "ਕੋਈ ਲੈਣ-ਦੇਣ ਨਹੀਂ ਮਿਲੀ।",
+  "transferSuccess": "{recipient} ਨੂੰ {amount} ਰੁਪਏ ਦਾ ਟ੍ਰਾਂਸਫਰ ਸਫਲਤਾਪੂਰਵਕ ਸ਼ੁਰੂ ਕੀਤਾ ਗਿਆ ਹੈ।",
+  "transferFailed": "ਟ੍ਰਾਂਸਫਰ ਅਸਫਲ। ਕ੍ਰਿਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "errorGeneric": "ਮਾਫ਼ ਕਰੋ, ਗਲਤੀ ਆਈ। ਕ੍ਰਿਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "errorInsufficientFunds": "ਅਪੂਰਨ ਫੰਡ। ਕ੍ਰਿਪਾ ਕਰਕੇ ਆਪਣਾ ਬੈਲੇਂਸ ਜਾਂਚੋ।",
+  "pleaseSaySomething": "ਕ੍ਰਿਪਾ ਕਰਕੇ ਕੁਝ ਕਹੋ"
 }

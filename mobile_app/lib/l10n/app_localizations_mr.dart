@@ -21,6 +21,9 @@ class AppLocalizationsMr extends AppLocalizations {
   String get micHint => 'बोलण्यासाठी माइक टॅप करा';
 
   @override
+  String get tapToSpeak => 'बोलण्यासाठी टॅप करा';
+
+  @override
   String get listening => 'ऐकत आहे...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get cancel => 'रद्द करा';
+
+  @override
+  String get stopVoiceBankingConfirm => 'व्हॉइस बँकिंग थांबवायचे? सर्व सध्याची व्हॉइस क्रिया रद्द होईल.';
 
   @override
   String get welcomeTo => 'स्वागत';
@@ -277,4 +283,34 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'अतिरिक्त सहाय्यासाठी आमच्या सहाय्य टीमशी संपर्क साधा';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'तुमचे वर्तमान बॅलन्स $amount रुपये आहे.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'येथे तुमच्या $count अलीकडील व्यवहार आहेत.';
+  }
+
+  @override
+  String get noTransactions => 'कोणतेही व्यवहार आढळले नाहीत.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipient ला $amount रुपये हस्तांतरण यशस्वीरित्या सुरू झाले.';
+  }
+
+  @override
+  String get transferFailed => 'हस्तांतरण अयशस्वी. कृपया पुन्हा प्रयत्न करा.';
+
+  @override
+  String get errorGeneric => 'क्षमा करा, त्रुटी आली. कृपया पुन्हा प्रयत्न करा.';
+
+  @override
+  String get errorInsufficientFunds => 'अपुरे निधी. कृपया तुमचे बॅलन्स तपासा.';
+
+  @override
+  String get pleaseSaySomething => 'कृपया काहीतरी बोला';
 }

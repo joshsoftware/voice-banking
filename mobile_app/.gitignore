@@ -190,3 +190,6 @@ Thumbs.db
 # Keep important files
 !**/lib/l10n/app_*.arb
 !**/lib/l10n/app_localizations.dart
+
+# FVM Version Cache
+.fvm/

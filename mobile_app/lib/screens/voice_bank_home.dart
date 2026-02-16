@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
 import '../bloc/voice_bloc.dart';
@@ -27,21 +27,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   bool _isLoadingTransactions = true;
   String? _balance;
   String? _customerName;
-  bool _isRecording = false; // Track recording state locally
-  bool _isHolding = false; // Track if user is holding the button
-  Timer? _holdTimer; // Timer for hold duration
-  double _holdProgress = 0.0; // Progress of hold (0.0 to 1.0)
 
   @override
   void initState() {
     super.initState();
     _loadData();
-  }
-
-  @override
-  void dispose() {
-    _holdTimer?.cancel();
-    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -171,6 +161,35 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       default:
         return Colors.grey;
     }
+  }
+
+  void _showStopVoiceBankingConfirmation(BuildContext context, VoiceBloc bloc) {
+    final loc = AppLocalizations.of(context)!;
+    showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.stop),
+          content: Text(loc.stopVoiceBankingConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(loc.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+                bloc.add(CancelVoiceSession());
+              },
+              child: Text(loc.stop),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _logout() async {
@@ -573,17 +592,6 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               _loadBalanceFromPrefs();
               _loadCustomerName();
               _loadRecentTransactionsFromPrefs();
-            } else if (state is Listening) {
-              setState(() {
-                _isRecording = true;
-                _isHolding = false; // Stop holding when recording starts
-              });
-            } else if (state is Transcribing || state is Idle) {
-              setState(() {
-                _isRecording = false;
-                _isHolding = false;
-                _holdProgress = 0.0;
-              });
             }
           },
           child: BlocBuilder<VoiceBloc, VoiceState>(
@@ -685,6 +693,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final bloc = context.read<VoiceBloc>();
+        bloc.currentDialogContext = context;
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -950,17 +960,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonLabel(VoiceState state, BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    if (_isHolding && !_isRecording) {
+    if (state is Listening || state is ShowBeneficiariesDialog) {
       return Text(
-        "Hold... ${(0.1 - (_holdProgress * 0.1)).toStringAsFixed(1)}s",
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-    } else if (state is Listening) {
-      return Text(
-        "Release to Stop",
+        loc.listening,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -984,7 +986,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       );
     } else {
       return Text(
-        "Hold to Speak",
+        loc.tapToSpeak,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -994,99 +996,39 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
-    return _buildHoldToSpeakButton(state, context);
+    return _buildClickToSpeakButton(state, context);
   }
 
-  Widget _buildHoldToSpeakButton(VoiceState state, BuildContext context) {
-    return GestureDetector(
-      onPanDown: (_) {
-        _startHold();
-      },
-      onPanEnd: (_) {
-        _endHold();
-      },
-      onPanCancel: () {
-        _endHold();
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: _getButtonColor(state).withOpacity(0.3),
-              blurRadius: 15,
-              spreadRadius: 3,
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // Progress indicator
-            if (_isHolding && !_isRecording)
-              Positioned.fill(
-                child: CircularProgressIndicator(
-                  value: _holdProgress,
-                  strokeWidth: 4,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  backgroundColor: Colors.white.withOpacity(0.3),
-                ),
-              ),
-            // Button
-            FloatingActionButton.extended(
-              onPressed: null, // Disable tap, only use gesture
-              backgroundColor: _getButtonColor(state),
-              icon: _buildButtonIcon(state),
-              label: _buildButtonLabel(state, context),
-            ),
-          ],
-        ),
+  Widget _buildClickToSpeakButton(VoiceState state, BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: _getButtonColor(state).withOpacity(0.3),
+            blurRadius: 15,
+            spreadRadius: 3,
+          ),
+        ],
+      ),
+      child: FloatingActionButton.extended(
+        onPressed: () {
+          final bloc = context.read<VoiceBloc>();
+          if (state is Idle) {
+            final sessionId = const Uuid().v4();
+            bloc.add(StartListening(
+              locale: Localizations.localeOf(context).languageCode,
+              sessionId: sessionId,
+            ));
+          } else {
+            _showStopVoiceBankingConfirmation(context, bloc);
+          }
+        },
+        backgroundColor: _getButtonColor(state),
+        icon: _buildButtonIcon(state),
+        label: _buildButtonLabel(state, context),
       ),
     );
-  }
-
-  void _startHold() {
-    if (_isHolding || _isRecording) return;
-
-    setState(() {
-      _isHolding = true;
-      _holdProgress = 0.0;
-    });
-
-    // Start timer for 0.1 seconds
-    _holdTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      setState(() {
-        _holdProgress = (timer.tick * 50) / 100.0; // 0.1 seconds = 100ms
-      });
-
-      if (_holdProgress >= 1.0) {
-        // 0.1 seconds completed, start recording
-        timer.cancel();
-        _startRecording();
-      }
-    });
-  }
-
-  void _endHold() {
-    _holdTimer?.cancel();
-
-    if (_isRecording) {
-      // Stop recording
-      final bloc = context.read<VoiceBloc>();
-      bloc.add(
-          StopListening(locale: Localizations.localeOf(context).languageCode));
-    }
-
-    setState(() {
-      _isHolding = false;
-      _holdProgress = 0.0;
-    });
-  }
-
-  void _startRecording() {
-    if (_isRecording) return;
-
-    final bloc = context.read<VoiceBloc>();
-    bloc.add(StartListening());
   }
 
   void _showOtpDialog(BuildContext context, String message, String sessionId,
@@ -1102,6 +1044,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        final bloc = context.read<VoiceBloc>();
+        bloc.currentDialogContext = context;
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
@@ -1599,6 +1543,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        final bloc = context.read<VoiceBloc>();
+        bloc.currentDialogContext = context;
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -1870,7 +1816,9 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        final bloc = context.read<VoiceBloc>();
+        bloc.currentDialogContext = context;
+          return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

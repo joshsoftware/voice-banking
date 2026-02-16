@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get micHint => 'Tap the mic to speak';
 
   @override
+  String get tapToSpeak => 'Tap to speak';
+
+  @override
   String get listening => 'Listening...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get stopVoiceBankingConfirm => 'Stop voice banking? All current voice activity will be cancelled.';
 
   @override
   String get welcomeTo => 'Welcome to';
@@ -277,4 +283,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'Contact our support team for additional assistance';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'Your current balance is $amount rupees.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'Here are your $count most recent transactions.';
+  }
+
+  @override
+  String get noTransactions => 'No transactions found.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return 'Transfer of $amount rupees to $recipient has been initiated successfully.';
+  }
+
+  @override
+  String get transferFailed => 'Transfer failed. Please try again.';
+
+  @override
+  String get errorGeneric => 'Sorry, I encountered an error. Please try again.';
+
+  @override
+  String get errorInsufficientFunds => 'Insufficient funds. Please check your balance.';
+
+  @override
+  String get pleaseSaySomething => 'Please say something';
 }

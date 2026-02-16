@@ -21,6 +21,9 @@ class AppLocalizationsMl extends AppLocalizations {
   String get micHint => 'സംസാരിക്കാൻ മൈക്കിൽ ടാപ്പ് ചെയ്യുക';
 
   @override
+  String get tapToSpeak => 'സംസാരിക്കാൻ ടാപ്പ് ചെയ്യുക';
+
+  @override
   String get listening => 'കേൾക്കുന്നു...';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get cancel => 'റദ്ദാക്കുക';
+
+  @override
+  String get stopVoiceBankingConfirm => 'വോയ്സ് ബാങ്കിംഗ് നിർത്തണോ? എല്ലാ നിലവിലെ വോയ്സ് പ്രവർത്തനങ്ങളും റദ്ദാക്കപ്പെടും.';
 
   @override
   String get welcomeTo => 'സ്വാഗതം';
@@ -277,4 +283,34 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get contactSupportDescription => 'അധിക സഹായത്തിനായി ഞങ്ങളുടെ സപ്പോർട്ട് ടീമുമായി ബന്ധപ്പെടുക';
+
+  @override
+  String balanceSuccess(Object amount) {
+    return 'നിങ്ങളുടെ നിലവിലെ ബാലൻസ് $amount രൂപയാണ്.';
+  }
+
+  @override
+  String transactionsFound(Object count) {
+    return 'നിങ്ങളുടെ $count ഏറ്റവും പുതിയ ഇടപാടുകൾ ഇതാ.';
+  }
+
+  @override
+  String get noTransactions => 'ഇടപാടുകളൊന്നും കണ്ടെത്തിയില്ല.';
+
+  @override
+  String transferSuccess(Object amount, Object recipient) {
+    return '$recipient-ന് $amount രൂപ ട്രാൻസ്ഫർ വിജയകരമായി ആരംഭിച്ചു.';
+  }
+
+  @override
+  String get transferFailed => 'ട്രാൻസ്ഫർ പരാജയപ്പെട്ടു. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get errorGeneric => 'ക്ഷമിക്കണം, ഒരു പിശക് സംഭവിച്ചു. ദയവായി വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get errorInsufficientFunds => 'ധനം പോരാ. ദയവായി നിങ്ങളുടെ ബാലൻസ് പരിശോധിക്കുക.';
+
+  @override
+  String get pleaseSaySomething => 'ദയവായി എന്തെങ്കിലും പറയുക';
 }

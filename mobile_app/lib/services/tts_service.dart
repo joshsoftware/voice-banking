@@ -34,9 +34,21 @@ class TTSService {
     }
   }
 
+  /// Stops any ongoing or queued speech. Call when user cancels voice session.
+  Future<void> stop() async {
+    try {
+      await _tts.stop();
+    } catch (e) {
+      print("TTS Stop Error: $e");
+    }
+  }
+
   Future<void> speak(String text, {String langCode = "en"}) async {
     try {
       await _tts.stop();
+
+      final availableLanguages = await _tts.getLanguages;
+      print("TTS Debug - Available languages: $availableLanguages");
 
       print("TTS Debug - Requested language code: $langCode");
       print("TTS Debug - Text to speak: $text");
@@ -61,7 +73,7 @@ class TTSService {
 
       // Default fallback: English
       print("TTS Debug - Falling back to English");
-      await _tts.setLanguage("en-IN");
+      await _tts.setLanguage(langCode);
       await _tts.speak(text);
     } catch (e) {
       print("TTS Speak Error: $e");
