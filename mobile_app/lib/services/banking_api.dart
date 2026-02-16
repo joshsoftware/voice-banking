@@ -1,12 +1,17 @@
 import 'package:dio/dio.dart';
 import '../models/transaction.dart';
+import '../config/backend_url_config.dart';
 import 'shared_preferences_service.dart';
 
 class BankingAPI {
-  //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000/bank/me"));
-  final Dio dio =
-  Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
-      // Dio(BaseOptions(baseUrl: "http://192.168.1.237:8000/bank/me"));
+  Dio get dio {
+    final base = BackendUrlConfig.getBackendUrl();
+    if (base == null || base.isEmpty) {
+      throw StateError('Backend URL is not set');
+    }
+    final url = base.endsWith('/') ? '${base}bank/me' : '$base/bank/me';
+    return Dio(BaseOptions(baseUrl: url));
+  }
 
   Future<double> getBalance() async {
     final phone = SharedPreferencesService.getMobileNumber();

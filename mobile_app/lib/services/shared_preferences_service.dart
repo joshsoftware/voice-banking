@@ -9,6 +9,7 @@ class SharedPreferencesService {
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _recentTransactionsKey = 'recent_transactions';
   static const String _sessionIdKey = 'session_id';
+  static const String _backendUrlKey = 'backend_url';
 
   static SharedPreferences? _prefs;
 
@@ -82,6 +83,14 @@ class SharedPreferencesService {
 
   static String? getSessionId() {
     return _prefs?.getString(_sessionIdKey);
+  }
+
+  static String? getBackendUrl() {
+    return _prefs?.getString(_backendUrlKey);
+  }
+
+  static Future<void> setBackendUrl(String url) async {
+    await _prefs?.setString(_backendUrlKey, url.trim());
   }
 
   static Future<void> clearAll() async {

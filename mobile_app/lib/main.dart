@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voice_banking_poc/routes.dart';
 import 'bloc/voice_bloc.dart';
+import 'config/backend_url_config.dart';
 import 'services/voice_repository.dart';
 import 'services/shared_preferences_service.dart';
 import 'l10n/app_localizations.dart';
@@ -10,8 +11,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize shared preferences
+  // Initialize shared preferences and load backend URL into global
   await SharedPreferencesService.init();
+  await BackendUrlConfig.init();
 
   final voiceRepo = VoiceRepository();
 

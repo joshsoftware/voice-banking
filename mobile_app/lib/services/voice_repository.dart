@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import '../config/backend_url_config.dart';
 import 'shared_preferences_service.dart';
 
 /// Thrown when the recorded audio is empty/silent (no speech detected).
@@ -43,11 +44,15 @@ class VoiceRepository {
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000"));
   late final Dio dio;
 
+  static String get _baseUrl =>
+      BackendUrlConfig.getBackendUrl() ?? 'https://loglytics.joshsoftware.com';
+
   VoiceRepository() {
-    // Initialize Dio with proper configuration
+    // Initialize Dio with proper configuration (uses URL from SharedPreferences)
     dio = Dio(BaseOptions(
-      baseUrl: "https://loglytics.joshsoftware.com",
+      // baseUrl: "https://loglytics.joshsoftware.com",
       // baseUrl: "http://192.168.1.237:8000",
+      baseUrl: _baseUrl,
       connectTimeout: const Duration(seconds: 300),
       receiveTimeout: const Duration(seconds: 300),
       sendTimeout: const Duration(seconds: 300),
@@ -83,8 +88,9 @@ class VoiceRepository {
   // Method to create a fresh HTTP client
   Dio _createFreshDio() {
     return Dio(BaseOptions(
-      baseUrl: "https://loglytics.joshsoftware.com",
+      // baseUrl: "https://loglytics.joshsoftware.com",
       // baseUrl: "http://192.168.1.237:8000",
+      baseUrl: _baseUrl,
       connectTimeout: const Duration(seconds: 300),
       receiveTimeout: const Duration(seconds: 300),
       sendTimeout: const Duration(seconds: 300),
