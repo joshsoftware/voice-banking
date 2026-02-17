@@ -428,4 +428,94 @@ class VoiceRepository {
       rethrow;
     }
   }
+
+  /// Register voice with 3 audio files for voice banking registration
+  /// 
+  /// [userId] - Customer ID from shared preferences
+  /// [audio1] - First audio file (File object)
+  /// [audio2] - Second audio file (File object)
+  /// [audio3] - Third audio file (File object)
+  /// 
+  /// Throws Exception on failure (network errors, validation errors, etc.)
+  Future<void> registerVoice({
+    required String userId,
+    required File audio1,
+    required File audio2,
+    required File audio3,
+  }) async {
+    try {
+      // Verify files exist
+      if (!await audio1.exists() || !await audio2.exists() || !await audio3.exists()) {
+        throw Exception("One or more audio files are missing");
+      }
+
+      // Get phone number from shared preferences
+      final phone = SharedPreferencesService.getMobileNumber();
+      if (phone == null) {
+        throw Exception("Phone number not found in shared preferences");
+      }
+
+      // Create multipart form data
+      final form = FormData.fromMap({
+        'user_id': userId,
+        'phone': phone,
+        'audio_1': await MultipartFile.fromFile(
+          audio1.path,
+          filename: 'audio_1.wav',
+        ),
+        'audio_2': await MultipartFile.fromFile(
+          audio2.path,
+          filename: 'audio_2.wav',
+        ),
+        'audio_3': await MultipartFile.fromFile(
+          audio3.path,
+          filename: 'audio_3.wav',
+        ),
+      });
+
+      // Use a fresh HTTP client for each request to avoid connection issues
+      final freshDio = _createFreshDio();
+      freshDio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        logPrint: (obj) => log('Dio: $obj'),
+      ));
+
+      log('Voice Registration - Sending form data with user_id: $userId');
+      log('Voice Registration - Audio files: ${audio1.path}, ${audio2.path}, ${audio3.path}');
+
+      final res = await freshDio.post('/voice/register', data: form);
+      freshDio.close(); // Close the fresh client after use
+
+      // Check response status
+      if (res.statusCode != 200 && res.statusCode != 201) {
+        throw Exception("Voice registration failed: ${res.statusMessage}");
+      }
+
+      log('Voice Registration - Success: ${res.data}');
+    } on DioException catch (e) {
+      print("Voice Repository Error - Voice Registration DioException: ${e.type} - ${e.message}");
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw Exception(
+            "Network timeout. Please check your connection and try again.");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception(
+            "Connection error. Please check your internet connection.");
+      } else if (e.response != null) {
+        // Backend validation error
+        final errorMessage = e.response?.data?['message'] ?? 
+                           e.response?.data?['error'] ?? 
+                           e.message ?? 
+                           "Voice registration failed";
+        throw Exception(errorMessage);
+      } else {
+        throw Exception("Network error: ${e.message}");
+      }
+    } catch (e) {
+      print("Voice Repository Error - Voice registration failed: $e");
+      rethrow;
+    }
+  }
 }
