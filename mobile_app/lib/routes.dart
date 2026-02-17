@@ -4,6 +4,7 @@ import 'package:voice_banking_poc/screens/otp_screen.dart';
 import 'package:voice_banking_poc/screens/voice_bank_home.dart';
 import 'package:voice_banking_poc/screens/all_transactions_screen.dart';
 import 'package:voice_banking_poc/screens/faq_screen.dart';
+import 'package:voice_banking_poc/screens/registration_voice_screen.dart';
 import 'package:voice_banking_poc/services/shared_preferences_service.dart';
 
 class MyRouter {
@@ -27,6 +28,8 @@ class MyRouter {
         return MaterialPageRoute(builder: (context) => AllTransactionsScreen());
       case '/FAQ':
         return MaterialPageRoute(builder: (context) => FAQScreen());
+      case '/RegistrationVoice':
+        return MaterialPageRoute(builder: (context) => const RegistrationVoiceScreen());
       default:
         return MaterialPageRoute(builder: (context) => ErrorPage());
     }
