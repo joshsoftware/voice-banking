@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import '../main.dart'; // for VoiceBankingApp.setLocale
 
 class LanguageToggleWidget extends StatelessWidget {
-  const LanguageToggleWidget({super.key});
+  const LanguageToggleWidget({super.key, this.color});
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<Locale>(
-      icon: const Icon(Icons.language, color: Colors.white),
+      icon: Icon(Icons.language, color: color ?? Colors.white),
       onSelected: (locale) {
         VoiceBankingApp.setLocale(context, locale);
       },
