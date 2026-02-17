@@ -103,7 +103,34 @@ class _LandingScreenState extends State<LandingScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: const Color(0xFF667eea),
-        actions: [LanguageToggleWidget()],
+        leading: LanguageToggleWidget(),
+        actions: [
+          TextButton(
+            onPressed: _isLoading
+                ? null
+                : () {
+                    Navigator.pushNamed(
+                      context,
+                      '/RegistrationVoice',
+                    );
+                  },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Register',
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 2),
+                Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+              ],
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
