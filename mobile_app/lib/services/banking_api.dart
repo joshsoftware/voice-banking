@@ -5,7 +5,7 @@ import 'shared_preferences_service.dart';
 class BankingAPI {
   //final Dio dio = Dio(BaseOptions(baseUrl: "http://192.168.1.6:8000/bank/me"));
   final Dio dio =
-  Dio(BaseOptions(baseUrl: "https://loglytics.joshsoftware.com/bank/me"));
+  Dio(BaseOptions(baseUrl: "https://thelingo.co.in/voice-api/bank/me"));
       // Dio(BaseOptions(baseUrl: "http://192.168.1.237:8000/bank/me"));
 
   Future<double> getBalance() async {

@@ -46,7 +46,7 @@ class VoiceRepository {
   VoiceRepository() {
     // Initialize Dio with proper configuration
     dio = Dio(BaseOptions(
-      baseUrl: "https://loglytics.joshsoftware.com",
+      baseUrl: "https://thelingo.co.in/voice-api",
       // baseUrl: "http://192.168.1.237:8000",
       connectTimeout: const Duration(seconds: 300),
       receiveTimeout: const Duration(seconds: 300),
@@ -83,7 +83,7 @@ class VoiceRepository {
   // Method to create a fresh HTTP client
   Dio _createFreshDio() {
     return Dio(BaseOptions(
-      baseUrl: "https://loglytics.joshsoftware.com",
+      baseUrl: "https://thelingo.co.in/voice-api",
       // baseUrl: "http://192.168.1.237:8000",
       connectTimeout: const Duration(seconds: 300),
       receiveTimeout: const Duration(seconds: 300),
