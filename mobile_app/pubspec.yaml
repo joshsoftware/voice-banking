@@ -22,6 +22,9 @@ dependencies:
 flutter: 
   uses-material-design: true
   generate: true
+  
+  assets:
+    - assets/images/
 
 generate:
   l10n:
