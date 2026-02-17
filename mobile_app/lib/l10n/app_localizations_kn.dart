@@ -313,4 +313,130 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'ದಯವಿಟ್ಟು ಏನಾದರೂ ಹೇಳಿ';
+
+  @override
+  String get voiceRegistration => 'ಧ್ವನಿ ನೋಂದಣಿ';
+
+  @override
+  String get pleaseWaitForUpload => 'ದಯವಿಟ್ಟು ಅಪ್‌ಲೋಡ್ ಪೂರ್ಣಗೊಳ್ಳಲು ನಿರೀಕ್ಷಿಸಿ';
+
+  @override
+  String get voiceRegistrationCompleted => 'ಧ್ವನಿ ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ!';
+
+  @override
+  String get unknownState => 'ಅಜ್ಞಾತ ಸ್ಥಿತಿ';
+
+  @override
+  String get uploadingVoiceRecordings => 'ಧ್ವನಿ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'ಚಿತ್ರ $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'ಏನೋ ತಪ್ಪಾಗಿದೆ';
+
+  @override
+  String get imageNotAvailable => 'ಚಿತ್ರ ಲಭ್ಯವಿಲ್ಲ';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'ಹಂತ $current ನ $total';
+  }
+
+  @override
+  String get describeImageInstruction => 'ದಯವಿಟ್ಟು ಈ ಚಿತ್ರದಲ್ಲಿ ನೀವು ನೋಡುವುದನ್ನು ವಿವರಿಸಿ। ಸ್ಪಷ್ಟವಾಗಿ ಮಾತನಾಡಿ ಮತ್ತು ಮುಖ್ಯ ಅಂಶಗಳನ್ನು ವಿವರಿಸಿ।';
+
+  @override
+  String get stopRecording => 'ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸಿ';
+
+  @override
+  String get reRecord => 'ಮತ್ತೆ ರೆಕಾರ್ಡ್ ಮಾಡಿ';
+
+  @override
+  String get startRecording => 'ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ';
+
+  @override
+  String get recording => 'ರೆಕಾರ್ಡ್ ಆಗುತ್ತಿದೆ...';
+
+  @override
+  String get stopDescription => 'ವಿವರಣೆ ನಿಲ್ಲಿಸಿ';
+
+  @override
+  String get playDescription => 'ವಿವರಣೆ ಪ್ಲೇ ಮಾಡಿ';
+
+  @override
+  String get nextStep => 'ಮುಂದಿನ ಹಂತ';
+
+  @override
+  String get register => 'ನೋಂದಣಿ ಮಾಡಿ';
+
+  @override
+  String get pleaseWaitForDescription => 'ದಯವಿಟ್ಟು ವಿವರಣೆ ಮುಗಿಯಲು ನಿರೀಕ್ಷಿಸಿ।';
+
+  @override
+  String get microphonePermissionRequired => 'ಮೈಕ್ರೋಫೋನ್ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ। ದಯವಿಟ್ಟು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ।';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಲು ವಿಫಲ: $error';
+  }
+
+  @override
+  String get recordingFailed => 'ರೆಕಾರ್ಡಿಂಗ್ ವಿಫಲವಾಗಿದೆ। ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ।';
+
+  @override
+  String get recordingFileNotFound => 'ರೆಕಾರ್ಡಿಂಗ್ ಫೈಲ್ ಕಂಡುಬಂದಿಲ್ಲ। ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ।';
+
+  @override
+  String get recordingEmpty => 'ರೆಕಾರ್ಡಿಂಗ್ ಖಾಲಿಯಾಗಿದೆ। ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ।';
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸಲು ವಿಫಲ: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'ದಯವಿಟ್ಟು ವಿವರಣೆ ಪ್ಲೇ ಮಾಡುವ ಮೊದಲು ರೆಕಾರ್ಡಿಂಗ್ ನಿಲ್ಲಿಸಿ।';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'ವಿವರಣೆ ಪ್ಲೇ ಮಾಡಲು ವಿಫಲ: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'ವಿವರಣೆ ನಿಲ್ಲಿಸಲು ವಿಫಲ: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'ದಯವಿಟ್ಟು ಮುಂದುವರಿಯುವ ಮೊದಲು ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ।';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'ದಯವಿಟ್ಟು ರೆಕಾರ್ಡಿಂಗ್ ಅಥವಾ ವಿವರಣೆ ಪೂರ್ಣಗೊಳ್ಳಲು ನಿರೀಕ್ಷಿಸಿ।';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'ದಯವಿಟ್ಟು ಸಲ್ಲಿಸುವ ಮೊದಲು ಎಲ್ಲಾ 3 ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ।';
+
+  @override
+  String get userIdNotFound => 'ಬಳಕೆದಾರ ID ಕಂಡುಬಂದಿಲ್ಲ। ದಯವಿಟ್ಟು ಮತ್ತೆ ಲಾಗ್ ಇನ್ ಮಾಡಿ।';
+
+  @override
+  String get recordingFilesMissing => 'ಒಂದು ಅಥವಾ ಹೆಚ್ಚು ರೆಕಾರ್ಡಿಂಗ್ ಫೈಲ್‌ಗಳು ಕಾಣೆಯಾಗಿವೆ।';
+
+  @override
+  String get imageDescriptionCooking => 'ಒಬ್ಬ ಮಹಿಳೆ ಸ್ಟೋವ್‌ನಲ್ಲಿ ಒಂದು ಪಾತ್ರೆಯಲ್ಲಿ ಏನನ್ನಾದರೂ ಕದಲಿಸುತ್ತಿದ್ದಾಳೆ, ಪಕ್ಕದಲ್ಲಿ ಒಬ್ಬ ಪುರುಷ ಒಂದು ಮಿಕ್ಸಿಂಗ್ ಬೌಲ್ ಹಿಡಿದು ನಿಂತಿದ್ದಾನೆ। ಅವರು ಒಟ್ಟಿಗೆ ಅಡುಗೆಮನೆಯಲ್ಲಿ ಆಹಾರ ತಯಾರಿಸುತ್ತಿದ್ದಾರೆ ಎಂದು ತೋರುತ್ತದೆ। ದೃಶ್ಯವು ಬೆಚ್ಚಗಿನ ಮರ್ತ್ತು ಸಹಕಾರಿ ತೋರುತ್ತದೆ।';
+
+  @override
+  String get imageDescriptionLaptop => 'ಒಬ್ಬ ಯುವತಿ ಒಂದು ಡೆಸ್ಕ್‌ನಲ್ಲಿ ಕುಳಿತು ತನ್ನ ಲ್ಯಾಪ್‌ಟಾಪ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತಿದ್ದಾಳೆ। ಮೇಜಿನ ಮೇಲೆ ಪುಸ್ತಕಗಳು ಮರ್ತ್ತು ಒಂದು ಕಾಫಿ ಕಪ್ ಇದೆ, ಮರ್ತ್ತು ಕೊಠಡಿಯ ಸುತ್ತಲೂ ಹಲವಾರು ಸಸ್ಯಗಳನ್ನು ಇಡಲಾಗಿದೆ। ಸ್ಥಳವು ಆರಾಮದಾಯಕ ಮರ್ತ್ತು ಮನೆಯಿಂದ ಕೆಲಸ ಮಾಡಲು ಸೂಕ್ತವಾಗಿ ಕಾಣುತ್ತದೆ।';
+
+  @override
+  String get imageDescriptionCoffee => 'ಮೂರು ಜನರು ಒಂದು ಆರಾಮದಾಯಕ ಕೆಫೆಯಲ್ಲಿ ಸಣ್ಣ ಮೇಜುಗಳ ಮೇಲೆ ಕುಳಿತಿದ್ದಾರೆ। ಅವರಲ್ಲಿ ಇಬ್ಬರು ಚಹಾ ಮರ್ತ್ತು ಕೇಕ್ ತಿನ್ನುತ್ತಾ ಮಾತನಾಡುತ್ತಿದ್ದಾರೆ, ಮರ್ತ್ತು ಇನ್ನೊಬ್ಬ ಮಹಿಳೆ ಹತ್ತಿರ ಕುಳಿತು ಒಂದು ಬೆಕ್ಕನ್ನು ಹಿಡಿದಿದ್ದಾಳೆ। ನೆಲದ ಮೇಲೆ ಒಂದು ನಾಯಿ ಮಲಗಿದೆ, ಮರ್ತ್ತು ವಾತಾವರಣವು ಶಾಂತ ಮರ್ತ್ತು ಸ್ನೇಹಪೂರ್ಣವಾಗಿ ಕಾಣುತ್ತದೆ।';
+
+  @override
+  String get imageDescriptionConstruction => 'ಮೂರು ನಿರ್ಮಾಣ ಕಾರ್ಮಿಕರು ಹೆಲ್ಮೆಟ್‌ಗಳನ್ನು ಧರಿಸಿ ಒಂದು ಕಟ್ಟಡ ಯೋಜನೆಯನ್ನು ಚರ್ಚಿಸುತ್ತಿದ್ದಾರೆ। ಒಬ್ಬ ವ್ಯಕ್ತಿ ಬೋರ್ಡ್‌ನಲ್ಲಿ ಪ್ರದರ್ಶಿಸಲಾದ ದೊಡ್ಡ ಬ್ಲೂಪ್ರಿಂಟ್‌ನತ್ತ ಸೂಚಿಸುತ್ತಿದ್ದಾನೆ। ತಂಡವು ಒಂದು ನಿರ್ಮಾಣ ಯೋಜನೆಯನ್ನು ಯೋಜಿಸುತ್ತಿದೆ ಅಥವಾ ವಿಮರ್ಶಿಸುತ್ತಿದೆ ಎಂದು ತೋರುತ್ತದೆ।';
+
+  @override
+  String get imageDescriptionCrossing => 'ಒಬ್ಬ ಯುವಕ ಒಬ್ಬ ವೃದ್ಧ ಮಹಿಳೆಗೆ ಪಾದಚಾರಿ ಕ್ರಾಸಿಂಗ್‌ನಲ್ಲಿ ರಸ್ತೆ ದಾಟಲು ಸಹಾಯ ಮಾಡುತ್ತಿದ್ದಾನೆ। ಹತ್ತಿರದಲ್ಲಿ ಟ್ರಾಫಿಕ್ ಸಿಗ್ನಲ್‌ಗಳು ಮರ್ತ್ತು ಒಂದು ಕಾರು ಕಾಯುತ್ತಿದೆ। ದೃಶ್ಯವು ನಗರದ ವಾತಾವರಣದಲ್ಲಿ ದಯೆ ಮರ್ತ್ತು ಸುರಕ್ಷತೆಯನ್ನು ತೋರಿಸುತ್ತದೆ।';
 }

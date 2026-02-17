@@ -313,4 +313,130 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'தயவுசெய்து ஏதாவது சொல்லுங்கள்';
+
+  @override
+  String get voiceRegistration => 'குரல் பதிவு';
+
+  @override
+  String get pleaseWaitForUpload => 'தயவுசெய்து பதிவேற்றம் முடியும் வரை காத்திருக்கவும்';
+
+  @override
+  String get voiceRegistrationCompleted => 'குரல் பதிவு வெற்றிகரமாக முடிக்கப்பட்டது!';
+
+  @override
+  String get unknownState => 'அறியப்படாத நிலை';
+
+  @override
+  String get uploadingVoiceRecordings => 'குரல் பதிவுகள் பதிவேற்றப்படுகின்றன...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'படம் $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'ஏதோ தவறு நடந்தது';
+
+  @override
+  String get imageNotAvailable => 'படம் கிடைக்கவில்லை';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'படி $current இன் $total';
+  }
+
+  @override
+  String get describeImageInstruction => 'தயவுசெய்து இந்த படத்தில் நீங்கள் பார்க்கும் விஷயத்தை விவரிக்கவும்। தெளிவாக பேசுங்கள் மற்றும் முக்கிய கூறுகளை விவரிக்கவும்।';
+
+  @override
+  String get stopRecording => 'பதிவை நிறுத்து';
+
+  @override
+  String get reRecord => 'மீண்டும் பதிவு செய்';
+
+  @override
+  String get startRecording => 'பதிவைத் தொடங்கு';
+
+  @override
+  String get recording => 'பதிவு செய்யப்படுகிறது...';
+
+  @override
+  String get stopDescription => 'விளக்கத்தை நிறுத்து';
+
+  @override
+  String get playDescription => 'விளக்கத்தை இயக்கு';
+
+  @override
+  String get nextStep => 'அடுத்த படி';
+
+  @override
+  String get register => 'பதிவு செய்';
+
+  @override
+  String get pleaseWaitForDescription => 'தயவுசெய்து விளக்கம் முடியும் வரை காத்திருக்கவும்।';
+
+  @override
+  String get microphonePermissionRequired => 'மைக்ரோஃபோன் அனுமதி தேவை। தயவுசெய்து அமைப்புகளில் அதை இயக்கவும்।';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'பதிவைத் தொடங்க முடியவில்லை: $error';
+  }
+
+  @override
+  String get recordingFailed => 'பதிவு தோல்வியடைந்தது। தயவுசெய்து மீண்டும் முயற்சிக்கவும்।';
+
+  @override
+  String get recordingFileNotFound => 'பதிவு கோப்பு கிடைக்கவில்லை। தயவுசெய்து மீண்டும் முயற்சிக்கவும்।';
+
+  @override
+  String get recordingEmpty => 'பதிவு காலியாக உள்ளது। தயவுசெய்து மீண்டும் முயற்சிக்கவும்।';
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'பதிவை நிறுத்த முடியவில்லை: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'தயவுசெய்து விளக்கத்தை இயக்குவதற்கு முன் பதிவை நிறுத்தவும்।';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'விளக்கத்தை இயக்க முடியவில்லை: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'விளக்கத்தை நிறுத்த முடியவில்லை: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'தயவுசெய்து முன்னேறுவதற்கு முன் உங்கள் குரலை பதிவு செய்யவும்।';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'தயவுசெய்து பதிவு அல்லது விளக்கம் முடியும் வரை காத்திருக்கவும்।';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'தயவுசெய்து சமர்ப்பிப்பதற்கு முன் அனைத்து 3 பதிவுகளையும் முடிக்கவும்।';
+
+  @override
+  String get userIdNotFound => 'பயனர் ID கிடைக்கவில்லை। தயவுசெய்து மீண்டும் உள்நுழையவும்।';
+
+  @override
+  String get recordingFilesMissing => 'ஒன்று அல்லது அதற்கு மேற்பட்ட பதிவு கோப்புகள் காணவில்லை।';
+
+  @override
+  String get imageDescriptionCooking => 'ஒரு பெண் அடுப்பில் ஒரு பாத்திரத்தில் ஏதாவது கிளறிக்கொண்டிருக்கிறார், அருகில் ஒரு ஆண் ஒரு கலக்கும் கிண்ணத்தை வைத்திருக்கிறார்। அவர்கள் ஒன்றாக சமையலறையில் உணவு தயாரிக்கிறார்கள் என்று தோன்றுகிறது। காட்சி வெப்பமான மற்றும் ஒத்துழைப்பு நிறைந்ததாக தோன்றுகிறது।';
+
+  @override
+  String get imageDescriptionLaptop => 'ஒரு இளம் பெண் ஒரு மேசையில் அமர்ந்து தனது லேப்டாபில் வேலை செய்கிறார்। மேசையில் புத்தகங்கள் மற்றும் ஒரு காபி கப் உள்ளது, மற்றும் அறையைச் சுற்றி பல செடிகள் வைக்கப்பட்டுள்ளன। இடம் வசதியான மற்றும் வீட்டிலிருந்து வேலை செய்வதற்கு ஏற்றதாக தோன்றுகிறது।';
+
+  @override
+  String get imageDescriptionCoffee => 'மூன்று பேர் ஒரு வசதியான கஃபேயில் சிறிய மேசைகளில் அமர்ந்திருக்கிறார்கள்। அவர்களில் இருவர் தேநீர் மற்றும் கேக் சாப்பிட்டுக்கொண்டு பேசிக்கொண்டிருக்கிறார்கள், மற்றொரு பெண் அருகில் அமர்ந்து ஒரு பூனையை வைத்திருக்கிறார்। தரையில் ஒரு நாய் படுத்திருக்கிறது, மற்றும் சூழல் அமைதியான மற்றும் நட்பு நிறைந்ததாக தோன்றுகிறது।';
+
+  @override
+  String get imageDescriptionConstruction => 'மூன்று கட்டுமான தொழிலாளர்கள் ஹெல்மெட் அணிந்து ஒரு கட்டிடத் திட்டத்தைப் பற்றி விவாதிக்கிறார்கள்। ஒரு நபர் ஒரு பலகையில் காட்டப்பட்டுள்ள ஒரு பெரிய வரைபடத்தை சுட்டிக்காட்டுகிறார்। குழு ஒரு கட்டுமான திட்டத்தை திட்டமிடுகிறது அல்லது மதிப்பாய்வு செய்கிறது என்று தோன்றுகிறது।';
+
+  @override
+  String get imageDescriptionCrossing => 'ஒரு இளம் ஆண் ஒரு முதிய பெண்ணுக்கு ஒரு பாதசாரி கடக்கும் இடத்தில் சாலையை கடக்க உதவுகிறார்। அருகில் போக்குவரத்து சமிக்ஞைகள் மற்றும் ஒரு கார் காத்திருக்கிறது। காட்சி ஒரு நகர்ப்புற சூழலில் கருணை மற்றும் பாதுகாப்பைக் காட்டுகிறது।';
 }

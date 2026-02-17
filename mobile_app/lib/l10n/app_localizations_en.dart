@@ -313,4 +313,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'Please say something';
+
+  @override
+  String get voiceRegistration => 'Voice Registration';
+
+  @override
+  String get pleaseWaitForUpload => 'Please wait for upload to complete';
+
+  @override
+  String get voiceRegistrationCompleted => 'Voice registration completed successfully!';
+
+  @override
+  String get unknownState => 'Unknown state';
+
+  @override
+  String get uploadingVoiceRecordings => 'Uploading voice recordings...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'Image $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get imageNotAvailable => 'Image not available';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get describeImageInstruction => 'Please describe what you see in this image. Speak clearly and describe the main elements.';
+
+  @override
+  String get stopRecording => 'Stop Recording';
+
+  @override
+  String get reRecord => 'Re-record';
+
+  @override
+  String get startRecording => 'Start Recording';
+
+  @override
+  String get recording => 'Recording...';
+
+  @override
+  String get stopDescription => 'Stop Description';
+
+  @override
+  String get playDescription => 'Play Description';
+
+  @override
+  String get nextStep => 'Next Step';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get pleaseWaitForDescription => 'Please wait for the description to finish playing.';
+
+  @override
+  String get microphonePermissionRequired => 'Microphone permission is required. Please enable it in Settings.';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'Failed to start recording: $error';
+  }
+
+  @override
+  String get recordingFailed => 'Recording failed. Please try again.';
+
+  @override
+  String get recordingFileNotFound => 'Recording file not found. Please try again.';
+
+  @override
+  String get recordingEmpty => 'Recording is empty. Please try again.';
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'Failed to stop recording: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'Please stop recording before playing the description.';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'Failed to play description: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'Failed to stop description: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'Please record your voice before proceeding.';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'Please wait for recording or description to complete.';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'Please complete all 3 recordings before submitting.';
+
+  @override
+  String get userIdNotFound => 'User ID not found. Please log in again.';
+
+  @override
+  String get recordingFilesMissing => 'One or more recording files are missing.';
+
+  @override
+  String get imageDescriptionCooking => 'A woman is stirring something in a pot on the stove while a man stands beside her holding a mixing bowl. They seem to be preparing a meal together in a kitchen. The scene looks warm and collaborative.';
+
+  @override
+  String get imageDescriptionLaptop => 'A young woman is sitting at a desk and working on her laptop. There are books and a coffee cup on the table, and several plants placed around the room. The space looks comfortable and suitable for working from home.';
+
+  @override
+  String get imageDescriptionCoffee => 'Three people are sitting at small tables in a cozy cafe. Two of them are having tea and cake while talking, and another woman is sitting nearby holding a cat. A dog is lying on the floor, and the atmosphere looks calm and friendly.';
+
+  @override
+  String get imageDescriptionConstruction => 'Three construction workers wearing helmets are discussing a building plan. One person is pointing at a large blueprint displayed on a board. The team appears to be planning or reviewing a construction project.';
+
+  @override
+  String get imageDescriptionCrossing => 'A young man is helping an elderly woman cross the road at a pedestrian crossing. There are traffic signals and a car waiting nearby. The scene shows kindness and safety in a city environment.';
 }

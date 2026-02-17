@@ -313,4 +313,130 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'ദയവായി എന്തെങ്കിലും പറയുക';
+
+  @override
+  String get voiceRegistration => 'വോയ്‌സ് രജിസ്ട്രേഷൻ';
+
+  @override
+  String get pleaseWaitForUpload => 'ദയവായി അപ്‌ലോഡ് പൂർത്തിയാകുന്നത് വരെ കാത്തിരിക്കുക';
+
+  @override
+  String get voiceRegistrationCompleted => 'വോയ്‌സ് രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി!';
+
+  @override
+  String get unknownState => 'അജ്ഞാത അവസ്ഥ';
+
+  @override
+  String get uploadingVoiceRecordings => 'വോയ്‌സ് റെക്കോർഡിംഗുകൾ അപ്‌ലോഡ് ചെയ്യുന്നു...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'ചിത്രം $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'എന്തോ തെറ്റ് സംഭവിച്ചു';
+
+  @override
+  String get imageNotAvailable => 'ചിത്രം ലഭ്യമല്ല';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'ഘട്ടം $current ന്റെ $total';
+  }
+
+  @override
+  String get describeImageInstruction => 'ദയവായി ഈ ചിത്രത്തിൽ നിങ്ങൾ കാണുന്നത് വിവരിക്കുക। വ്യക്തമായി സംസാരിക്കുക, പ്രധാന ഘടകങ്ങൾ വിവരിക്കുക।';
+
+  @override
+  String get stopRecording => 'റെക്കോർഡിംഗ് നിർത്തുക';
+
+  @override
+  String get reRecord => 'വീണ്ടും റെക്കോർഡ് ചെയ്യുക';
+
+  @override
+  String get startRecording => 'റെക്കോർഡിംഗ് ആരംഭിക്കുക';
+
+  @override
+  String get recording => 'റെക്കോർഡ് ചെയ്യുന്നു...';
+
+  @override
+  String get stopDescription => 'വിവരണം നിർത്തുക';
+
+  @override
+  String get playDescription => 'വിവരണം പ്ലേ ചെയ്യുക';
+
+  @override
+  String get nextStep => 'അടുത്ത ഘട്ടം';
+
+  @override
+  String get register => 'രജിസ്റ്റർ ചെയ്യുക';
+
+  @override
+  String get pleaseWaitForDescription => 'ദയവായി വിവരണം പൂർത്തിയാകുന്നത് വരെ കാത്തിരിക്കുക।';
+
+  @override
+  String get microphonePermissionRequired => 'മൈക്രോഫോൺ അനുമതി ആവശ്യമാണ്। ദയവായി സെറ്റിംഗുകളിൽ ഇത് പ്രവർത്തനക്ഷമമാക്കുക।';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'റെക്കോർഡിംഗ് ആരംഭിക്കുന്നതിൽ പരാജയപ്പെട്ടു: $error';
+  }
+
+  @override
+  String get recordingFailed => 'റെക്കോർഡിംഗ് പരാജയപ്പെട്ടു। ദയവായി വീണ്ടും ശ്രമിക്കുക।';
+
+  @override
+  String get recordingFileNotFound => 'റെക്കോർഡിംഗ് ഫയൽ കണ്ടെത്തിയില്ല। ദയവായി വീണ്ടും ശ്രമിക്കുക।';
+
+  @override
+  String get recordingEmpty => 'റെക്കോർഡിംഗ് ശൂന്യമാണ്। ദയവായി വീണ്ടും ശ്രമിക്കുക।';
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'റെക്കോർഡിംഗ് നിർത്തുന്നതിൽ പരാജയപ്പെട്ടു: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'ദയവായി വിവരണം പ്ലേ ചെയ്യുന്നതിന് മുമ്പ് റെക്കോർഡിംഗ് നിർത്തുക।';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'വിവരണം പ്ലേ ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'വിവരണം നിർത്തുന്നതിൽ പരാജയപ്പെട്ടു: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'ദയവായി മുന്നോട്ട് പോകുന്നതിന് മുമ്പ് നിങ്ങളുടെ വോയ്‌സ് റെക്കോർഡ് ചെയ്യുക।';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'ദയവായി റെക്കോർഡിംഗ് അല്ലെങ്കിൽ വിവരണം പൂർത്തിയാകുന്നത് വരെ കാത്തിരിക്കുക।';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'ദയവായി സമർപ്പിക്കുന്നതിന് മുമ്പ് എല്ലാ 3 റെക്കോർഡിംഗുകളും പൂർത്തിയാക്കുക।';
+
+  @override
+  String get userIdNotFound => 'ഉപയോക്തൃ ID കണ്ടെത്തിയില്ല। ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക।';
+
+  @override
+  String get recordingFilesMissing => 'ഒന്നോ അതിലധികമോ റെക്കോർഡിംഗ് ഫയലുകൾ കാണാതായിരിക്കുന്നു।';
+
+  @override
+  String get imageDescriptionCooking => 'ഒരു സ്ത്രീ സ്റ്റോവിൽ ഒരു പാത്രത്തിൽ എന്തെങ്കിലും ഇളക്കുകയാണ്, അരികിൽ ഒരു പുരുഷൻ ഒരു മിക്സിംഗ് പാത്രം പിടിച്ചുനിൽക്കുന്നു। അവർ ഒരുമിച്ച് അടുക്കളയിൽ ഭക്ഷണം തയ്യാറാക്കുന്നതായി തോന്നുന്നു। രംഗം ചൂടുള്ളതും സഹകരണപരവുമാണ്।';
+
+  @override
+  String get imageDescriptionLaptop => 'ഒരു യുവതി ഒരു ഡെസ്കിൽ ഇരുന്ന് തന്റെ ലാപ്‌ടോപ്പിൽ പ്രവർത്തിക്കുന്നു। മേശയിൽ പുസ്തകങ്ങളും ഒരു കോഫി കപ്പും ഉണ്ട്, മാളികയുടെ ചുറ്റും നിരവധി സസ്യങ്ങൾ വെച്ചിരിക്കുന്നു। സ്ഥലം സുഖകരവും വീട്ടിൽ നിന്ന് പ്രവർത്തിക്കാൻ അനുയോജ്യവുമാണ്।';
+
+  @override
+  String get imageDescriptionCoffee => 'മൂന്ന് പേർ ഒരു സുഖകരമായ കഫയിൽ ചെറിയ മേശകളിൽ ഇരിക്കുന്നു। അവരിൽ രണ്ട് പേർ ചായയും കേക്കും കഴിച്ചുകൊണ്ട് സംസാരിക്കുന്നു, മറ്റൊരു സ്ത്രീ അരികിൽ ഇരുന്ന് ഒരു പൂച്ച പിടിച്ചുനിൽക്കുന്നു। നിലത്ത് ഒരു നായ കിടക്കുന്നു, അന്തരീക്ഷം ശാന്തവും സൗഹാർദ്ദപരവുമാണ്।';
+
+  @override
+  String get imageDescriptionConstruction => 'മൂന്ന് നിർമ്മാണ തൊഴിലാളികൾ ഹെൽമെറ്റുകൾ ധരിച്ച് ഒരു കെട്ടിട പദ്ധതിയെക്കുറിച്ച് ചർച്ച ചെയ്യുന്നു। ഒരാൾ ബോർഡിൽ പ്രദർശിപ്പിച്ചിരിക്കുന്ന ഒരു വലിയ ബ്ലൂപ്രിന്റിനെ ചൂണ്ടിക്കാണിക്കുന്നു। ടീം ഒരു നിർമ്മാണ പ്രോജക്റ്റ് ആസൂത്രണം ചെയ്യുകയോ അവലോകനം ചെയ്യുകയോ ചെയ്യുന്നതായി തോന്നുന്നു।';
+
+  @override
+  String get imageDescriptionCrossing => 'ഒരു യുവാവ് ഒരു വൃദ്ധയെ പാദചാരി ക്രോസിംഗിൽ റോഡ് കടക്കാൻ സഹായിക്കുന്നു। അരികിൽ ട്രാഫിക് സിഗ്നലുകളും ഒരു കാറും കാത്തിരിക്കുന്നു। രംഗം നഗര അന്തരീക്ഷത്തിൽ ദയയും സുരക്ഷയും കാണിക്കുന്നു।';
 }

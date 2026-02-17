@@ -313,4 +313,130 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'કૃપા કરીને કંઈક કહો';
+
+  @override
+  String get voiceRegistration => 'વૉઇસ નોંધણી';
+
+  @override
+  String get pleaseWaitForUpload => 'કૃપા કરીને અપલોડ પૂર્ણ થવા માટે રાહ જુઓ';
+
+  @override
+  String get voiceRegistrationCompleted => 'વૉઇસ નોંધણી સફળતાપૂર્વક પૂર્ણ થઈ!';
+
+  @override
+  String get unknownState => 'અજ્ઞાત સ્થિતિ';
+
+  @override
+  String get uploadingVoiceRecordings => 'વૉઇસ રેકોર્ડિંગ અપલોડ થઈ રહી છે...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'છબી $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'કંઈક ખોટું થયું';
+
+  @override
+  String get imageNotAvailable => 'છબી ઉપલબ્ધ નથી';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'પગલું $current ના $total';
+  }
+
+  @override
+  String get describeImageInstruction => 'કૃપા કરીને આ છબીમાં તમે જે જુઓ છો તેનું વર્ણન કરો। સ્પષ્ટ રીતે બોલો અને મુખ્ય તત્વોનું વર્ણન કરો।';
+
+  @override
+  String get stopRecording => 'રેકોર્ડિંગ બંધ કરો';
+
+  @override
+  String get reRecord => 'ફરીથી રેકોર્ડ કરો';
+
+  @override
+  String get startRecording => 'રેકોર્ડિંગ શરૂ કરો';
+
+  @override
+  String get recording => 'રેકોર્ડ થઈ રહ્યું છે...';
+
+  @override
+  String get stopDescription => 'વર્ણન બંધ કરો';
+
+  @override
+  String get playDescription => 'વર્ણન ચલાવો';
+
+  @override
+  String get nextStep => 'આગળનું પગલું';
+
+  @override
+  String get register => 'નોંધણી કરો';
+
+  @override
+  String get pleaseWaitForDescription => 'કૃપા કરીને વર્ણન પૂર્ણ થવા માટે રાહ જુઓ।';
+
+  @override
+  String get microphonePermissionRequired => 'માઇક્રોફોન પરવાનગી જરૂરી છે। કૃપા કરીને સેટિંગ્સમાં તેને સક્ષમ કરો।';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'રેકોર્ડિંગ શરૂ કરવામાં અસફળ: $error';
+  }
+
+  @override
+  String get recordingFailed => 'રેકોર્ડિંગ અસફળ થઈ। કૃપા કરીને ફરી પ્રયાસ કરો।';
+
+  @override
+  String get recordingFileNotFound => 'રેકોર્ડિંગ ફાઇલ મળી નથી। કૃપા કરીને ફરી પ્રયાસ કરો।';
+
+  @override
+  String get recordingEmpty => 'રેકોર્ડિંગ ખાલી છે। કૃપા કરીને ફરી પ્રયાસ કરો।';
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'રેકોર્ડિંગ બંધ કરવામાં અસફળ: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'કૃપા કરીને વર્ણન ચલાવતા પહેલા રેકોર્ડિંગ બંધ કરો।';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'વર્ણન ચલાવવામાં અસફળ: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'વર્ણન બંધ કરવામાં અસફળ: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'કૃપા કરીને આગળ વધતા પહેલા તમારો અવાજ રેકોર્ડ કરો।';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'કૃપા કરીને રેકોર્ડિંગ અથવા વર્ણન પૂર્ણ થવા માટે રાહ જુઓ।';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'કૃપા કરીને સબમિટ કરતા પહેલા બધા 3 રેકોર્ડિંગ પૂર્ણ કરો।';
+
+  @override
+  String get userIdNotFound => 'વપરાશકર્તા ID મળ્યું નથી। કૃપા કરીને ફરીથી લૉગ ઇન કરો।';
+
+  @override
+  String get recordingFilesMissing => 'એક અથવા વધુ રેકોર્ડિંગ ફાઇલો ગુમ થઈ ગઈ છે।';
+
+  @override
+  String get imageDescriptionCooking => 'એક સ્ત્રી સ્ટોવ પર એક વાસણમાં કંઈક હલાવી રહી છે જ્યારે એક પુરુષ તેની બાજુમાં એક મિક્સિંગ બાઉલ પકડીને ઊભો છે। એવું લાગે છે કે તેઓ એકસાથે રસોડામાં ખોરાક તૈયાર કરી રહ્યા છે। દૃશ્ય ગરમ અને સહયોગી દેખાય છે।';
+
+  @override
+  String get imageDescriptionLaptop => 'એક યુવતી એક ડેસ્ક પર બેસીને તેના લેપટોપ પર કામ કરી રહી છે। ટેબલ પર પુસ્તકો અને એક કોફી કપ છે, અને રૂમની આસપાસ અનેક છોડ મૂકેલા છે। જગ્યા આરામદાયક અને ઘરેથી કામ કરવા માટે યોગ્ય દેખાય છે।';
+
+  @override
+  String get imageDescriptionCoffee => 'ત્રણ લોકો એક આરામદાયક કેફેમાં નાના ટેબલ પર બેઠા છે। તેમાંથી બે ચા અને કેક ખાતા અને વાત કરતા હોય છે, અને બીજી સ્ત્રી નજીક બેઠીને એક બિલાડી પકડીને છે। ફ્લોર પર એક કૂતરો પડ્યો છે, અને વાતાવરણ શાંત અને મૈત્રીપૂર્ણ દેખાય છે।';
+
+  @override
+  String get imageDescriptionConstruction => 'ત્રણ બાંધકામ કામદારો હેલ્મેટ પહેરીને એક બિલ્ડિંગ પ્લાનની ચર્ચા કરી રહ્યા છે। એક વ્યક્તિ બોર્ડ પર પ્રદર્શિત એક મોટા બ્લુપ્રિન્ટ તરફ સંકેત કરી રહ્યો છે। ટીમ એક બાંધકામ પ્રોજેક્ટની યોજના બનાવી રહી છે અથવા સમીક્ષા કરી રહી છે।';
+
+  @override
+  String get imageDescriptionCrossing => 'એક યુવક એક વૃદ્ધ સ્ત્રીને પદયાત્રી ક્રોસિંગ પર રસ્તો પાર કરવામાં મદદ કરી રહ્યો છે। નજીકમાં ટ્રાફિક સિગ્નલ અને એક કાર રાહ જોઈ રહી છે। દૃશ્ય શહેરી વાતાવરણમાં દયા અને સુરક્ષા દર્શાવે છે।';
 }

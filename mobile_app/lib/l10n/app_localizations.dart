@@ -698,6 +698,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please say something'**
   String get pleaseSaySomething;
+
+  /// No description provided for @voiceRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Registration'**
+  String get voiceRegistration;
+
+  /// No description provided for @pleaseWaitForUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait for upload to complete'**
+  String get pleaseWaitForUpload;
+
+  /// No description provided for @voiceRegistrationCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice registration completed successfully!'**
+  String get voiceRegistrationCompleted;
+
+  /// No description provided for @unknownState.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown state'**
+  String get unknownState;
+
+  /// No description provided for @uploadingVoiceRecordings.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading voice recordings...'**
+  String get uploadingVoiceRecordings;
+
+  /// No description provided for @imageNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Image {number}'**
+  String imageNumber(Object number);
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @imageNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Image not available'**
+  String get imageNotAvailable;
+
+  /// No description provided for @stepOfTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String stepOfTotal(Object current, Object total);
+
+  /// No description provided for @describeImageInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Please describe what you see in this image. Speak clearly and describe the main elements.'**
+  String get describeImageInstruction;
+
+  /// No description provided for @stopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Recording'**
+  String get stopRecording;
+
+  /// No description provided for @reRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-record'**
+  String get reRecord;
+
+  /// No description provided for @startRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Recording'**
+  String get startRecording;
+
+  /// No description provided for @recording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get recording;
+
+  /// No description provided for @stopDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Description'**
+  String get stopDescription;
+
+  /// No description provided for @playDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Description'**
+  String get playDescription;
+
+  /// No description provided for @nextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Step'**
+  String get nextStep;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @pleaseWaitForDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait for the description to finish playing.'**
+  String get pleaseWaitForDescription;
+
+  /// No description provided for @microphonePermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission is required. Please enable it in Settings.'**
+  String get microphonePermissionRequired;
+
+  /// No description provided for @failedToStartRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start recording: {error}'**
+  String failedToStartRecording(Object error);
+
+  /// No description provided for @recordingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording failed. Please try again.'**
+  String get recordingFailed;
+
+  /// No description provided for @recordingFileNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording file not found. Please try again.'**
+  String get recordingFileNotFound;
+
+  /// No description provided for @recordingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording is empty. Please try again.'**
+  String get recordingEmpty;
+
+  /// No description provided for @failedToStopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to stop recording: {error}'**
+  String failedToStopRecording(Object error);
+
+  /// No description provided for @pleaseStopRecordingBeforePlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Please stop recording before playing the description.'**
+  String get pleaseStopRecordingBeforePlay;
+
+  /// No description provided for @failedToPlayDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to play description: {error}'**
+  String failedToPlayDescription(Object error);
+
+  /// No description provided for @failedToStopDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to stop description: {error}'**
+  String failedToStopDescription(Object error);
+
+  /// No description provided for @pleaseRecordBeforeProceeding.
+  ///
+  /// In en, this message translates to:
+  /// **'Please record your voice before proceeding.'**
+  String get pleaseRecordBeforeProceeding;
+
+  /// No description provided for @pleaseWaitForRecordingOrDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait for recording or description to complete.'**
+  String get pleaseWaitForRecordingOrDescription;
+
+  /// No description provided for @pleaseCompleteAllRecordings.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete all 3 recordings before submitting.'**
+  String get pleaseCompleteAllRecordings;
+
+  /// No description provided for @userIdNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User ID not found. Please log in again.'**
+  String get userIdNotFound;
+
+  /// No description provided for @recordingFilesMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more recording files are missing.'**
+  String get recordingFilesMissing;
+
+  /// No description provided for @imageDescriptionCooking.
+  ///
+  /// In en, this message translates to:
+  /// **'A woman is stirring something in a pot on the stove while a man stands beside her holding a mixing bowl. They seem to be preparing a meal together in a kitchen. The scene looks warm and collaborative.'**
+  String get imageDescriptionCooking;
+
+  /// No description provided for @imageDescriptionLaptop.
+  ///
+  /// In en, this message translates to:
+  /// **'A young woman is sitting at a desk and working on her laptop. There are books and a coffee cup on the table, and several plants placed around the room. The space looks comfortable and suitable for working from home.'**
+  String get imageDescriptionLaptop;
+
+  /// No description provided for @imageDescriptionCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Three people are sitting at small tables in a cozy cafe. Two of them are having tea and cake while talking, and another woman is sitting nearby holding a cat. A dog is lying on the floor, and the atmosphere looks calm and friendly.'**
+  String get imageDescriptionCoffee;
+
+  /// No description provided for @imageDescriptionConstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Three construction workers wearing helmets are discussing a building plan. One person is pointing at a large blueprint displayed on a board. The team appears to be planning or reviewing a construction project.'**
+  String get imageDescriptionConstruction;
+
+  /// No description provided for @imageDescriptionCrossing.
+  ///
+  /// In en, this message translates to:
+  /// **'A young man is helping an elderly woman cross the road at a pedestrian crossing. There are traffic signals and a car waiting nearby. The scene shows kindness and safety in a city environment.'**
+  String get imageDescriptionCrossing;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
