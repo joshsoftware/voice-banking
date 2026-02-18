@@ -102,8 +102,8 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
                           duration: const Duration(seconds: 2),
                         ),
                       );
-                      // Navigate back after a short delay
-                      Future.delayed(const Duration(seconds: 2), () {
+                      // Pop the registration screen immediately after successful registration
+                      Future.delayed(const Duration(milliseconds: 500), () {
                         if (mounted) {
                           Navigator.of(context).pop(true); // Return success
                         }

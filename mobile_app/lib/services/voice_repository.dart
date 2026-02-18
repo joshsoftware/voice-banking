@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' show Random;
 import 'package:dio/dio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'shared_preferences_service.dart';
 
 /// Thrown when the recorded audio is empty/silent (no speech detected).
@@ -94,6 +96,58 @@ class VoiceRepository {
       persistentConnection: true,
       maxRedirects: 3,
     ));
+  }
+
+  /// Base URL for the voiceprint enroll API (POST /enroll/{user_id}).
+  /// Change this when the final base URL is known.
+  static const String voiceprintEnrollBaseUrl = 'http://192.168.2.43:8000/api/v1';
+
+  Dio _createEnrollDio() {
+    return Dio(BaseOptions(
+      baseUrl: voiceprintEnrollBaseUrl,
+      connectTimeout: const Duration(seconds: 300),
+      receiveTimeout: const Duration(seconds: 300),
+      sendTimeout: const Duration(seconds: 300),
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      persistentConnection: true,
+      maxRedirects: 3,
+    ));
+  }
+
+  /// Gets the native device ID (Android fingerprint or iOS identifierForVendor).
+  /// Falls back to a UUID-based device ID if native ID is unavailable.
+  Future<String> _getDeviceId() async {
+    try {
+      final deviceInfo = DeviceInfoPlugin();
+      
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        // Use fingerprint (unique per device/build) as device identifier
+        final deviceId = androidInfo.id;
+        if (deviceId.isNotEmpty && deviceId != 'unknown') {
+          return deviceId;
+        }
+        // Fallback to a combination of device identifiers
+        final deviceIdentifier = '${androidInfo.manufacturer}_${androidInfo.model}_${androidInfo.device}';
+        if (deviceIdentifier.isNotEmpty) {
+          return deviceIdentifier.replaceAll(' ', '_');
+        }
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        // Use identifierForVendor if available (unique per vendor per device)
+        final identifier = iosInfo.identifierForVendor;
+        if (identifier != null && identifier.isNotEmpty) {
+          return identifier;
+        }
+      }
+    } catch (e) {
+      log('Error getting native device ID: $e');
+    }
+    
+    // Fallback to stored UUID-based device ID
+    return "";
   }
 
   Future<String> getFilePath() async {
@@ -429,72 +483,78 @@ class VoiceRepository {
     }
   }
 
-  /// Register voice with 3 audio files for voice banking registration
-  /// 
-  /// [userId] - Customer ID from shared preferences
-  /// [audio1] - First audio file (File object)
-  /// [audio2] - Second audio file (File object)
-  /// [audio3] - Third audio file (File object)
-  /// 
+  /// Register voice with 3 audio files for voiceprint enrollment.
+  ///
+  /// Calls POST /enroll/{user_id} where user_id is either:
+  /// - Reused from local storage if previously created, or
+  /// - Created as deviceId + random(1..100) if not found.
+  /// Sends multipart body: files (3 audio files), optional device_id.
+  ///
+  /// [audio1], [audio2], [audio3] - Audio files (e.g. WAV).
   /// Throws Exception on failure (network errors, validation errors, etc.)
   Future<void> registerVoice({
-    required String userId,
     required File audio1,
     required File audio2,
     required File audio3,
   }) async {
     try {
-      // Verify files exist
       if (!await audio1.exists() || !await audio2.exists() || !await audio3.exists()) {
         throw Exception("One or more audio files are missing");
       }
 
-      // Get phone number from shared preferences
-      final phone = SharedPreferencesService.getMobileNumber();
-      if (phone == null) {
-        throw Exception("Phone number not found in shared preferences");
+      // Check for stored user_id first
+      // String? userId = SharedPreferencesService.getVoiceprintUserId();
+      final deviceId = await _getDeviceId();
+      final customerId = await SharedPreferencesService.getCustomerId();
+
+      if(customerId == null || customerId.isEmpty) {
+        throw Exception("Customer ID not found in shared preferences");
       }
+      
+      // If not found, create new user_id: deviceId + random(1..100)
+      // if (userId == null || userId.isEmpty) {
+      //   final randomSuffix = Random().nextInt(100) + 1; // 1..100
+      //   // userId = '$deviceId$randomSuffix';
+      //   // Store for future reuse
+      //   await SharedPreferencesService.saveVoiceprintUserId(userId);
+      //   log('Voice Enrollment - Created new user_id: $userId');
+      // } else {
+      //   log('Voice Enrollment - Reusing stored user_id: $userId');
+      // }
 
-      // Create multipart form data
-      final form = FormData.fromMap({
-        'user_id': userId,
-        'phone': phone,
-        'audio_1': await MultipartFile.fromFile(
-          audio1.path,
-          filename: 'audio_1.wav',
-        ),
-        'audio_2': await MultipartFile.fromFile(
-          audio2.path,
-          filename: 'audio_2.wav',
-        ),
-        'audio_3': await MultipartFile.fromFile(
-          audio3.path,
-          filename: 'audio_3.wav',
-        ),
-      });
 
-      // Use a fresh HTTP client for each request to avoid connection issues
-      final freshDio = _createFreshDio();
-      freshDio.interceptors.add(LogInterceptor(
+      final form = FormData();
+      form.files.addAll([
+        MapEntry('files', await MultipartFile.fromFile(audio1.path, filename: 'sample1.wav')),
+        MapEntry('files', await MultipartFile.fromFile(audio2.path, filename: 'sample2.wav')),
+        MapEntry('files', await MultipartFile.fromFile(audio3.path, filename: 'sample3.wav')),
+      ]);
+      form.fields.add(MapEntry('device_id', deviceId.toString()));
+      form.fields.add(MapEntry('customer_id', customerId.toString()));
+
+      final enrollDio = _createEnrollDio();
+      enrollDio.interceptors.add(LogInterceptor(
         requestBody: true,
         responseBody: true,
         logPrint: (obj) => log('Dio: $obj'),
       ));
 
-      log('Voice Registration - Sending form data with user_id: $userId');
-      log('Voice Registration - Audio files: ${audio1.path}, ${audio2.path}, ${audio3.path}');
+      log('Voice Enrollment - POST /voiceprint/enroll');
+      log('Voice Enrollment - device_id: $deviceId');
+      log('Voice Enrollment - customer_id: $customerId');
+      log('Voice Enrollment - Audio files: ${audio1.path}, ${audio2.path}, ${audio3.path}');
 
-      final res = await freshDio.post('/voice/register', data: form);
-      freshDio.close(); // Close the fresh client after use
+      final res = await enrollDio.post('/voiceprint/enroll', data: form);
+      enrollDio.close();
 
-      // Check response status
       if (res.statusCode != 200 && res.statusCode != 201) {
-        throw Exception("Voice registration failed: ${res.statusMessage}");
+        throw Exception("Voice enrollment failed: ${res.statusMessage}");
       }
 
-      log('Voice Registration - Success: ${res.data}');
+      await SharedPreferencesService.setVoiceRegistered(true);
+      log('Voice Enrollment - Success: ${res.data}');
     } on DioException catch (e) {
-      print("Voice Repository Error - Voice Registration DioException: ${e.type} - ${e.message}");
+      print("Voice Repository Error - Voice Enrollment DioException: ${e.type} - ${e.message}");
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
@@ -504,17 +564,16 @@ class VoiceRepository {
         throw Exception(
             "Connection error. Please check your internet connection.");
       } else if (e.response != null) {
-        // Backend validation error
-        final errorMessage = e.response?.data?['message'] ?? 
-                           e.response?.data?['error'] ?? 
-                           e.message ?? 
-                           "Voice registration failed";
+        final errorMessage = e.response?.data?['message'] ??
+            e.response?.data?['error'] ??
+            e.message ??
+            "Voice enrollment failed";
         throw Exception(errorMessage);
       } else {
         throw Exception("Network error: ${e.message}");
       }
     } catch (e) {
-      print("Voice Repository Error - Voice registration failed: $e");
+      print("Voice Repository Error - Voice enrollment failed: $e");
       rethrow;
     }
   }

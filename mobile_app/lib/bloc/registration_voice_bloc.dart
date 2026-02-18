@@ -8,7 +8,6 @@ import '../bloc/registration_voice_event.dart';
 import '../bloc/registration_voice_state.dart';
 import '../services/voice_repository.dart';
 import '../services/tts_service.dart';
-import '../services/shared_preferences_service.dart';
 
 /// Bloc for managing voice registration flow
 class RegistrationVoiceBloc
@@ -478,27 +477,16 @@ class RegistrationVoiceBloc
     ));
 
     try {
-      // Get user ID (customer_id) from shared preferences
-      final userId = SharedPreferencesService.getCustomerId();
-      if (userId == null) {
-        add(UploadFailure('User ID not found. Please log in again.'));
-        return;
-      }
-
-      // Create File objects from paths
       final audio1 = File(currentState.recordedFilePaths[0]);
       final audio2 = File(currentState.recordedFilePaths[1]);
       final audio3 = File(currentState.recordedFilePaths[2]);
 
-      // Verify files exist
       if (!await audio1.exists() || !await audio2.exists() || !await audio3.exists()) {
         add(UploadFailure('One or more recording files are missing.'));
         return;
       }
 
-      // Call repository method
       await _voiceRepository.registerVoice(
-        userId: userId,
         audio1: audio1,
         audio2: audio2,
         audio3: audio3,
