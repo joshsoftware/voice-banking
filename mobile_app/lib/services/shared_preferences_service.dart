@@ -9,6 +9,9 @@ class SharedPreferencesService {
   static const String _isLoggedInKey = 'is_logged_in';
   static const String _recentTransactionsKey = 'recent_transactions';
   static const String _sessionIdKey = 'session_id';
+  static const String _deviceIdKey = 'device_id';
+  static const String _voiceprintUserIdKey = 'voiceprint_user_id';
+  static const String _isVoiceRegisteredKey = 'is_voice_registered';
 
   static SharedPreferences? _prefs;
 
@@ -82,6 +85,36 @@ class SharedPreferencesService {
 
   static String? getSessionId() {
     return _prefs?.getString(_sessionIdKey);
+  }
+
+  /// Returns a persistent device ID (created once with UUID). Used for voiceprint enroll API.
+  // static Future<String> getOrCreateDeviceId() async {
+  //   var id = _prefs?.getString(_deviceIdKey);
+  //   if (id == null || id.isEmpty) {
+  //     id = 'phone-${const Uuid().v4()}';
+  //     await _prefs?.setString(_deviceIdKey, id);
+  //   }
+  //   return id;
+  // }
+
+  /// Returns the stored voiceprint user_id, or null if not set.
+  static String? getVoiceprintUserId() {
+    return _prefs?.getString(_voiceprintUserIdKey);
+  }
+
+  /// Saves the voiceprint user_id for reuse in future enroll calls.
+  static Future<void> saveVoiceprintUserId(String userId) async {
+    await _prefs?.setString(_voiceprintUserIdKey, userId);
+  }
+
+  /// Returns whether the user has completed voice registration (enroll succeeded).
+  static bool isVoiceRegistered() {
+    return _prefs?.getBool(_isVoiceRegisteredKey) ?? false;
+  }
+
+  /// Saves the voice registration status (set to true after successful /enroll).
+  static Future<void> setVoiceRegistered(bool value) async {
+    await _prefs?.setBool(_isVoiceRegisteredKey, value);
   }
 
   static Future<void> clearAll() async {

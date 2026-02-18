@@ -1012,9 +1012,14 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         ],
       ),
       child: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           final bloc = context.read<VoiceBloc>();
           if (state is Idle) {
+            final isVoiceRegistered = SharedPreferencesService.isVoiceRegistered();
+            if (!isVoiceRegistered) {
+              Navigator.pushNamed(context, '/RegistrationVoice');
+              return;
+            }
             final sessionId = const Uuid().v4();
             bloc.add(StartListening(
               locale: Localizations.localeOf(context).languageCode,
