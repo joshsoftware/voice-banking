@@ -897,35 +897,83 @@ abstract class AppLocalizations {
   /// **'One or more recording files are missing.'**
   String get recordingFilesMissing;
 
-  /// No description provided for @imageDescriptionCooking.
+  /// No description provided for @imageDescriptionBoardMeeting.
   ///
   /// In en, this message translates to:
-  /// **'A woman is stirring something in a pot on the stove while a man stands beside her holding a mixing bowl. They seem to be preparing a meal together in a kitchen. The scene looks warm and collaborative.'**
-  String get imageDescriptionCooking;
+  /// **'A professional man gives a data presentation to colleagues in a modern, sunlit office boardroom overlooking a scenic city skyline.'**
+  String get imageDescriptionBoardMeeting;
 
-  /// No description provided for @imageDescriptionLaptop.
+  /// No description provided for @imageDescriptionBoyWithDog.
   ///
   /// In en, this message translates to:
-  /// **'A young woman is sitting at a desk and working on her laptop. There are books and a coffee cup on the table, and several plants placed around the room. The space looks comfortable and suitable for working from home.'**
-  String get imageDescriptionLaptop;
+  /// **'A boy wearing glasses walks a husky dog on a sunny park pathway, smiling while holding the leash.'**
+  String get imageDescriptionBoyWithDog;
 
-  /// No description provided for @imageDescriptionCoffee.
+  /// No description provided for @imageDescriptionChildrenPainting.
   ///
   /// In en, this message translates to:
-  /// **'Three people are sitting at small tables in a cozy cafe. Two of them are having tea and cake while talking, and another woman is sitting nearby holding a cat. A dog is lying on the floor, and the atmosphere looks calm and friendly.'**
-  String get imageDescriptionCoffee;
+  /// **'Five children sit on a carpet near a large window, happily painting colorful pictures together inside a bright living room.'**
+  String get imageDescriptionChildrenPainting;
 
-  /// No description provided for @imageDescriptionConstruction.
+  /// No description provided for @imageDescriptionChildrenWithDog.
   ///
   /// In en, this message translates to:
-  /// **'Three construction workers wearing helmets are discussing a building plan. One person is pointing at a large blueprint displayed on a board. The team appears to be planning or reviewing a construction project.'**
-  String get imageDescriptionConstruction;
+  /// **'Four children play joyfully with two dogs in a lush green garden, tossing a frisbee under the bright afternoon sun.'**
+  String get imageDescriptionChildrenWithDog;
 
-  /// No description provided for @imageDescriptionCrossing.
+  /// No description provided for @imageDescriptionConstructionSite.
   ///
   /// In en, this message translates to:
-  /// **'A young man is helping an elderly woman cross the road at a pedestrian crossing. There are traffic signals and a car waiting nearby. The scene shows kindness and safety in a city environment.'**
-  String get imageDescriptionCrossing;
+  /// **'Four construction professionals in safety vests and hard hats stand on a dusty site, carefully reviewing a large architectural building blueprint.'**
+  String get imageDescriptionConstructionSite;
+
+  /// No description provided for @imageDescriptionFamilyDinner.
+  ///
+  /// In en, this message translates to:
+  /// **'A happy family of four enjoys a traditional Indian dinner at a restaurant, sharing food and laughter in a warm atmosphere.'**
+  String get imageDescriptionFamilyDinner;
+
+  /// No description provided for @imageDescriptionHoliCelebration.
+  ///
+  /// In en, this message translates to:
+  /// **'A joyful group of family and friends celebrate Holi, laughing together amidst a vibrant explosion of colorful powders in the air.'**
+  String get imageDescriptionHoliCelebration;
+
+  /// No description provided for @imageDescriptionLadyPainting.
+  ///
+  /// In en, this message translates to:
+  /// **'A young woman focuses on painting a beautiful yellow landscape on a canvas in her sun-drenched, cozy home art studio.'**
+  String get imageDescriptionLadyPainting;
+
+  /// No description provided for @imageDescriptionMomAndSon.
+  ///
+  /// In en, this message translates to:
+  /// **'A mother helps her young son cook at the stove, standing on a wooden stool in a bright, modern white kitchen.'**
+  String get imageDescriptionMomAndSon;
+
+  /// No description provided for @imageDescriptionPeopleDiwaliCelebration.
+  ///
+  /// In en, this message translates to:
+  /// **'People in traditional attire celebrate Diwali on a decorated street with vibrant lanterns, glowing diyas, and a spectacular firework display overhead.'**
+  String get imageDescriptionPeopleDiwaliCelebration;
+
+  /// No description provided for @imageDescriptionTajMahal.
+  ///
+  /// In en, this message translates to:
+  /// **'A group of young friends in denim jackets stands on a rooftop, holding coffee and smiling with the Taj Mahal behind.'**
+  String get imageDescriptionTajMahal;
+
+  /// No description provided for @imageDescriptionVillageScene.
+  ///
+  /// In en, this message translates to:
+  /// **'An elderly farmer sits atop a wooden bullock cart pulled by two white oxen, carrying a large harvest during a golden sunset.'**
+  String get imageDescriptionVillageScene;
+
+  /// No description provided for @imageDescriptionWomenDiwaliCelebration.
+  ///
+  /// In en, this message translates to:
+  /// **'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.'**
+  String get imageDescriptionWomenDiwaliCelebration;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

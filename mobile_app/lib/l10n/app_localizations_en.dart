@@ -426,17 +426,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recordingFilesMissing => 'One or more recording files are missing.';
 
   @override
-  String get imageDescriptionCooking => 'A woman is stirring something in a pot on the stove while a man stands beside her holding a mixing bowl. They seem to be preparing a meal together in a kitchen. The scene looks warm and collaborative.';
+  String get imageDescriptionBoardMeeting => 'A professional man gives a data presentation to colleagues in a modern, sunlit office boardroom overlooking a scenic city skyline.';
 
   @override
-  String get imageDescriptionLaptop => 'A young woman is sitting at a desk and working on her laptop. There are books and a coffee cup on the table, and several plants placed around the room. The space looks comfortable and suitable for working from home.';
+  String get imageDescriptionBoyWithDog => 'A boy wearing glasses walks a husky dog on a sunny park pathway, smiling while holding the leash.';
 
   @override
-  String get imageDescriptionCoffee => 'Three people are sitting at small tables in a cozy cafe. Two of them are having tea and cake while talking, and another woman is sitting nearby holding a cat. A dog is lying on the floor, and the atmosphere looks calm and friendly.';
+  String get imageDescriptionChildrenPainting => 'Five children sit on a carpet near a large window, happily painting colorful pictures together inside a bright living room.';
 
   @override
-  String get imageDescriptionConstruction => 'Three construction workers wearing helmets are discussing a building plan. One person is pointing at a large blueprint displayed on a board. The team appears to be planning or reviewing a construction project.';
+  String get imageDescriptionChildrenWithDog => 'Four children play joyfully with two dogs in a lush green garden, tossing a frisbee under the bright afternoon sun.';
 
   @override
-  String get imageDescriptionCrossing => 'A young man is helping an elderly woman cross the road at a pedestrian crossing. There are traffic signals and a car waiting nearby. The scene shows kindness and safety in a city environment.';
+  String get imageDescriptionConstructionSite => 'Four construction professionals in safety vests and hard hats stand on a dusty site, carefully reviewing a large architectural building blueprint.';
+
+  @override
+  String get imageDescriptionFamilyDinner => 'A happy family of four enjoys a traditional Indian dinner at a restaurant, sharing food and laughter in a warm atmosphere.';
+
+  @override
+  String get imageDescriptionHoliCelebration => 'A joyful group of family and friends celebrate Holi, laughing together amidst a vibrant explosion of colorful powders in the air.';
+
+  @override
+  String get imageDescriptionLadyPainting => 'A young woman focuses on painting a beautiful yellow landscape on a canvas in her sun-drenched, cozy home art studio.';
+
+  @override
+  String get imageDescriptionMomAndSon => 'A mother helps her young son cook at the stove, standing on a wooden stool in a bright, modern white kitchen.';
+
+  @override
+  String get imageDescriptionPeopleDiwaliCelebration => 'People in traditional attire celebrate Diwali on a decorated street with vibrant lanterns, glowing diyas, and a spectacular firework display overhead.';
+
+  @override
+  String get imageDescriptionTajMahal => 'A group of young friends in denim jackets stands on a rooftop, holding coffee and smiling with the Taj Mahal behind.';
+
+  @override
+  String get imageDescriptionVillageScene => 'An elderly farmer sits atop a wooden bullock cart pulled by two white oxen, carrying a large harvest during a golden sunset.';
+
+  @override
+  String get imageDescriptionWomenDiwaliCelebration => 'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.';
 }
