@@ -21,13 +21,21 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    // Get localized image descriptions
+    // Get localized image descriptions (same order as _allImagePaths in bloc)
     final localizedDescriptions = [
-      loc.imageDescriptionCooking,
-      loc.imageDescriptionLaptop,
-      loc.imageDescriptionCoffee,
-      loc.imageDescriptionConstruction,
-      loc.imageDescriptionCrossing,
+      loc.imageDescriptionBoardMeeting,
+      loc.imageDescriptionBoyWithDog,
+      loc.imageDescriptionChildrenPainting,
+      loc.imageDescriptionChildrenWithDog,
+      loc.imageDescriptionConstructionSite,
+      loc.imageDescriptionFamilyDinner,
+      loc.imageDescriptionHoliCelebration,
+      loc.imageDescriptionLadyPainting,
+      loc.imageDescriptionMomAndSon,
+      loc.imageDescriptionPeopleDiwaliCelebration,
+      loc.imageDescriptionTajMahal,
+      loc.imageDescriptionVillageScene,
+      loc.imageDescriptionWomenDiwaliCelebration,
     ];
     
     return BlocProvider(
@@ -347,13 +355,21 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
     final locale = Localizations.localeOf(context);
     final localeCode = locale.languageCode;
     
-    // Get localized image descriptions for current locale
+    // Get localized image descriptions for current locale (same order as _allImagePaths in bloc)
     final localizedDescriptions = [
-      loc.imageDescriptionCooking,
-      loc.imageDescriptionLaptop,
-      loc.imageDescriptionCoffee,
-      loc.imageDescriptionConstruction,
-      loc.imageDescriptionCrossing,
+      loc.imageDescriptionBoardMeeting,
+      loc.imageDescriptionBoyWithDog,
+      loc.imageDescriptionChildrenPainting,
+      loc.imageDescriptionChildrenWithDog,
+      loc.imageDescriptionConstructionSite,
+      loc.imageDescriptionFamilyDinner,
+      loc.imageDescriptionHoliCelebration,
+      loc.imageDescriptionLadyPainting,
+      loc.imageDescriptionMomAndSon,
+      loc.imageDescriptionPeopleDiwaliCelebration,
+      loc.imageDescriptionTajMahal,
+      loc.imageDescriptionVillageScene,
+      loc.imageDescriptionWomenDiwaliCelebration,
     ];
     
     return Column(

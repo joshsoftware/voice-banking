@@ -20,13 +20,21 @@ class RegistrationVoiceBloc
   StreamSubscription? _ttsCompletionSubscription;
   bool _isDisposed = false;
 
-  // All available image paths (matching order with descriptions)
+  // All available image paths (matching order with descriptions in .arb)
   static const List<String> _allImagePaths = [
-    'assets/images/cooking_together.png',
-    'assets/images/woman_laptop.png',
-    'assets/images/relaxing_coffee.png',
-    'assets/images/construction_team.png',
-    'assets/images/helping_cross_road.png',
+    'assets/images/board_meeting.png',
+    'assets/images/boy_with_dog.png',
+    'assets/images/children_painting.png',
+    'assets/images/children_with_dog.png',
+    'assets/images/construction_site.png',
+    'assets/images/family_dinner.png',
+    'assets/images/holi_celebration.png',
+    'assets/images/lady_painting.png',
+    'assets/images/mom_and_son.png',
+    'assets/images/people_diwali_celebration.png',
+    'assets/images/taj_mahal.png',
+    'assets/images/village_scene.png',
+    'assets/images/women_diwali_celebration.png',
   ];
 
   /// Randomly select 3 images and their corresponding descriptions
