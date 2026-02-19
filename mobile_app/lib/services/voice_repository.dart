@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:math' show Random;
 import 'package:dio/dio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +10,18 @@ import 'shared_preferences_service.dart';
 /// Thrown when the recorded audio is empty/silent (no speech detected).
 class EmptyRecordingException implements Exception {
   EmptyRecordingException();
+}
+
+/// Thrown when voice validation fails. [consecutiveFailures] is how many times in a row we got is_voice_valid = false.
+class VoiceValidationFailedException implements Exception {
+  final int consecutiveFailures;
+  VoiceValidationFailedException(this.consecutiveFailures);
+}
+
+/// Thrown when user is locked out due to failed voice validation (all retries exhausted).
+class VoiceLockoutException implements Exception {
+  final DateTime lockoutUntil;
+  VoiceLockoutException(this.lockoutUntil);
 }
 
 class VoiceRepository {
@@ -114,6 +125,65 @@ class VoiceRepository {
       persistentConnection: true,
       maxRedirects: 3,
     ));
+  }
+
+  /// Verifies the user's voice against their enrolled voiceprint.
+  ///
+  /// Backend response: { is_voice_valid } only.
+  /// Frontend tracks consecutive failures. On any fail → [VoiceValidationFailedException]
+  /// (no block/lockout; UI shows "go to a silent room & try again or try later").
+  Future<Map<String, dynamic>> verifyVoice(File audioFile) async {
+    final customerId = SharedPreferencesService.getCustomerId();
+    if (customerId == null || customerId.isEmpty) {
+      throw Exception("Customer ID not found. Please log in again.");
+    }
+
+    final form = FormData.fromMap({
+      'file': await MultipartFile.fromFile(audioFile.path, filename: 'recording.wav'),
+    });
+    form.fields.add(MapEntry('customer_id', customerId.toString()));
+
+    final verifyDio = _createEnrollDio();
+    verifyDio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      logPrint: (obj) => log('Dio: $obj'),
+    ));
+
+    try {
+      log('Voice Verify - POST /voiceprint/verify');
+      log('Customer ID - $customerId');
+      final res = await verifyDio.post('/voiceprint/verify', data: form);
+      verifyDio.close();
+
+      final data = res.data is Map<String, dynamic> ? res.data as Map<String, dynamic> : <String, dynamic>{};
+      final isVoiceValid = data['verified'] == true;
+
+      if (isVoiceValid) {
+        await SharedPreferencesService.resetConsecutiveVoiceValidationFailures();
+        return data;
+      }
+
+      final count = SharedPreferencesService.getConsecutiveVoiceValidationFailures() + 1;
+      await SharedPreferencesService.setConsecutiveVoiceValidationFailures(count);
+
+      // Never block; always allow retry. UI will show "go to a silent room & try again or try later".
+      throw VoiceValidationFailedException(count);
+    } on DioException catch (e) {
+      verifyDio.close();
+      log('Voice Verify - DioException: ${e.type} - ${e.message}');
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        throw Exception("Network timeout. Please check your connection and try again.");
+      } else if (e.type == DioExceptionType.connectionError) {
+        throw Exception("Connection error. Please check your internet connection.");
+      } else if (e.response != null) {
+        final msg = e.response?.data?['message'] ?? e.response?.data?['error'] ?? e.message ?? "Voice verification failed";
+        throw Exception(msg);
+      }
+      throw Exception("Network error: ${e.message}");
+    }
   }
 
   /// Gets the native device ID (Android fingerprint or iOS identifierForVendor).
@@ -300,6 +370,9 @@ class VoiceRepository {
       }
 
       ifNotEmptyCallback?.call();
+
+      // Verify voice before transcribing intent (no lockout; user can always retry)
+      await verifyVoice(file);
 
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
@@ -575,6 +648,46 @@ class VoiceRepository {
     } catch (e) {
       print("Voice Repository Error - Voice enrollment failed: $e");
       rethrow;
+    }
+  }
+
+  /// Deletes the user's voiceprint from the server.
+  /// DELETE /voiceprint/ with body: { customer_id }
+  /// Caller should call SharedPreferencesService.setVoiceRegistered(false) on 200.
+  Future<void> deleteVoiceprint(String customerId) async {
+    if (customerId.isEmpty) {
+      throw Exception("Customer ID is required");
+    }
+    final deleteDio = _createEnrollDio();
+    deleteDio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      logPrint: (obj) => log('Dio: $obj'),
+    ));
+    try {
+      log('Voice Delete - DELETE /voiceprint/ customer_id: $customerId');
+      final res = await deleteDio.delete(
+        '/voiceprint/',
+        queryParameters: {'customer_id': customerId},
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
+      deleteDio.close();
+      if (res.statusCode != 200) {
+        throw Exception(
+            res.data?['message'] ?? 'Failed to delete voiceprint');
+      }
+    } on DioException catch (e) {
+      deleteDio.close();
+      if (e.response != null) {
+        final msg = e.response?.data?['message'] ??
+            e.response?.data?['error'] ??
+            e.message ??
+            'Failed to delete voiceprint';
+        throw Exception(msg);
+      }
+      throw Exception(e.message ?? 'Failed to delete voiceprint');
     }
   }
 }

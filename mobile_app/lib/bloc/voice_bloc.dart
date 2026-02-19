@@ -61,6 +61,20 @@ class ShowBeneficiariesDialog extends VoiceState {
 /// Emitted when the user recorded but said nothing (empty/silent audio).
 class RecordingEmpty extends VoiceState {}
 
+/// Emitted when voice validation fails (1st or 2nd consecutive failure).
+class VoiceValidationFailed extends VoiceState {
+  final int consecutiveFailures;
+  final String message;
+  VoiceValidationFailed(this.consecutiveFailures, this.message);
+}
+
+/// Emitted when user is locked out due to too many failed voice validation attempts.
+class VoiceLockout extends VoiceState {
+  final DateTime lockoutUntil;
+  final String message;
+  VoiceLockout(this.lockoutUntil, this.message);
+}
+
 sealed class VoiceEvent {}
 
 class StartListening extends VoiceEvent {
@@ -182,6 +196,25 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         add(GotTranscript(data, e.locale));
       } on EmptyRecordingException catch (_) {
         emit(RecordingEmpty());
+        add(Reset());
+      } on VoiceValidationFailedException catch (ve) {
+        // 3+ failures: suggest silent room (no block)
+        final messageKey = ve.consecutiveFailures >= 3
+            ? 'voice_validation_silent_room_retry'
+            : 'voice_validation_failed';
+        final message = TranslationService.translateResponse(
+          messageKey,
+          e.locale,
+          null,
+        );
+        if (!_voiceSessionCancelled) {
+          try {
+            await tts.speak(message, langCode: e.locale);
+          } catch (err) {
+            print("TTS Error on voice validation failed: $err");
+          }
+        }
+        emit(VoiceValidationFailed(ve.consecutiveFailures, message));
         add(Reset());
       } catch (err) {
         print("Voice Bloc Error - Stop/transcribe failed: $err");
