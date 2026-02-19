@@ -463,4 +463,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.';
+
+  @override
+  String get resetVoice => 'Reset Voice';
+
+  @override
+  String get resetVoiceConfirm => 'This will delete your voice profile. You will need to complete voice registration again. Continue?';
+
+  @override
+  String get resetVoiceSuccess => 'Voice reset successfully. Please complete registration again.';
+
+  @override
+  String get resetVoiceError => 'Failed to reset voice. Please try again.';
 }

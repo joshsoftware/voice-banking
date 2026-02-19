@@ -463,4 +463,16 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'गुलाबी पारंपरिक पोशाकातील महिला चमकणाऱ्या तेलाच्या दिव्यांनी वेढलेल्या जमिनीवर सुंदर रंगीत रंगोली काळजीपूर्वक तयार करते।';
+
+  @override
+  String get resetVoice => 'व्हॉईस रीसेट करा';
+
+  @override
+  String get resetVoiceConfirm => 'यामुळे तुमचा व्हॉईस प्रोफाइल हटवला जाईल. तुम्हाला पुन्हा व्हॉईस नोंदणी पूर्ण करावी लागेल. पुढे चालू ठेवायचे?';
+
+  @override
+  String get resetVoiceSuccess => 'व्हॉईस यशस्वीरित्या रीसेट झाला. कृपया पुन्हा नोंदणी पूर्ण करा.';
+
+  @override
+  String get resetVoiceError => 'व्हॉईस रीसेट करण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.';
 }

@@ -974,6 +974,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.'**
   String get imageDescriptionWomenDiwaliCelebration;
+
+  /// No description provided for @resetVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Voice'**
+  String get resetVoice;
+
+  /// No description provided for @resetVoiceConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete your voice profile. You will need to complete voice registration again. Continue?'**
+  String get resetVoiceConfirm;
+
+  /// No description provided for @resetVoiceSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice reset successfully. Please complete registration again.'**
+  String get resetVoiceSuccess;
+
+  /// No description provided for @resetVoiceError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to reset voice. Please try again.'**
+  String get resetVoiceError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

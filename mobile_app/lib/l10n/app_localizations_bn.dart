@@ -463,4 +463,16 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'গোলাপী ঐতিহ্যবাহী পোশাক পরা একজন মহিলা জ্বলন্ত তেলের দিয়ার মধ্যে মাটিতে সুন্দর রঙিন রঙ্গোলি সাবধানে তৈরি করছেন।';
+
+  @override
+  String get resetVoice => 'ভয়েস রিসেট করুন';
+
+  @override
+  String get resetVoiceConfirm => 'এটি আপনার ভয়েস প্রোফাইল মুছে ফেলবে। আপনাকে আবার ভয়েস নিবন্ধন সম্পূর্ণ করতে হবে। চালিয়ে যেতে চান?';
+
+  @override
+  String get resetVoiceSuccess => 'ভয়েস সফলভাবে রিসেট হয়েছে। অনুগ্রহ করে আবার নিবন্ধন সম্পূর্ণ করুন।';
+
+  @override
+  String get resetVoiceError => 'ভয়েস রিসেট করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।';
 }

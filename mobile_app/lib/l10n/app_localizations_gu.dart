@@ -463,4 +463,16 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'ગુલાબી પરંપરાગત પોશાકમાં એક સ્ત્રી ઝગમગતા તેલના દીવાસોથી ઘેરાયેલી જમીન પર સુંદર રંગીન રંગોળી કાળજીથી બનાવે છે।';
+
+  @override
+  String get resetVoice => 'વૉઇસ રીસેટ કરો';
+
+  @override
+  String get resetVoiceConfirm => 'આ તમારું વૉઇસ પ્રોફાઇલ દૂર કરશે. તમારે ફરી વૉઇસ નોંધણી પૂર્ણ કરવી પડશે. ચાલુ રાખવું છે?';
+
+  @override
+  String get resetVoiceSuccess => 'વૉઇસ સફળતાપૂર્વક રીસેટ થયું. કૃપા કરીને ફરી નોંધણી પૂર્ણ કરો.';
+
+  @override
+  String get resetVoiceError => 'વૉઇસ રીસેટ કરવામાં નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો.';
 }

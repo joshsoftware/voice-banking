@@ -143,5 +143,9 @@
   "imageDescriptionPeopleDiwaliCelebration": "People in traditional attire celebrate Diwali on a decorated street with vibrant lanterns, glowing diyas, and a spectacular firework display overhead.",
   "imageDescriptionTajMahal": "A group of young friends in denim jackets stands on a rooftop, holding coffee and smiling with the Taj Mahal behind.",
   "imageDescriptionVillageScene": "An elderly farmer sits atop a wooden bullock cart pulled by two white oxen, carrying a large harvest during a golden sunset.",
-  "imageDescriptionWomenDiwaliCelebration": "A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps."
+  "imageDescriptionWomenDiwaliCelebration": "A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.",
+  "resetVoice": "Reset Voice",
+  "resetVoiceConfirm": "This will delete your voice profile. You will need to complete voice registration again. Continue?",
+  "resetVoiceSuccess": "Voice reset successfully. Please complete registration again.",
+  "resetVoiceError": "Failed to reset voice. Please try again."
 }

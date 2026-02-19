@@ -463,4 +463,16 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'गुलाबी पारंपरिक पोशाक वाली एक महिला जगमगाते तेल के दीयों से घिरी ज़मीन पर सुंदर रंगीन रंगोली बना रही है।';
+
+  @override
+  String get resetVoice => 'वॉयस रीसेट करें';
+
+  @override
+  String get resetVoiceConfirm => 'यह आपकी वॉयस प्रोफ़ाइल हटा देगा। आपको फिर से वॉयस पंजीकरण पूरा करना होगा। जारी रखें?';
+
+  @override
+  String get resetVoiceSuccess => 'वॉयस सफलतापूर्वक रीसेट हो गया। कृपया पुनः पंजीकरण पूरा करें।';
+
+  @override
+  String get resetVoiceError => 'वॉयस रीसेट करने में विफल। कृपया पुनः प्रयास करें।';
 }

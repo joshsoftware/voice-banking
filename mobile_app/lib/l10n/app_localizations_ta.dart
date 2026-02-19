@@ -463,4 +463,16 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'இளஞ்சிவப்பு பாரம்பரிய உடை அணிந்த பெண் எரியும் எண்ணெய் விளக்குகளால் சூழப்பட்ட நிலத்தில் அழகான வண்ணமயமான ரங்கோலியை கவனமாக உருவாக்குகிறார்.';
+
+  @override
+  String get resetVoice => 'குரலை மீட்டமை';
+
+  @override
+  String get resetVoiceConfirm => 'இது உங்கள் குரல் சுயவிவரத்தை நீக்கும். குரல் பதிவை மீண்டும் முடிக்க வேண்டும். தொடரவா?';
+
+  @override
+  String get resetVoiceSuccess => 'குரல் வெற்றிகரமாக மீட்டமைக்கப்பட்டது. மீண்டும் பதிவு செய்யுங்கள்.';
+
+  @override
+  String get resetVoiceError => 'குரலை மீட்டமைக்க தோல்வி. மீண்டும் முயற்சிக்கவும்.';
 }

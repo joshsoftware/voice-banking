@@ -463,4 +463,16 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'പിങ്ക് പരമ്പരാഗത വസ്ത്രം ധരിച്ച ഒരു സ്ത്രീ ജ്വലിക്കുന്ന എണ്ണ ദീപങ്ങളാൽ ചുറ്റപ്പെട്ട നിലത്ത് മനോഹരമായ വർണ്ണാഭമായ രംഗോലി ശ്രദ്ധാപൂർവ്വം നിർമ്മിക്കുന്നു.';
+
+  @override
+  String get resetVoice => 'വോയ്‌സ് പുനഃക്രമീകരിക്കുക';
+
+  @override
+  String get resetVoiceConfirm => 'ഇത് നിങ്ങളുടെ വോയ്‌സ് പ്രൊഫൈൽ ഇല്ലാതാക്കും. നിങ്ങൾ വീണ്ടും വോയ്‌സ് രജിസ്ട്രേഷൻ പൂർത്തിയാക്കേണ്ടതുണ്ട്. തുടരണോ?';
+
+  @override
+  String get resetVoiceSuccess => 'വോയ്‌സ് വിജയകരമായി പുനഃക്രമീകരിച്ചു. വീണ്ടും രജിസ്ട്രേഷൻ പൂർത്തിയാക്കുക.';
+
+  @override
+  String get resetVoiceError => 'വോയ്‌സ് പുനഃക്രമീകരിക്കുന്നതിൽ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.';
 }

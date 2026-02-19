@@ -463,4 +463,16 @@ class AppLocalizationsPa extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'ਗੁਲਾਬੀ ਪਰੰਪਰਾਗਤ ਪੋਸ਼ਾਕ ਵਿੱਚ ਇੱਕ ਔਰਤ ਚਮਕਦੇ ਤੇਲ ਦੇ ਦੀਵਿਆਂ ਨਾਲ ਘਿਰੀ ਜ਼ਮੀਨ \'ਤੇ ਸੁੰਦਰ ਰੰਗੀਨ ਰੰਗੋਲੀ ਧਿਆਨ ਨਾਲ ਬਣਾ ਰਹੀ ਹੈ।';
+
+  @override
+  String get resetVoice => 'ਆਵਾਜ਼ ਰੀਸੈੱਟ ਕਰੋ';
+
+  @override
+  String get resetVoiceConfirm => 'ਇਸ ਨਾਲ ਤੁਹਾਡਾ ਆਵਾਜ਼ ਪ੍ਰੋਫਾਈਲ ਮਿਟ ਜਾਵੇਗਾ। ਤੁਹਾਨੂੰ ਦੁਬਾਰਾ ਆਵਾਜ਼ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਪੂਰੀ ਕਰਨੀ ਪਵੇਗੀ। ਜਾਰੀ ਰੱਖਣਾ ਹੈ?';
+
+  @override
+  String get resetVoiceSuccess => 'ਆਵਾਜ਼ ਸਫਲਤਾਪੂਰਵਕ ਰੀਸੈੱਟ ਹੋ ਗਈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਪੂਰੀ ਕਰੋ।';
+
+  @override
+  String get resetVoiceError => 'ਆਵਾਜ਼ ਰੀਸੈੱਟ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।';
 }

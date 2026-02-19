@@ -463,4 +463,16 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'ಗುಲಾಬಿ ಸಾಂಪ್ರದಾಯಿಕ ಉಡುಪು ಧರಿಸಿದ ಮಹಿಳೆ ಜ್ವಲಿಸುವ ತೈಲ ದೀಪಗಳಿಂದ ಸುತ್ತುವರೆದ ನೆಲದ ಮೇಲೆ ಸುಂದರವಾದ ಬಣ್ಣದ ರಂಗೋಲಿಯನ್ನು ಎಚ್ಚರಿಕೆಯಿಂದ ರಚಿಸುತ್ತಿದ್ದಾಳೆ.';
+
+  @override
+  String get resetVoice => 'ಧ್ವನಿ ಮರುಹೊಂದಿಸಿ';
+
+  @override
+  String get resetVoiceConfirm => 'ಇದು ನಿಮ್ಮ ಧ್ವನಿ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಅಳಿಸುತ್ತದೆ. ನೀವು ಮತ್ತೆ ಧ್ವನಿ ನೋಂದಣಿ ಪೂರ್ಣಗೊಳಿಸಬೇಕು. ಮುಂದುವರಿಸುವುದೇ?';
+
+  @override
+  String get resetVoiceSuccess => 'ಧ್ವನಿ ಯಶಸ್ವಿಯಾಗಿ ಮರುಹೊಂದಿಸಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ನೋಂದಣಿ ಪೂರ್ಣಗೊಳಿಸಿ.';
+
+  @override
+  String get resetVoiceError => 'ಧ್ವನಿ ಮರುಹೊಂದಿಸಲು ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
 }

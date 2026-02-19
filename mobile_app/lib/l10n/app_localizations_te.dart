@@ -463,4 +463,16 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get imageDescriptionWomenDiwaliCelebration => 'పింక్ సాంప్రదాయ వస్త్రం ధరించిన మహిళ మెరిసే నూనె దీపాలతో చుట్టుకొన్న నేల మీద అందమైన రంగురంగుల రంగోలిని జాగ్రత్తగా సృష్టిస్తోంది.';
+
+  @override
+  String get resetVoice => 'వాయిస్ రీసెట్ చేయి';
+
+  @override
+  String get resetVoiceConfirm => 'ఇది మీ వాయిస్ ప్రొఫైల్‌ను తొలగిస్తుంది. మీరు మళ్ళీ వాయిస్ నమోదును పూర్తి చేయాలి. కొనసాగించాలా?';
+
+  @override
+  String get resetVoiceSuccess => 'వాయిస్ విజయవంతంగా రీసెట్ చేయబడింది. మళ్ళీ నమోదు పూర్తి చేయండి.';
+
+  @override
+  String get resetVoiceError => 'వాయిస్ రీసెట్ చేయడంలో విఫలమైంది. మళ్ళీ ప్రయత్నించండి.';
 }
