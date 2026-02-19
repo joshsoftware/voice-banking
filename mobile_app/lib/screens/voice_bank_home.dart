@@ -192,6 +192,70 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     );
   }
 
+  Future<void> _resetVoice(BuildContext context) async {
+    final loc = AppLocalizations.of(context)!;
+    final customerId = SharedPreferencesService.getCustomerId();
+    if (customerId == null || customerId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.resetVoiceError),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.resetVoice),
+          content: Text(loc.resetVoiceConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(loc.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(loc.resetVoice),
+              style: TextButton.styleFrom(foregroundColor: Colors.orange[700]),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true) return;
+    try {
+      final bloc = context.read<VoiceBloc>();
+      await bloc.repo.deleteVoiceprint(customerId);
+      await SharedPreferencesService.setVoiceRegistered(false);
+      if (!mounted) return;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final snackBar = SnackBar(
+        content: Text(loc.resetVoiceSuccess),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.fixed,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        scaffoldMessenger.showSnackBar(snackBar);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final snackBar = SnackBar(
+        content: Text(loc.resetVoiceError),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.fixed,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        scaffoldMessenger.showSnackBar(snackBar);
+      });
+    }
+  }
+
   void _logout() async {
     // Show confirmation dialog
     final bool? shouldLogout = await showDialog<bool>(
@@ -268,12 +332,28 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             LanguageToggleWidget(),
             PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert, color: Colors.white),
-              onSelected: (String value) {
+              onSelected: (String value) async {
                 if (value == 'logout') {
                   _logout();
+                } else if (value == 'resetVoice') {
+                  await _resetVoice(context);
                 }
               },
               itemBuilder: (BuildContext context) => [
+                if (SharedPreferencesService.isVoiceRegistered())
+                  PopupMenuItem<String>(
+                    value: 'resetVoice',
+                    child: Row(
+                      children: [
+                        Icon(Icons.voice_over_off, color: Colors.orange[700]),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.resetVoice,
+                          style: TextStyle(color: Colors.orange[700]),
+                        ),
+                      ],
+                    ),
+                  ),
                 PopupMenuItem<String>(
                   value: 'logout',
                   child: Row(
@@ -574,7 +654,22 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         // Enhanced Floating Action Button
         floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
           listener: (context, state) {
-            if (state is ShowTransactionsDialog) {
+            if (state is VoiceValidationFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            } else if (state is VoiceLockout) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.orange,
+                  duration: const Duration(seconds: 5),
+                ),
+              );
+            } else if (state is ShowTransactionsDialog) {
               _showTransactionsDialog(
                   context, state.message, state.transactions, state.sessionId);
             } else if (state is ShowOtpDialog) {
@@ -926,6 +1021,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       return Colors.orange[600]!;
     } else if (state is Executing) {
       return Colors.purple[600]!;
+    } else if (state is VoiceLockout) {
+      return Colors.orange[800]!;
     } else {
       return Colors.blue[600]!;
     }
@@ -934,6 +1031,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonIcon(VoiceState state) {
     if (state is Listening) {
       return const Icon(Icons.stop, color: Colors.white);
+    } else if (state is VoiceLockout) {
+      return const Icon(Icons.lock_clock, color: Colors.white);
     } else if (state is Transcribing) {
       return const SizedBox(
         width: 20,
@@ -960,6 +1059,15 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonLabel(VoiceState state, BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
+    if (state is VoiceLockout) {
+      return Text(
+        'Locked',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
     if (state is Listening || state is ShowBeneficiariesDialog) {
       return Text(
         loc.listening,
@@ -1014,6 +1122,15 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       child: FloatingActionButton.extended(
         onPressed: () async {
           final bloc = context.read<VoiceBloc>();
+          if (state is VoiceLockout) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.orange,
+              ),
+            );
+            return;
+          }
           if (state is Idle) {
             final isVoiceRegistered = SharedPreferencesService.isVoiceRegistered();
             if (!isVoiceRegistered) {
