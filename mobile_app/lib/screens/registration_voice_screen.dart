@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/registration_voice_bloc.dart';
@@ -339,7 +340,7 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            loc.describeImageInstruction,
+            loc.describeImageInstruction(kMaxRecordingSeconds),
             style: const TextStyle(fontSize: 14),
             textAlign: TextAlign.center,
           ),
@@ -418,35 +419,11 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
 
         SizedBox(height: state.isRecording ? 5 : 15),
 
-        // Recording indicator
-        if (state.isRecording)
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.red[50],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  AppLocalizations.of(context)!.recording,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+        // Recording indicator with gentle filling progress (no countdown)
+        if (state.isRecording && state.recordingStartedAt != null)
+          _RecordingProgressSection(
+            recordingStartedAt: state.recordingStartedAt!,
+            maxDurationSeconds: kMaxRecordingSeconds,
           ),
 
         if (state.isRecording)
@@ -575,6 +552,10 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
       return loc.recordingFileNotFound;
     } else if (errorMessage.contains('Recording is empty')) {
       return loc.recordingEmpty;
+    } else if (errorMessage.contains('Please speak for at least')) {
+      return loc.pleaseSpeakAtLeastSeconds(kMinRecordingSeconds);
+    } else if (errorMessage.contains('Please speak something')) {
+      return loc.pleaseSaySomething;
     } else if (errorMessage.contains('Failed to stop recording')) {
       final error = errorMessage.split(':').length > 1 ? errorMessage.split(':')[1].trim() : '';
       return loc.failedToStopRecording(error);
@@ -599,5 +580,103 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
     }
     // Return original message if no translation found
     return errorMessage;
+  }
+}
+
+/// Gentle filling progress indicator during recording — no countdown numbers.
+/// Shows a soft pill-shaped bar that fills over [maxDurationSeconds].
+class _RecordingProgressSection extends StatefulWidget {
+  final DateTime recordingStartedAt;
+  final int maxDurationSeconds;
+
+  const _RecordingProgressSection({
+    required this.recordingStartedAt,
+    required this.maxDurationSeconds,
+  });
+
+  @override
+  State<_RecordingProgressSection> createState() =>
+      _RecordingProgressSectionState();
+}
+
+class _RecordingProgressSectionState extends State<_RecordingProgressSection> {
+  Timer? _timer;
+  double _progress = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateProgress();
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+      if (mounted) _updateProgress();
+    });
+  }
+
+  void _updateProgress() {
+    final elapsed = DateTime.now().difference(widget.recordingStartedAt);
+    final seconds = elapsed.inMilliseconds / 1000.0;
+    final p = (seconds / widget.maxDurationSeconds).clamp(0.0, 1.0);
+    if (p != _progress) {
+      setState(() => _progress = p);
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.red[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.red[100]!),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                loc.recording,
+                style: TextStyle(
+                  color: Colors.red[700],
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Gentle filling bar — fills over time, no numbers
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: SizedBox(
+              height: 6,
+              child: LinearProgressIndicator(
+                value: _progress,
+                backgroundColor: Colors.red[100],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                minHeight: 6,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
