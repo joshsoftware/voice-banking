@@ -193,6 +193,24 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
   }
 
   Widget _buildScrollableContent(BuildContext context, RegistrationVoiceReady state) {
+    final loc = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context);
+    final localizedDescriptions = [
+      loc.imageDescriptionBoardMeeting,
+      loc.imageDescriptionBoyWithDog,
+      loc.imageDescriptionChildrenPainting,
+      loc.imageDescriptionChildrenWithDog,
+      loc.imageDescriptionConstructionSite,
+      loc.imageDescriptionFamilyDinner,
+      loc.imageDescriptionHoliCelebration,
+      loc.imageDescriptionLadyPainting,
+      loc.imageDescriptionMomAndSon,
+      loc.imageDescriptionPeopleDiwaliCelebration,
+      loc.imageDescriptionTajMahal,
+      loc.imageDescriptionVillageScene,
+      loc.imageDescriptionWomenDiwaliCelebration,
+    ];
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -201,8 +219,15 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
 
         const SizedBox(height: 20),
 
-        // Image display
-        _buildImageDisplay(state.currentImageIndex, state.selectedImagePaths),
+        // Image display with speaker button in bottom right
+        _buildImageDisplay(
+          context,
+          state.currentImageIndex,
+          state.selectedImagePaths,
+          state,
+          localizedDescriptions,
+          locale.languageCode,
+        ),
 
         const SizedBox(height: 20),
 
@@ -258,7 +283,17 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
     );
   }
 
-  Widget _buildImageDisplay(int currentIndex, List<String> imagePaths) {
+  Widget _buildImageDisplay(
+    BuildContext context,
+    int currentIndex,
+    List<String> imagePaths,
+    RegistrationVoiceReady state,
+    List<String> localizedDescriptions,
+    String localeCode,
+  ) {
+    final canPlay = !state.isRecording && !state.isUploading;
+    final canStop = state.isTTSPlaying && !state.isUploading;
+
     return Container(
       width: double.infinity,
       height: 300,
@@ -267,49 +302,84 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[300]!),
       ),
-      child: currentIndex < imagePaths.length
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                imagePaths[currentIndex],
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback if image not found
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image,
-                          size: 64,
-                          color: Colors.grey[400],
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: currentIndex < imagePaths.length
+                ? Image.asset(
+                    imagePaths[currentIndex],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.image, size: 64, color: Colors.grey[400]),
+                            const SizedBox(height: 8),
+                            Text(
+                              AppLocalizations.of(context)!.imageNumber(currentIndex + 1),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppLocalizations.of(context)!.somethingWentWrong,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          AppLocalizations.of(context)!.imageNumber(currentIndex + 1),
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          AppLocalizations.of(context)!.somethingWentWrong,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  )
+                : Center(
+                    child: Text(AppLocalizations.of(context)!.imageNotAvailable),
+                  ),
+          ),
+          // Google-style speaker button in bottom right corner
+          Positioned(
+            bottom: 12,
+            right: 12,
+            child: Material(
+              color: Colors.blue[100],
+              shape: const CircleBorder(),
+              child: InkWell(
+                onTap: canPlay || canStop
+                    ? () {
+                        if (state.isTTSPlaying) {
+                          context.read<RegistrationVoiceBloc>().add(StopTTS());
+                        } else {
+                          context.read<RegistrationVoiceBloc>().add(PlayTTS(
+                                localizedDescriptions: localizedDescriptions,
+                                localeCode: localeCode,
+                              ));
+                        }
+                      }
+                    : null,
+                customBorder: const CircleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    state.isTTSPlaying ? Icons.stop : Icons.volume_up,
+                    size: 16,
+                    color: canPlay || canStop
+                        ? (state.isTTSPlaying ? Colors.red : Colors.blue[700])
+                        : Colors.grey[400],
+                  ),
+                ),
               ),
-            )
-          : Center(
-              child: Text(AppLocalizations.of(context)!.imageNotAvailable),
             ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -351,28 +421,7 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
 
   Widget _buildControlButtons(BuildContext context, RegistrationVoiceReady state) {
     final loc = AppLocalizations.of(context)!;
-    
-    // Get current locale code
-    final locale = Localizations.localeOf(context);
-    final localeCode = locale.languageCode;
-    
-    // Get localized image descriptions for current locale (same order as _allImagePaths in bloc)
-    final localizedDescriptions = [
-      loc.imageDescriptionBoardMeeting,
-      loc.imageDescriptionBoyWithDog,
-      loc.imageDescriptionChildrenPainting,
-      loc.imageDescriptionChildrenWithDog,
-      loc.imageDescriptionConstructionSite,
-      loc.imageDescriptionFamilyDinner,
-      loc.imageDescriptionHoliCelebration,
-      loc.imageDescriptionLadyPainting,
-      loc.imageDescriptionMomAndSon,
-      loc.imageDescriptionPeopleDiwaliCelebration,
-      loc.imageDescriptionTajMahal,
-      loc.imageDescriptionVillageScene,
-      loc.imageDescriptionWomenDiwaliCelebration,
-    ];
-    
+
     return Column(
       children: [
         // Record/Re-record button
@@ -428,46 +477,6 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
 
         if (state.isRecording)
           const SizedBox(height: 15),
-
-        // Play/Stop TTS button
-        SizedBox(
-          width: double.infinity,
-          // height: 46,
-          child: state.isTTSPlaying
-              ? OutlinedButton.icon(
-                  onPressed: state.isUploading
-                      ? null
-                      : () => context.read<RegistrationVoiceBloc>().add(StopTTS()),
-                  icon: const Icon(Icons.stop),
-                  label: Text(loc.stopDescription),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(color: Colors.red),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                )
-              : OutlinedButton.icon(
-                  onPressed: state.isRecording || state.isUploading
-                      ? null
-                      : () => context.read<RegistrationVoiceBloc>().add(PlayTTS(
-                            localizedDescriptions: localizedDescriptions,
-                            localeCode: localeCode,
-                          )),
-                  icon: const Icon(Icons.volume_down),
-                  label: Text(loc.playDescription),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.green,
-                    side: const BorderSide(color: Colors.green),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-        ),
-
-        const SizedBox(height: 15),
 
         // Next button (only show if not on last image and recording is done)
         if (state.currentImageIndex < 2 && state.hasCurrentRecording)
