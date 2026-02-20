@@ -346,7 +346,9 @@ class AppLocalizationsMr extends AppLocalizations {
   }
 
   @override
-  String get describeImageInstruction => 'कृपया या प्रतिमेत आपण जे पाहत आहात ते वर्णन करा। स्पष्टपणे बोला आणि मुख्य घटकांचे वर्णन करा।';
+  String describeImageInstruction(Object seconds) {
+    return 'कृपया या प्रतिमेत आपण जे पाहत आहात ते $seconds सेकंदात वर्णन करा। स्पष्टपणे बोला आणि मुख्य घटकांचे वर्णन करा।';
+  }
 
   @override
   String get stopRecording => 'रेकॉर्डिंग थांबवा';
@@ -391,6 +393,11 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get recordingEmpty => 'रेकॉर्डिंग रिकामी आहे। कृपया पुन्हा प्रयत्न करा।';
+
+  @override
+  String pleaseSpeakAtLeastSeconds(Object seconds) {
+    return 'कृपया किमान $seconds सेकंद बोला।';
+  }
 
   @override
   String failedToStopRecording(Object error) {

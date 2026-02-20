@@ -756,8 +756,8 @@ abstract class AppLocalizations {
   /// No description provided for @describeImageInstruction.
   ///
   /// In en, this message translates to:
-  /// **'Please describe what you see in this image. Speak clearly and describe the main elements.'**
-  String get describeImageInstruction;
+  /// **'Please describe what you see in this image in up to {seconds} seconds. Speak clearly and describe the main elements.'**
+  String describeImageInstruction(Object seconds);
 
   /// No description provided for @stopRecording.
   ///
@@ -842,6 +842,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recording is empty. Please try again.'**
   String get recordingEmpty;
+
+  /// No description provided for @pleaseSpeakAtLeastSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Please speak for at least {seconds} seconds.'**
+  String pleaseSpeakAtLeastSeconds(Object seconds);
 
   /// No description provided for @failedToStopRecording.
   ///
