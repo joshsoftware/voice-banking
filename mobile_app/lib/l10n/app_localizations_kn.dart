@@ -475,4 +475,16 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'ಧ್ವನಿ ಮರುಹೊಂದಿಸಲು ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get audioStorageConsentTitle => 'ಆಡಿಯೋ ಸಂಗ್ರಹಣೆ ಒಪ್ಪಿಗೆ';
+
+  @override
+  String get audioStorageConsentMessage => 'ಧ್ವನಿ ಬ್ಯಾಂಕಿಂಗ್ ಬಳಸಲು, ದೃಢೀಕರಣ ಮತ್ತು ಪ್ರಕ್ರಿಯೆಗಾಗಿ ನಿಮ್ಮ ಧ್ವನಿ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ನಮ್ಮ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಶೇಖರಿಸಬೇಕಾಗುತ್ತದೆ. ನಿಮ್ಮ ಆಡಿಯೋವನ್ನು ನಮ್ಮೊಂದಿಗೆ ಶೇಖರಿಸಲು ನೀವು ಒಪ್ಪುತ್ತೀರಾ?';
+
+  @override
+  String get acceptConsent => 'ನಾನು ಒಪ್ಪುತ್ತೇನೆ';
+
+  @override
+  String get declineConsent => 'ನಾನು ನಿರಾಕರಿಸುತ್ತೇನೆ';
 }

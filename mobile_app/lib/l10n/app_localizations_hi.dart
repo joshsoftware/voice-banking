@@ -475,4 +475,16 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'वॉयस रीसेट करने में विफल। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get audioStorageConsentTitle => 'ऑडियो संग्रहण सहमति';
+
+  @override
+  String get audioStorageConsentMessage => 'वॉयस बैंकिंग उपयोग करने के लिए, हमें प्रमाणीकरण और प्रसंस्करण के लिए आपके वॉयस रिकॉर्डिंग सिस्टम में संग्रहित करने की आवश्यकता है। क्या आप अपना ऑडियो हमारे साथ संग्रहित करने की सहमति देते हैं?';
+
+  @override
+  String get acceptConsent => 'मैं स्वीकार करता/करती हूं';
+
+  @override
+  String get declineConsent => 'मैं अस्वीकार करता/करती हूं';
 }

@@ -475,4 +475,16 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'વૉઇસ રીસેટ કરવામાં નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો.';
+
+  @override
+  String get audioStorageConsentTitle => 'ઑડિયો સ્ટોરેજ સંમતિ';
+
+  @override
+  String get audioStorageConsentMessage => 'વોઇસ બેન્કિંગ ઉપયોગ કરવા માટે, અધિકૃતીકરણ અને પ્રક્રિયા માટે આપણે તમારી વોઇસ રેકોર્ડિંગ્સ અમારી સિસ્ટમમાં સંગ્રહિત કરવી પડશે. શું તમે તમારું ઑડિયો અમારા સાથે સંગ્રહિત કરવા માટે સંમત છો?';
+
+  @override
+  String get acceptConsent => 'હું સ્વીકારું છું';
+
+  @override
+  String get declineConsent => 'હું અસ્વીકાર કરું છું';
 }

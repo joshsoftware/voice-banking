@@ -475,4 +475,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'Failed to reset voice. Please try again.';
+
+  @override
+  String get audioStorageConsentTitle => 'Audio Storage Consent';
+
+  @override
+  String get audioStorageConsentMessage => 'To use voice banking, we need to store your voice recordings in our system for authentication and processing. Do you consent to storing your audio with us?';
+
+  @override
+  String get acceptConsent => 'I Accept';
+
+  @override
+  String get declineConsent => 'I Decline';
 }

@@ -475,4 +475,16 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'వాయిస్ రీసెట్ చేయడంలో విఫలమైంది. మళ్ళీ ప్రయత్నించండి.';
+
+  @override
+  String get audioStorageConsentTitle => 'ఆడియో నిల్వ సమ్మతి';
+
+  @override
+  String get audioStorageConsentMessage => 'వాయిస్ బ్యాంకింగ్ ఉపయోగించడానికి, ప్రమాణీకరణ మరియు ప్రాసెసింగ్ కోసం మేము మీ వాయిస్ రికార్డింగ్‌లను మా సిస్టమ్‌లో నిల్వ చేయాలి. మీ ఆడియోను మాతో నిల్వ చేయడానికి మీరు అంగీకరిస్తున్నారా?';
+
+  @override
+  String get acceptConsent => 'నేను అంగీకరిస్తాను';
+
+  @override
+  String get declineConsent => 'నేను తిరస్కరిస్తాను';
 }

@@ -998,6 +998,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to reset voice. Please try again.'**
   String get resetVoiceError;
+
+  /// No description provided for @audioStorageConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Storage Consent'**
+  String get audioStorageConsentTitle;
+
+  /// No description provided for @audioStorageConsentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To use voice banking, we need to store your voice recordings in our system for authentication and processing. Do you consent to storing your audio with us?'**
+  String get audioStorageConsentMessage;
+
+  /// No description provided for @acceptConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'I Accept'**
+  String get acceptConsent;
+
+  /// No description provided for @declineConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'I Decline'**
+  String get declineConsent;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

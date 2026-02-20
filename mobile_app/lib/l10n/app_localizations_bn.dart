@@ -475,4 +475,16 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'ভয়েস রিসেট করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get audioStorageConsentTitle => 'অডিও স্টোরেজ সম্মতি';
+
+  @override
+  String get audioStorageConsentMessage => 'ভয়েস ব্যাংকিং ব্যবহার করার জন্য, প্রমাণীকরণ এবং প্রক্রিয়াকরণের জন্য আমাদের সিস্টেমে আপনার ভয়েস রেকর্ডিং সংরক্ষণ করা প্রয়োজন। আপনি কি আপনার অডিও আমাদের সাথে সংরক্ষণ করতে সম্মত?';
+
+  @override
+  String get acceptConsent => 'আমি গ্রহণ করি';
+
+  @override
+  String get declineConsent => 'আমি প্রত্যাখ্যান করি';
 }

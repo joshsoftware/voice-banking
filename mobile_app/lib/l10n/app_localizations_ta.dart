@@ -475,4 +475,16 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'குரலை மீட்டமைக்க தோல்வி. மீண்டும் முயற்சிக்கவும்.';
+
+  @override
+  String get audioStorageConsentTitle => 'ஆடியோ சேமிப்பு ஒப்புதல்';
+
+  @override
+  String get audioStorageConsentMessage => 'குரல் வங்கியைப் பயன்படுத்த, அங்கீகாரம் மற்றும் செயலாக்கத்திற்காக உங்கள் குரல் பதிவுகளை எங்கள் சிஸ்டத்தில் சேமிக்க வேண்டும். உங்கள் ஆடியோவை எங்களிடம் சேமிப்பதற்கு நீங்கள் ஒப்புக்கொள்கிறீர்களா?';
+
+  @override
+  String get acceptConsent => 'நான் ஏற்றுக்கொள்கிறேன்';
+
+  @override
+  String get declineConsent => 'நான் நிராகரிக்கிறேன்';
 }

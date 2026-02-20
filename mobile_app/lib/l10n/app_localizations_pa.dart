@@ -475,4 +475,16 @@ class AppLocalizationsPa extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'ਆਵਾਜ਼ ਰੀਸੈੱਟ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।';
+
+  @override
+  String get audioStorageConsentTitle => 'ਆਡੀਓ ਸਟੋਰੇਜ ਸਹਿਮਤੀ';
+
+  @override
+  String get audioStorageConsentMessage => 'ਵੌਇਸ ਬੈਂਕਿੰਗ ਵਰਤਣ ਲਈ, ਸਾਨੂੰ ਪ੍ਰਮਾਣੀਕਰਨ ਅਤੇ ਪ੍ਰੋਸੈਸਿੰਗ ਲਈ ਤੁਹਾਡੀਆਂ ਆਵਾਜ਼ ਰਿਕਾਰਡਿੰਗਾਂ ਨੂੰ ਸਾਡੀ ਸਿਸਟਮ ਵਿੱਚ ਸਟੋਰ ਕਰਨੀਆਂ ਚਾਹੀਦੀਆਂ ਹਨ। ਕੀ ਤੁਸੀਂ ਆਪਣਾ ਆਡੀਓ ਸਾਡੇ ਨਾਲ ਸਟੋਰ ਕਰਨ ਦੀ ਸਹਿਮਤੀ ਦਿੰਦੇ ਹੋ?';
+
+  @override
+  String get acceptConsent => 'ਮੈਂ ਸਵੀਕਾਰ ਕਰਦਾ/ਕਰਦੀ ਹਾਂ';
+
+  @override
+  String get declineConsent => 'ਮੈਂ ਅਸਵੀਕਾਰ ਕਰਦਾ/ਕਰਦੀ ਹਾਂ';
 }

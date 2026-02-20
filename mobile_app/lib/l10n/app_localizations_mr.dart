@@ -475,4 +475,16 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'व्हॉईस रीसेट करण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.';
+
+  @override
+  String get audioStorageConsentTitle => 'ऑडिओ स्टोरेज संमती';
+
+  @override
+  String get audioStorageConsentMessage => 'व्हॉईस बँकिंग वापरण्यासाठी, प्रमाणीकरण आणि प्रक्रियेसाठी आम्हाला तुमच्या व्हॉईस रेकॉर्डिंग आमच्या सिस्टीममध्ये साठवण्याची गरज आहे. तुम्ही तुमचा ऑडिओ आमच्याकडे साठवण्यास सहमती दिली आहे का?';
+
+  @override
+  String get acceptConsent => 'मी स्वीकारतो/स्वीकारते';
+
+  @override
+  String get declineConsent => 'मी नकार देतो/देते';
 }

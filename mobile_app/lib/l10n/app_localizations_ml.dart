@@ -475,4 +475,16 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get resetVoiceError => 'വോയ്‌സ് പുനഃക്രമീകരിക്കുന്നതിൽ പരാജയപ്പെട്ടു. വീണ്ടും ശ്രമിക്കുക.';
+
+  @override
+  String get audioStorageConsentTitle => 'ഓഡിയോ സ്റ്റോറേജ് സമ്മതം';
+
+  @override
+  String get audioStorageConsentMessage => 'വോയ്‌സ് ബാങ്കിംഗ് ഉപയോഗിക്കാൻ, പ്രാമാണീകരണത്തിനും പ്രോസസ്സിംഗിനും വേണ്ടി ഞങ്ങളുടെ സിസ്റ്റത്തിൽ നിങ്ങളുടെ വോയ്‌സ് റെക്കോർഡിംഗുകൾ സംഭരിക്കേണ്ടതാണ്. നിങ്ങളുടെ ഓഡിയോ ഞങ്ങളോടൊപ്പം സംഭരിക്കാൻ നിങ്ങൾ സമ്മതിക്കുന്നുവോ?';
+
+  @override
+  String get acceptConsent => 'ഞാൻ സമ്മതിക്കുന്നു';
+
+  @override
+  String get declineConsent => 'ഞാൻ നിരസിക്കുന്നു';
 }
