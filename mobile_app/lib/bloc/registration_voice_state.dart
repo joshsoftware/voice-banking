@@ -1,6 +1,8 @@
 /// States for voice registration flow
 sealed class RegistrationVoiceState {}
 
+const _undefined = Object();
+
 /// Initial state
 class RegistrationVoiceInitial extends RegistrationVoiceState {}
 
@@ -15,6 +17,8 @@ class RegistrationVoiceReady extends RegistrationVoiceState {
   final List<String> selectedImageDescriptions; // Descriptions matching selected images
   final String? errorMessage;
   final bool uploadSuccess;
+  /// When recording started (for progress UI); null when not recording
+  final DateTime? recordingStartedAt;
 
   RegistrationVoiceReady({
     required this.currentImageIndex,
@@ -26,6 +30,7 @@ class RegistrationVoiceReady extends RegistrationVoiceState {
     required this.selectedImageDescriptions,
     this.errorMessage,
     this.uploadSuccess = false,
+    this.recordingStartedAt,
   });
 
   /// Check if current image has been recorded
@@ -52,6 +57,7 @@ class RegistrationVoiceReady extends RegistrationVoiceState {
     List<String>? selectedImageDescriptions,
     String? errorMessage,
     bool? uploadSuccess,
+    Object? recordingStartedAt = _undefined,
   }) {
     return RegistrationVoiceReady(
       currentImageIndex: currentImageIndex ?? this.currentImageIndex,
@@ -63,6 +69,9 @@ class RegistrationVoiceReady extends RegistrationVoiceState {
       selectedImageDescriptions: selectedImageDescriptions ?? this.selectedImageDescriptions,
       errorMessage: errorMessage,
       uploadSuccess: uploadSuccess ?? this.uploadSuccess,
+      recordingStartedAt: recordingStartedAt == _undefined
+          ? this.recordingStartedAt
+          : recordingStartedAt as DateTime?,
     );
   }
 }

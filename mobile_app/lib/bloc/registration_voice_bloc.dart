@@ -10,6 +10,13 @@ import '../services/voice_repository.dart';
 import '../services/tts_service.dart';
 
 /// Bloc for managing voice registration flow
+
+/// Maximum recording duration in seconds (used in bloc and UI)
+const kMaxRecordingSeconds = 15;
+
+/// Minimum recording duration in seconds (user must speak at least this long)
+const kMinRecordingSeconds = 5;
+
 class RegistrationVoiceBloc
     extends Bloc<RegistrationVoiceEvent, RegistrationVoiceState> {
   final VoiceRepository _voiceRepository;
@@ -17,7 +24,13 @@ class RegistrationVoiceBloc
   final AudioRecorder _recorder = AudioRecorder();
   
   StreamSubscription? _ttsCompletionSubscription;
+  StreamSubscription<Amplitude>? _amplitudeSubscription;
+  Timer? _recordingLimitTimer;
   bool _isDisposed = false;
+  bool _hasSpoken = false;
+  int _consecutiveAboveThreshold = 0;
+  static const double _speechThreshold = -20;
+  static const int _minConsecutiveForSpeech = 2;
 
   // All available image paths (matching order with descriptions in .arb)
   static const List<String> _allImagePaths = [
@@ -143,11 +156,34 @@ class RegistrationVoiceBloc
         ),
         path: filePath,
       );
+      
 
+      _hasSpoken = false;
+      _consecutiveAboveThreshold = 0;
+      _amplitudeSubscription?.cancel();
+      _amplitudeSubscription = _recorder
+          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .listen((amp) {
+        if (amp.current > _speechThreshold) {
+          _consecutiveAboveThreshold++;
+          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
+            _hasSpoken = true;
+          }
+        } else {
+          _consecutiveAboveThreshold = 0;
+        }
+      });
+
+      final startedAt = DateTime.now();
       emit(currentState.copyWith(
         isRecording: true,
         errorMessage: null,
+        recordingStartedAt: startedAt,
       ));
+      _recordingLimitTimer?.cancel();
+      _recordingLimitTimer = Timer(const Duration(seconds: kMaxRecordingSeconds), () {
+        if (!_isDisposed) add(StopRecording());
+      });
     } catch (e) {
       emit(currentState.copyWith(
         isRecording: false,
@@ -167,6 +203,11 @@ class RegistrationVoiceBloc
 
     if (!currentState.isRecording) return;
 
+    _recordingLimitTimer?.cancel();
+    _recordingLimitTimer = null;
+    await _amplitudeSubscription?.cancel();
+    _amplitudeSubscription = null;
+
     try {
       final path = await _recorder.stop();
 
@@ -174,16 +215,17 @@ class RegistrationVoiceBloc
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording failed. Please try again.',
+          recordingStartedAt: null,
         ));
         return;
       }
 
-      // Check if file exists and has content
       final file = File(path);
       if (!await file.exists()) {
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording file not found. Please try again.',
+          recordingStartedAt: null,
         ));
         return;
       }
@@ -193,11 +235,36 @@ class RegistrationVoiceBloc
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording is empty. Please try again.',
+          recordingStartedAt: null,
         ));
         return;
       }
 
-      // Update recorded file paths
+      // 1) Check duration: compare stop time with recording start
+      final startedAt = currentState.recordingStartedAt;
+      if (startedAt != null) {
+        final durationSec = DateTime.now().difference(startedAt).inSeconds;
+        if (durationSec < kMinRecordingSeconds) {
+          emit(currentState.copyWith(
+            isRecording: false,
+            errorMessage: 'Please speak for at least $kMinRecordingSeconds seconds.',
+            recordingStartedAt: null,
+          ));
+          return;
+        }
+      }
+
+      // 2) Check if user spoke (amplitude above threshold during recording)
+      if (!_hasSpoken) {
+        emit(currentState.copyWith(
+          isRecording: false,
+          errorMessage: 'Please speak something.',
+          recordingStartedAt: null,
+        ));
+        return;
+      }
+
+      // 3) Validation passed: save path and enable Next
       final updatedPaths = List<String>.from(currentState.recordedFilePaths);
       updatedPaths[currentState.currentImageIndex] = path;
 
@@ -205,11 +272,13 @@ class RegistrationVoiceBloc
         isRecording: false,
         recordedFilePaths: updatedPaths,
         errorMessage: null,
+        recordingStartedAt: null,
       ));
     } catch (e) {
       emit(currentState.copyWith(
         isRecording: false,
         errorMessage: 'Failed to stop recording: ${e.toString()}',
+        recordingStartedAt: null,
       ));
     }
   }
@@ -226,6 +295,8 @@ class RegistrationVoiceBloc
     // Stop any ongoing recording or TTS
     if (currentState.isRecording) {
       try {
+        await _amplitudeSubscription?.cancel();
+        _amplitudeSubscription = null;
         await _recorder.stop();
       } catch (e) {
         print('Error stopping recording: $e');
@@ -272,12 +343,34 @@ class RegistrationVoiceBloc
         path: filePath,
       );
 
+      _hasSpoken = false;
+      _consecutiveAboveThreshold = 0;
+      _amplitudeSubscription?.cancel();
+      _amplitudeSubscription = _recorder
+          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .listen((amp) {
+        if (amp.current > _speechThreshold) {
+          _consecutiveAboveThreshold++;
+          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
+            _hasSpoken = true;
+          }
+        } else {
+          _consecutiveAboveThreshold = 0;
+        }
+      });
+
+      final startedAt = DateTime.now();
       emit(currentState.copyWith(
         isRecording: true,
         isTTSPlaying: false,
         recordedFilePaths: updatedPaths,
         errorMessage: null,
+        recordingStartedAt: startedAt,
       ));
+      _recordingLimitTimer?.cancel();
+      _recordingLimitTimer = Timer(const Duration(seconds: kMaxRecordingSeconds), () {
+        if (!_isDisposed) add(StopRecording());
+      });
     } catch (e) {
       emit(currentState.copyWith(
         isRecording: false,
@@ -534,6 +627,10 @@ class RegistrationVoiceBloc
   @override
   Future<void> close() async {
     _isDisposed = true;
+    _recordingLimitTimer?.cancel();
+    _recordingLimitTimer = null;
+    await _amplitudeSubscription?.cancel();
+    _amplitudeSubscription = null;
     
     // Stop recording if active
     try {
