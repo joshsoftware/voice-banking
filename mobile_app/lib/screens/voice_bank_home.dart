@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
@@ -1107,6 +1108,37 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     return _buildClickToSpeakButton(state, context);
   }
 
+  Future<bool> _showAudioStorageConsentDialog(BuildContext context) async {
+    final loc = AppLocalizations.of(context)!;
+    final accepted = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.audioStorageConsentTitle),
+          content: Text(loc.audioStorageConsentMessage),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await SharedPreferencesService.setAudioStorageConsent(false);
+                if (dialogContext.mounted) Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(loc.declineConsent),
+            ),
+            TextButton(
+              onPressed: () async {
+                await SharedPreferencesService.setAudioStorageConsent(true);
+                if (dialogContext.mounted) Navigator.of(dialogContext).pop(true);
+              },
+              child: Text(loc.acceptConsent),
+            ),
+          ],
+        );
+      },
+    );
+    return accepted ?? false;
+  }
+
   Widget _buildClickToSpeakButton(VoiceState state, BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -1122,6 +1154,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       child: FloatingActionButton.extended(
         onPressed: () async {
           final bloc = context.read<VoiceBloc>();
+          final loc = AppLocalizations.of(context)!;
           if (state is VoiceLockout) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -1132,6 +1165,26 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             return;
           }
           if (state is Idle) {
+            // 1. Request microphone permission first
+            var status = await Permission.microphone.status;
+            if (!status.isGranted) {
+              status = await Permission.microphone.request();
+            }
+            if (!status.isGranted || !context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(loc.microphonePermissionRequired),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+              return;
+            }
+            // 2. Show consent dialog if not already consented
+            if (!SharedPreferencesService.hasAudioStorageConsent()) {
+              final accepted = await _showAudioStorageConsentDialog(context);
+              if (!accepted || !context.mounted) return;
+            }
+            // 3. Check voice registration and proceed
             final isVoiceRegistered = SharedPreferencesService.isVoiceRegistered();
             if (!isVoiceRegistered) {
               Navigator.pushNamed(context, '/RegistrationVoice');

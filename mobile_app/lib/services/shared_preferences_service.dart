@@ -15,6 +15,7 @@ class SharedPreferencesService {
   static const String _voiceLockoutUntilKey = 'voice_lockout_until';
   static const String _consecutiveVoiceValidationFailuresKey =
       'consecutive_voice_validation_failures';
+  static const String _audioStorageConsentKey = 'audio_storage_consent';
 
   static SharedPreferences? _prefs;
 
@@ -165,6 +166,17 @@ class SharedPreferencesService {
       await clearVoiceLockout();
       await resetConsecutiveVoiceValidationFailures();
     }
+  }
+
+  /// Returns whether the user has consented to storing their audio in the system.
+  /// Returns false if not set or explicitly declined.
+  static bool hasAudioStorageConsent() {
+    return _prefs?.getBool(_audioStorageConsentKey) ?? false;
+  }
+
+  /// Saves the user's audio storage consent (true = accepted, false = declined).
+  static Future<void> setAudioStorageConsent(bool value) async {
+    await _prefs?.setBool(_audioStorageConsentKey, value);
   }
 
   static Future<void> clearAll() async {
