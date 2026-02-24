@@ -241,6 +241,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         scaffoldMessenger.showSnackBar(snackBar);
+        setState(() {}); // Refresh UI so Register/Unregister button updates
       });
     } catch (e) {
       if (!mounted) return;
@@ -425,6 +426,42 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         style: TextStyle(
                           fontSize: isSmallScreen ? 14 : 16,
                           color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Register Voice / Unregister Voice button
+                      TextButton.icon(
+                        onPressed: () async {
+                          final isRegistered =
+                              SharedPreferencesService.isVoiceRegistered();
+                          if (isRegistered) {
+                            await _resetVoice(context);
+                          } else {
+                            await Navigator.pushNamed(
+                                context, '/RegistrationVoice');
+                            if (mounted) setState(() {});
+                          }
+                        },
+                        icon: Icon(
+                          SharedPreferencesService.isVoiceRegistered()
+                              ? Icons.voice_over_off
+                              : Icons.mic,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        label: Text(
+                          SharedPreferencesService.isVoiceRegistered()
+                              ? "Unregister Voice"
+                              : "Register Voice",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                         ),
                       ),
                     ],
@@ -1184,12 +1221,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
               final accepted = await _showAudioStorageConsentDialog(context);
               if (!accepted || !context.mounted) return;
             }
-            // 3. Check voice registration and proceed
-            final isVoiceRegistered = SharedPreferencesService.isVoiceRegistered();
-            if (!isVoiceRegistered) {
-              Navigator.pushNamed(context, '/RegistrationVoice');
-              return;
-            }
+            // 3. Start voice session (repo will skip verification if voice not registered)
             final sessionId = const Uuid().v4();
             bloc.add(StartListening(
               locale: Localizations.localeOf(context).languageCode,

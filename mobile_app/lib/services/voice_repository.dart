@@ -373,8 +373,10 @@ class VoiceRepository {
 
       ifNotEmptyCallback?.call();
 
-      // Verify voice before transcribing intent (no lockout; user can always retry)
-      await verifyVoice(file);
+      // Verify voice only if user has registered voice; otherwise go straight to transcribe
+      if (SharedPreferencesService.isVoiceRegistered()) {
+        await verifyVoice(file);
+      }
 
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
