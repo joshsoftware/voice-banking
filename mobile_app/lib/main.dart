@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:voice_banking_poc/routes.dart';
 import 'bloc/voice_bloc.dart';
 import 'services/voice_repository.dart';
@@ -9,6 +10,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: '.env');
 
   // Initialize shared preferences
   await SharedPreferencesService.init();

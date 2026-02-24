@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'shared_preferences_service.dart';
 
 /// Thrown when the recorded audio is empty/silent (no speech detected).
@@ -111,7 +112,7 @@ class VoiceRepository {
 
   /// Base URL for the voiceprint enroll API (POST /enroll/{user_id}).
   /// Change this when the final base URL is known.
-  static const String voiceprintEnrollBaseUrl = 'http://192.168.2.43:8000/api/v1';
+  static const String voiceprintEnrollBaseUrl = 'https://zaban.joshsoftware.com/api/v1';
 
   Dio _createEnrollDio() {
     return Dio(BaseOptions(
@@ -121,6 +122,7 @@ class VoiceRepository {
       sendTimeout: const Duration(seconds: 300),
       headers: {
         'Content-Type': 'multipart/form-data',
+        'X-API-Key': dotenv.env['VOICEPRINT_API_KEY'] ?? '',
       },
       persistentConnection: true,
       maxRedirects: 3,
