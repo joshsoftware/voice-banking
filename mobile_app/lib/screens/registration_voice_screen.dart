@@ -74,6 +74,11 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                 actions: [
+                  if (!isUploading)
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text("Skip"),
+                    ),
                   LanguageToggleWidget(color: Colors.black),
                 ],
               ),
