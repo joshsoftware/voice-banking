@@ -472,6 +472,15 @@ class AppLocalizationsKn extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'ಗುಲಾಬಿ ಸಾಂಪ್ರದಾಯಿಕ ಉಡುಪು ಧರಿಸಿದ ಮಹಿಳೆ ಜ್ವಲಿಸುವ ತೈಲ ದೀಪಗಳಿಂದ ಸುತ್ತುವರೆದ ನೆಲದ ಮೇಲೆ ಸುಂದರವಾದ ಬಣ್ಣದ ರಂಗೋಲಿಯನ್ನು ಎಚ್ಚರಿಕೆಯಿಂದ ರಚಿಸುತ್ತಿದ್ದಾಳೆ.';
 
   @override
+  String get skip => 'ಬಿಟ್ಟುಬಿಡಿ';
+
+  @override
+  String get registerVoice => 'ಧ್ವನಿ ನೋಂದಣಿ ಮಾಡಿ';
+
+  @override
+  String get unregisterVoice => 'ಧ್ವನಿ ನೋಂದಣಿ ರದ್ದುಗೊಳಿಸಿ';
+
+  @override
   String get resetVoice => 'ಧ್ವನಿ ಮರುಹೊಂದಿಸಿ';
 
   @override

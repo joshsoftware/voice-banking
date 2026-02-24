@@ -472,6 +472,15 @@ class AppLocalizationsTa extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'இளஞ்சிவப்பு பாரம்பரிய உடை அணிந்த பெண் எரியும் எண்ணெய் விளக்குகளால் சூழப்பட்ட நிலத்தில் அழகான வண்ணமயமான ரங்கோலியை கவனமாக உருவாக்குகிறார்.';
 
   @override
+  String get skip => 'தவிர்';
+
+  @override
+  String get registerVoice => 'குரலை பதிவு செய்';
+
+  @override
+  String get unregisterVoice => 'குரல் பதிவை ரத்து செய்';
+
+  @override
   String get resetVoice => 'குரலை மீட்டமை';
 
   @override

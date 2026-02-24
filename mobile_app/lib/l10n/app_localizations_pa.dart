@@ -472,6 +472,15 @@ class AppLocalizationsPa extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'ਗੁਲਾਬੀ ਪਰੰਪਰਾਗਤ ਪੋਸ਼ਾਕ ਵਿੱਚ ਇੱਕ ਔਰਤ ਚਮਕਦੇ ਤੇਲ ਦੇ ਦੀਵਿਆਂ ਨਾਲ ਘਿਰੀ ਜ਼ਮੀਨ \'ਤੇ ਸੁੰਦਰ ਰੰਗੀਨ ਰੰਗੋਲੀ ਧਿਆਨ ਨਾਲ ਬਣਾ ਰਹੀ ਹੈ।';
 
   @override
+  String get skip => 'ਛੱਡੋ';
+
+  @override
+  String get registerVoice => 'ਆਵਾਜ਼ ਰਜਿਸਟਰ ਕਰੋ';
+
+  @override
+  String get unregisterVoice => 'ਆਵਾਜ਼ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਰੱਦ ਕਰੋ';
+
+  @override
   String get resetVoice => 'ਆਵਾਜ਼ ਰੀਸੈੱਟ ਕਰੋ';
 
   @override

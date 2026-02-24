@@ -472,6 +472,15 @@ class AppLocalizationsMl extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'പിങ്ക് പരമ്പരാഗത വസ്ത്രം ധരിച്ച ഒരു സ്ത്രീ ജ്വലിക്കുന്ന എണ്ണ ദീപങ്ങളാൽ ചുറ്റപ്പെട്ട നിലത്ത് മനോഹരമായ വർണ്ണാഭമായ രംഗോലി ശ്രദ്ധാപൂർവ്വം നിർമ്മിക്കുന്നു.';
 
   @override
+  String get skip => 'ഒഴിവാക്കുക';
+
+  @override
+  String get registerVoice => 'വോയ്‌സ് രജിസ്റ്റർ ചെയ്യുക';
+
+  @override
+  String get unregisterVoice => 'വോയ്‌സ് രജിസ്റ്റർ റദ്ദാക്കുക';
+
+  @override
   String get resetVoice => 'വോയ്‌സ് പുനഃക്രമീകരിക്കുക';
 
   @override

@@ -472,6 +472,15 @@ class AppLocalizationsTe extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'పింక్ సాంప్రదాయ వస్త్రం ధరించిన మహిళ మెరిసే నూనె దీపాలతో చుట్టుకొన్న నేల మీద అందమైన రంగురంగుల రంగోలిని జాగ్రత్తగా సృష్టిస్తోంది.';
 
   @override
+  String get skip => 'దాటవేయి';
+
+  @override
+  String get registerVoice => 'వాయిస్ నమోదు చేయండి';
+
+  @override
+  String get unregisterVoice => 'వాయిస్ నమోదు రద్దు చేయండి';
+
+  @override
   String get resetVoice => 'వాయిస్ రీసెట్ చేయి';
 
   @override

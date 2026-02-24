@@ -472,6 +472,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.';
 
   @override
+  String get skip => 'Skip';
+
+  @override
+  String get registerVoice => 'Register Voice';
+
+  @override
+  String get unregisterVoice => 'Unregister Voice';
+
+  @override
   String get resetVoice => 'Reset Voice';
 
   @override

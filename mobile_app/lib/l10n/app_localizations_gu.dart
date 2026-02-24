@@ -472,6 +472,15 @@ class AppLocalizationsGu extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'ગુલાબી પરંપરાગત પોશાકમાં એક સ્ત્રી ઝગમગતા તેલના દીવાસોથી ઘેરાયેલી જમીન પર સુંદર રંગીન રંગોળી કાળજીથી બનાવે છે।';
 
   @override
+  String get skip => 'છોડો';
+
+  @override
+  String get registerVoice => 'વૉઇસ નોંધણી કરો';
+
+  @override
+  String get unregisterVoice => 'વૉઇસ નોંધણી રદ કરો';
+
+  @override
   String get resetVoice => 'વૉઇસ રીસેટ કરો';
 
   @override

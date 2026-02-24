@@ -472,6 +472,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'গোলাপী ঐতিহ্যবাহী পোশাক পরা একজন মহিলা জ্বলন্ত তেলের দিয়ার মধ্যে মাটিতে সুন্দর রঙিন রঙ্গোলি সাবধানে তৈরি করছেন।';
 
   @override
+  String get skip => 'এড়িয়ে যান';
+
+  @override
+  String get registerVoice => 'ভয়েস নিবন্ধন করুন';
+
+  @override
+  String get unregisterVoice => 'ভয়েস নিবন্ধন বাতিল করুন';
+
+  @override
   String get resetVoice => 'ভয়েস রিসেট করুন';
 
   @override

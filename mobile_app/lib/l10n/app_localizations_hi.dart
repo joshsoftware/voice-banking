@@ -472,6 +472,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get imageDescriptionWomenDiwaliCelebration => 'गुलाबी पारंपरिक पोशाक वाली एक महिला जगमगाते तेल के दीयों से घिरी ज़मीन पर सुंदर रंगीन रंगोली बना रही है।';
 
   @override
+  String get skip => 'छोड़ें';
+
+  @override
+  String get registerVoice => 'वॉयस पंजीकृत करें';
+
+  @override
+  String get unregisterVoice => 'वॉयस पंजीकरण रद्द करें';
+
+  @override
   String get resetVoice => 'वॉयस रीसेट करें';
 
   @override

@@ -981,6 +981,24 @@ abstract class AppLocalizations {
   /// **'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.'**
   String get imageDescriptionWomenDiwaliCelebration;
 
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @registerVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Voice'**
+  String get registerVoice;
+
+  /// No description provided for @unregisterVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unregister Voice'**
+  String get unregisterVoice;
+
   /// No description provided for @resetVoice.
   ///
   /// In en, this message translates to:
