@@ -5,8 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:android_id/android_id.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'shared_preferences_service.dart';
+
+Future<String?> getAndroidDeviceId() async {
+  const androidIdPlugin = AndroidId();
+  final String? androidId = await androidIdPlugin.getId();
+  return androidId;
+}
 
 /// Thrown when the recorded audio is empty/silent (no speech detected).
 class EmptyRecordingException implements Exception {
@@ -188,20 +195,19 @@ class VoiceRepository {
     }
   }
 
-  /// Gets the native device ID (Android fingerprint or iOS identifierForVendor).
-  /// Falls back to a UUID-based device ID if native ID is unavailable.
+  /// Gets the native device ID (Android ID or iOS identifierForVendor).
+  /// Falls back to a combination of device identifiers if native ID is unavailable.
   Future<String> _getDeviceId() async {
     try {
       final deviceInfo = DeviceInfoPlugin();
-      
+
       if (Platform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
-        // Use fingerprint (unique per device/build) as device identifier
-        final deviceId = androidInfo.id;
-        if (deviceId.isNotEmpty && deviceId != 'unknown') {
-          return deviceId;
+        final String? androidId = await getAndroidDeviceId();
+        if (androidId != null && androidId.isNotEmpty) {
+          return androidId;
         }
         // Fallback to a combination of device identifiers
+        final androidInfo = await deviceInfo.androidInfo;
         final deviceIdentifier = '${androidInfo.manufacturer}_${androidInfo.model}_${androidInfo.device}';
         if (deviceIdentifier.isNotEmpty) {
           return deviceIdentifier.replaceAll(' ', '_');
@@ -582,11 +588,13 @@ class VoiceRepository {
       // Check for stored user_id first
       // String? userId = SharedPreferencesService.getVoiceprintUserId();
       final deviceId = await _getDeviceId();
-      final customerId = await SharedPreferencesService.getCustomerId();
+      String? customerId = await SharedPreferencesService.getCustomerId();
 
       if(customerId == null || customerId.isEmpty) {
         throw Exception("Customer ID not found in shared preferences");
       }
+
+      customerId += deviceId;
       
       // If not found, create new user_id: deviceId + random(1..100)
       // if (userId == null || userId.isEmpty) {
