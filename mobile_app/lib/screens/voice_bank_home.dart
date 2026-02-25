@@ -238,11 +238,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.fixed,
       );
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        scaffoldMessenger.showSnackBar(snackBar);
-        setState(() {}); // Refresh UI so Register/Unregister button updates
-      });
+      scaffoldMessenger.showSnackBar(snackBar);
+      setState(() {}); // Refresh UI so Register/Unregister button updates
     } catch (e) {
       if (!mounted) return;
       final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -251,10 +248,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.fixed,
       );
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        scaffoldMessenger.showSnackBar(snackBar);
-      });
+      scaffoldMessenger.showSnackBar(snackBar);
     }
   }
 

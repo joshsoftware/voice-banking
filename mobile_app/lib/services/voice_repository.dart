@@ -142,15 +142,17 @@ class VoiceRepository {
   /// Frontend tracks consecutive failures. On any fail → [VoiceValidationFailedException]
   /// (no block/lockout; UI shows "go to a silent room & try again or try later").
   Future<Map<String, dynamic>> verifyVoice(File audioFile) async {
-    final customerId = SharedPreferencesService.getCustomerId();
-    if (customerId == null || customerId.isEmpty) {
-      throw Exception("Customer ID not found. Please log in again.");
-    }
+    // final customerId = SharedPreferencesService.getCustomerId();
+    // if (customerId == null || customerId.isEmpty) {
+    //   throw Exception("Customer ID not found. Please log in again.");
+    // }
 
+    final deviceId = await _getDeviceId();
+    
     final form = FormData.fromMap({
       'file': await MultipartFile.fromFile(audioFile.path, filename: 'recording.wav'),
     });
-    form.fields.add(MapEntry('customer_id', customerId.toString()));
+    form.fields.add(MapEntry('customer_id', deviceId.toString()));
 
     final verifyDio = _createEnrollDio();
     verifyDio.interceptors.add(LogInterceptor(
@@ -161,7 +163,7 @@ class VoiceRepository {
 
     try {
       log('Voice Verify - POST /voiceprint/verify');
-      log('Customer ID - $customerId');
+      log('Customer ID - $deviceId');
       final res = await verifyDio.post('/voiceprint/verify', data: form);
       verifyDio.close();
 
@@ -588,13 +590,13 @@ class VoiceRepository {
       // Check for stored user_id first
       // String? userId = SharedPreferencesService.getVoiceprintUserId();
       final deviceId = await _getDeviceId();
-      String? customerId = await SharedPreferencesService.getCustomerId();
+      // String? customerId = await SharedPreferencesService.getCustomerId();
 
-      if(customerId == null || customerId.isEmpty) {
-        throw Exception("Customer ID not found in shared preferences");
-      }
+      // if(customerId == null || customerId.isEmpty) {
+      //   throw Exception("Customer ID not found in shared preferences");
+      // }
 
-      customerId += deviceId;
+      // customerId += deviceId;
       
       // If not found, create new user_id: deviceId + random(1..100)
       // if (userId == null || userId.isEmpty) {
@@ -615,7 +617,7 @@ class VoiceRepository {
         MapEntry('files', await MultipartFile.fromFile(audio3.path, filename: 'sample3.wav')),
       ]);
       form.fields.add(MapEntry('device_id', deviceId.toString()));
-      form.fields.add(MapEntry('customer_id', customerId.toString()));
+      form.fields.add(MapEntry('customer_id', deviceId.toString()));
 
       final enrollDio = _createEnrollDio();
       enrollDio.interceptors.add(LogInterceptor(
@@ -626,7 +628,7 @@ class VoiceRepository {
 
       log('Voice Enrollment - POST /voiceprint/enroll');
       log('Voice Enrollment - device_id: $deviceId');
-      log('Voice Enrollment - customer_id: $customerId');
+      log('Voice Enrollment - customer_id: $deviceId');
       log('Voice Enrollment - Audio files: ${audio1.path}, ${audio2.path}, ${audio3.path}');
 
       final res = await enrollDio.post('/voiceprint/enroll', data: form);
@@ -667,9 +669,9 @@ class VoiceRepository {
   /// DELETE /voiceprint/ with body: { customer_id }
   /// Caller should call SharedPreferencesService.setVoiceRegistered(false) on 200.
   Future<void> deleteVoiceprint(String customerId) async {
-    if (customerId.isEmpty) {
-      throw Exception("Customer ID is required");
-    }
+    // if (customerId.isEmpty) {
+    //   throw Exception("Customer ID is required");
+    // }
     final deleteDio = _createEnrollDio();
     deleteDio.interceptors.add(LogInterceptor(
       requestBody: true,
@@ -677,10 +679,11 @@ class VoiceRepository {
       logPrint: (obj) => log('Dio: $obj'),
     ));
     try {
-      log('Voice Delete - DELETE /voiceprint/ customer_id: $customerId');
+      final deviceId = await _getDeviceId();
+      log('Voice Delete - DELETE /voiceprint/ customer_id: $deviceId');
       final res = await deleteDio.delete(
         '/voiceprint/',
-        queryParameters: {'customer_id': customerId},
+        queryParameters: {'customer_id': deviceId},
         options: Options(
           headers: {'Content-Type': 'application/json'},
         ),
