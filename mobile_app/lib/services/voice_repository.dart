@@ -141,12 +141,7 @@ class VoiceRepository {
   /// Backend response: { is_voice_valid } only.
   /// Frontend tracks consecutive failures. On any fail → [VoiceValidationFailedException]
   /// (no block/lockout; UI shows "go to a silent room & try again or try later").
-  Future<Map<String, dynamic>> verifyVoice(File audioFile) async {
-    // final customerId = SharedPreferencesService.getCustomerId();
-    // if (customerId == null || customerId.isEmpty) {
-    //   throw Exception("Customer ID not found. Please log in again.");
-    // }
-
+  Future<Map<String, dynamic>> verifyVoice(File audioFile, {CancelToken? cancelToken}) async {
     final deviceId = await _getDeviceId();
     
     final form = FormData.fromMap({
@@ -164,7 +159,11 @@ class VoiceRepository {
     try {
       log('Voice Verify - POST /voiceprint/verify');
       log('Customer ID - $deviceId');
-      final res = await verifyDio.post('/voiceprint/verify', data: form);
+      final res = await verifyDio.post(
+        '/voiceprint/verify',
+        data: form,
+        cancelToken: cancelToken,
+      );
       verifyDio.close();
 
       final data = res.data is Map<String, dynamic> ? res.data as Map<String, dynamic> : <String, dynamic>{};
@@ -182,6 +181,8 @@ class VoiceRepository {
       throw VoiceValidationFailedException(count);
     } on DioException catch (e) {
       verifyDio.close();
+      // Re-throw cancellation so the caller (stopAndTranscribe) propagates it up to VoiceBloc.
+      if (CancelToken.isCancel(e)) rethrow;
       log('Voice Verify - DioException: ${e.type} - ${e.message}');
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
@@ -347,6 +348,7 @@ class VoiceRepository {
   Future<Map<String, dynamic>> stopAndTranscribe(
       {locale = 'en',
       required String sessionId,
+      CancelToken? cancelToken,
       Function()? ifNotEmptyCallback}) async {
     try {
       _initialSilenceTimer?.cancel();
@@ -383,7 +385,7 @@ class VoiceRepository {
 
       // Verify voice only if user has registered voice; otherwise go straight to transcribe
       if (SharedPreferencesService.isVoiceRegistered()) {
-        await verifyVoice(file);
+        await verifyVoice(file, cancelToken: cancelToken);
       }
 
       // Get phone number from shared preferences
@@ -409,12 +411,18 @@ class VoiceRepository {
       ));
       log('Form data: ${form.fields.toString()}');
       log('Form data: ${form.files.toString()}');
-      final res = await freshDio.post('/voice/transcribe-intent', data: form);
-      freshDio.close(); // Close the fresh client after use
+      final res = await freshDio.post(
+        '/voice/transcribe-intent',
+        data: form,
+        cancelToken: cancelToken,
+      );
+      freshDio.close();
 
       res.data['lang'] = locale ?? 'en';
       return res.data;
     } on DioException catch (e) {
+      // Re-throw cancellation so the caller (VoiceBloc) can detect it.
+      if (CancelToken.isCancel(e)) rethrow;
       print("Voice Repository Error - DioException: ${e.type} - ${e.message}");
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
@@ -436,7 +444,8 @@ class VoiceRepository {
   Future<Map<String, dynamic>> verifyOtpWithTranscribe(
       {required String otp,
       required String sessionId,
-      required String locale}) async {
+      required String locale,
+      CancelToken? cancelToken}) async {
     try {
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
@@ -456,11 +465,19 @@ class VoiceRepository {
 
       // Use a fresh HTTP client for each request to avoid connection issues
       final freshDio = _createFreshDio();
-      final res = await freshDio.post('/voice/transcribe-intent', data: form);
-      freshDio.close(); // Close the fresh client after use
+      final res = await freshDio.post(
+        '/voice/transcribe-intent',
+        data: form,
+        cancelToken: cancelToken,
+      );
+      freshDio.close();
       res.data['lang'] = locale;
 
       return res.data;
+    } on DioException catch (e) {
+      if (CancelToken.isCancel(e)) rethrow;
+      print("Voice Repository Error - OTP verification API call failed: $e");
+      rethrow;
     } catch (e) {
       print("Voice Repository Error - OTP verification API call failed: $e");
       rethrow;
@@ -523,7 +540,8 @@ class VoiceRepository {
       required String locale,
       String? beneficiaryId,
       String? beneficiaryName,
-      double? originalAmount}) async {
+      double? originalAmount,
+      CancelToken? cancelToken}) async {
     try {
       // Get phone number from shared preferences
       final phone = SharedPreferencesService.getMobileNumber();
@@ -531,9 +549,6 @@ class VoiceRepository {
         throw Exception("Phone number not found in shared preferences");
       }
 
-      // No audio file needed - API now only requires beneficiary_name, session_id, and phone
-
-      // Call the API with only the required fields: beneficiary_name, session_id, phone
       final formData = <String, dynamic>{
         'session_id': sessionId.toString(),
         'phone': phone,
@@ -544,12 +559,18 @@ class VoiceRepository {
 
       // Use a fresh HTTP client for each request to avoid connection issues
       final freshDio = _createFreshDio();
-      final res = await freshDio.post('/voice/transcribe-intent', data: form);
-      freshDio.close(); // Close the fresh client after use
+      final res = await freshDio.post(
+        '/voice/transcribe-intent',
+        data: form,
+        cancelToken: cancelToken,
+      );
+      freshDio.close();
       res.data['lang'] = locale;
 
       return res.data;
     } on DioException catch (e) {
+      // Re-throw cancellation so the caller (VoiceBloc / UI) can detect it.
+      if (CancelToken.isCancel(e)) rethrow;
       print("Voice Repository Error - DioException: ${e.type} - ${e.message}");
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||

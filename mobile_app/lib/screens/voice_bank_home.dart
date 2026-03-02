@@ -1927,11 +1927,12 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                   sessionId: sessionId,
                                   locale: currentLocale,
                                   beneficiaryName: name,
+                                  cancelToken: bloc.activeCancelToken,
                                 );
 
                                 // Process the response through the voice bloc
                                 bloc.add(
-                                    GotTranscript(response, currentLocale));
+                                    GotTranscript(response, currentLocale, bloc.activeRequestId));
                               } catch (error) {
                                 print(
                                     "Error selecting duplicate beneficiary: $error");

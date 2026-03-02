@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/models.dart' as models;
@@ -86,13 +87,18 @@ class StartListening extends VoiceEvent {
 class StopListening extends VoiceEvent {
   final String locale;
   final String sessionId;
-  StopListening({required this.locale, required this.sessionId});
+  /// Snapshot of the active request ID at the moment this event was created.
+  /// Used to detect stale events that arrived after a cancel/restart.
+  final int requestId;
+  StopListening({required this.locale, required this.sessionId, required this.requestId});
 }
 
 class GotTranscript extends VoiceEvent {
   final Map<String, dynamic> data;
   final String locale;
-  GotTranscript(this.data, this.locale);
+  /// Snapshot of the active request ID when this transcript was requested.
+  final int requestId;
+  GotTranscript(this.data, this.locale, this.requestId);
 }
 
 class Reset extends VoiceEvent {}
@@ -120,29 +126,59 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
   String _currentLocale = 'en'; // Track current locale
   /// BuildContext of the currently shown dialog (excluding logout). Cleared when dialog is closed or when user speaks and we pop it.
   BuildContext? currentDialogContext;
-  /// Set when user cancels; skip any further TTS and reset to Idle.
-  bool _voiceSessionCancelled = false;
+
+  /// Monotonically-increasing counter. Each new voice session gets a unique ID.
+  /// Any async handler that captured an older ID must abort when it resumes,
+  /// because a newer session has since started (or the session was cancelled).
+  int _activeRequestId = 0;
+
+  /// Public read-only access to the current active request ID.
+  /// Use this when constructing a [GotTranscript] event from outside the bloc
+  /// (e.g. after a user-initiated action like selecting a duplicate beneficiary).
+  int get activeRequestId => _activeRequestId;
+
+  /// Cancel token for the currently in-flight Dio transcribe request.
+  /// Cancelled whenever a new session starts or the user cancels.
+  CancelToken? _activeCancelToken;
+
+  /// Public read-only access to the current cancel token.
+  /// Use this when making a repository call from outside the bloc (e.g. UI)
+  /// so it participates in the same cancellation lifecycle as the active session.
+  CancelToken? get activeCancelToken => _activeCancelToken;
 
   VoiceBloc(this.repo) : super(Idle()) {
     on<StartListening>((e, emit) async {
-      _voiceSessionCancelled = false;
+      // Invalidate any in-flight request from a previous session.
+      _activeRequestId++;
+      _activeCancelToken?.cancel('New voice session started');
+      _activeCancelToken = null;
+
       try {
+        final myRequestId = _activeRequestId;
         await repo.start(
-          onIdle: () => add(StopListening(locale: e.locale, sessionId: e.sessionId)),
+          onIdle: () {
+            if (_activeRequestId == myRequestId) {
+              add(StopListening(locale: e.locale, sessionId: e.sessionId, requestId: myRequestId));
+            }
+          },
           idleDuration: const Duration(seconds: 2),
-          onInitialSilence: () => add(InitialSilence(locale: e.locale)),
+          onInitialSilence: () {
+            if (_activeRequestId == myRequestId) {
+              add(InitialSilence(locale: e.locale));
+            }
+          },
           initialSilenceDuration: const Duration(seconds: 12),
           onSilenceReminder: () async {
-            if (_voiceSessionCancelled) return;
+            if (_activeRequestId != myRequestId) return;
             final message = TranslationService.translateResponse(
                 'empty_recording', e.locale, null);
-            if (_voiceSessionCancelled) return;
+            if (_activeRequestId != myRequestId) return;
             try {
               await tts.speak(message, langCode: e.locale);
             } catch (e) {
               print("TTS Error: $e");
             }
-            if (_voiceSessionCancelled) return;
+            if (_activeRequestId != myRequestId) return;
           },
           silenceReminderDuration: const Duration(seconds: 5),
         );
@@ -163,7 +199,10 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<CancelVoiceSession>((e, emit) async {
-      _voiceSessionCancelled = true;
+      // Invalidate any in-flight request so its async continuations abort.
+      _activeRequestId++;
+      _activeCancelToken?.cancel('User cancelled voice session');
+      _activeCancelToken = null;
       try {
         await repo.stopWithoutTranscribe();
       } catch (err) {
@@ -178,14 +217,23 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<StopListening>((e, emit) async {
+      // Abort if this event belongs to a superseded session.
+      if (e.requestId != _activeRequestId) return;
+
       emit(Transcribing());
-      _currentLocale = e.locale; // Store current locale
+      _currentLocale = e.locale;
+
+      // Create a cancel token for this specific HTTP request so it can be
+      // aborted if the user cancels or starts a new session mid-flight.
+      final cancelToken = CancelToken();
+      _activeCancelToken = cancelToken;
 
       print("Voice Bloc Debug - Processing normal voice input");
       try {
         final data = await repo.stopAndTranscribe(
           locale: e.locale,
           sessionId: e.sessionId,
+          cancelToken: cancelToken,
           ifNotEmptyCallback: () {
             if (currentDialogContext != null && currentDialogContext!.mounted) {
               Navigator.of(currentDialogContext!).pop();
@@ -193,32 +241,46 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             }
           },
         );
-        add(GotTranscript(data, e.locale));
+
+        // Guard: session may have been cancelled while the HTTP call was in-flight.
+        if (e.requestId != _activeRequestId) return;
+
+        add(GotTranscript(data, e.locale, e.requestId));
       } on EmptyRecordingException catch (_) {
+        if (e.requestId != _activeRequestId) return;
         emit(RecordingEmpty());
         add(Reset());
       } on VoiceValidationFailedException catch (ve) {
-        // 3+ failures: suggest silent room (no block)
-        final messageKey = ve.consecutiveFailures >= 3
-            ? 'voice_validation_silent_room_retry'
-            : 'voice_validation_failed';
+        if (e.requestId != _activeRequestId) return;
+        final messageKey = 'voice_validation_failed';
         final message = TranslationService.translateResponse(
           messageKey,
           e.locale,
           null,
         );
-        if (!_voiceSessionCancelled) {
+        if (e.requestId == _activeRequestId) {
           try {
             await tts.speak(message, langCode: e.locale);
           } catch (err) {
             print("TTS Error on voice validation failed: $err");
           }
         }
+        if (e.requestId != _activeRequestId) return;
         emit(VoiceValidationFailed(ve.consecutiveFailures, message));
         add(Reset());
+      } on DioException catch (err) {
+        if (CancelToken.isCancel(err)) {
+          print("Voice Bloc - Request cancelled: ${err.message}");
+          return;
+        }
+        print("Voice Bloc Error - Stop/transcribe failed: $err");
+        if (e.requestId == _activeRequestId) emit(Idle());
       } catch (err) {
         print("Voice Bloc Error - Stop/transcribe failed: $err");
-        emit(Idle());
+        if (e.requestId == _activeRequestId) emit(Idle());
+      } finally {
+        // Clear the cancel token if it's still ours.
+        if (_activeCancelToken == cancelToken) _activeCancelToken = null;
       }
     });
 
@@ -227,26 +289,53 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
     });
 
     on<VerifyOtp>((e, emit) async {
+      // OTP verification is a user-initiated action; treat it as a new request.
+      _activeRequestId++;
+      _activeCancelToken?.cancel('OTP verification started');
+      final myRequestId = _activeRequestId;
+      final cancelToken = CancelToken();
+      _activeCancelToken = cancelToken;
+
       emit(Transcribing());
 
       try {
-        // Call the transcribe API with OTP in header
         final data = await repo.verifyOtpWithTranscribe(
-            otp: e.otp, sessionId: e.sessionId, locale: e.locale);
+            otp: e.otp, sessionId: e.sessionId, locale: e.locale,
+            cancelToken: cancelToken);
 
-        // Process the response similar to GotTranscript
-        add(GotTranscript(data, e.locale));
+        if (myRequestId != _activeRequestId) return;
+        add(GotTranscript(data, e.locale, myRequestId));
+      } on DioException catch (err) {
+        if (CancelToken.isCancel(err)) return;
+        print("OTP Verification Error: $err");
+        if (myRequestId == _activeRequestId) {
+          emit(Executing("OTP verification failed. Please try again.",
+              VoiceIntent(VoiceIntentType.unknown)));
+          add(Reset());
+        }
       } catch (error) {
         print("OTP Verification Error: $error");
-        emit(Executing("OTP verification failed. Please try again.",
-            VoiceIntent(VoiceIntentType.unknown)));
-        add(Reset());
+        if (myRequestId == _activeRequestId) {
+          emit(Executing("OTP verification failed. Please try again.",
+              VoiceIntent(VoiceIntentType.unknown)));
+          add(Reset());
+        }
+      } finally {
+        if (_activeCancelToken == cancelToken) _activeCancelToken = null;
       }
     });
 
     on<GotTranscript>((e, emit) async {
+      // Abort immediately if this transcript belongs to a superseded session.
+      if (e.requestId != _activeRequestId) {
+        print("Voice Bloc - Discarding stale GotTranscript (requestId=${e.requestId}, active=$_activeRequestId)");
+        return;
+      }
+
       print("=== NEW VOICE BLOC CODE IS RUNNING - LANGUAGE FIX VERSION ===");
       print("Voice Bloc Debug - GotTranscript handler started");
+      // Capture the request ID for all subsequent guards within this handler.
+      final myRequestId = e.requestId;
       // Get orchestrator data and intent data
       final orchestratorData = e.data["orchestrator_data"];
       final intentData = e.data["intent_data"];
@@ -325,13 +414,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
             originalMessage, _currentLocale, context);
 
         // Speak the translated message
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
 
         // Show transactions dialog
         emit(
@@ -383,13 +472,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         print("Voice Bloc Debug - Translated message: $translatedMessage");
 
         // Speak the translated message
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
 
         // Show beneficiaries dialog
         print("Voice Bloc Debug - Emitting ShowBeneficiariesDialog");
@@ -422,13 +511,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               {'amount': amount.toString(), 'recipient': recipient});
 
           // Speak the translated message
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
 
           // Show OTP dialog
           emit(ShowOtpDialog(translatedMessage, sessionId, recipient, amount));
@@ -457,13 +546,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               message, _currentLocale, {});
 
           // Speak the translated message
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
 
           // Show duplicate beneficiaries dialog
           emit(ShowDuplicateDialog(translatedMessage, sessionId, beneficiaries,
@@ -508,13 +597,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           print("Voice Bloc Debug - Translated message: $translatedMessage");
 
           // Speak the translated message
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
           try {
             await tts.speak(translatedMessage, langCode: ttsLanguage);
           } catch (e) {
             print("TTS Error: $e");
           }
-          if (_voiceSessionCancelled) return;
+          if (myRequestId != _activeRequestId) return;
 
           // Show the error message
           emit(Executing(
@@ -626,13 +715,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
         String translatedMessage = TranslationService.translateApiResponse(
             originalMessage, _currentLocale, context);
 
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
         try {
           await tts.speak(translatedMessage, langCode: ttsLanguage);
         } catch (e) {
           print("TTS Error: $e");
         }
-        if (_voiceSessionCancelled) return;
+        if (myRequestId != _activeRequestId) return;
 
         // Determine intent type for execution state
         VoiceIntentType intentType = VoiceIntentType.unknown;
