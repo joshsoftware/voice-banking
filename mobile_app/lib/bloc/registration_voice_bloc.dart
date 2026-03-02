@@ -29,7 +29,9 @@ class RegistrationVoiceBloc
   bool _isDisposed = false;
   bool _hasSpoken = false;
   int _consecutiveAboveThreshold = 0;
+  /// dBFS threshold for speech detection. -20 dBFS is a reasonable default for speech.
   static const double _speechThreshold = -20;
+  /// Number of consecutive amplitude samples above threshold to confirm speech.
   static const int _minConsecutiveForSpeech = 2;
 
   // All available image paths (matching order with descriptions in .arb)
@@ -162,19 +164,27 @@ class RegistrationVoiceBloc
       _consecutiveAboveThreshold = 0;
       _amplitudeSubscription?.cancel();
       _amplitudeSubscription = _recorder
-          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .onAmplitudeChanged(const Duration(milliseconds: 500))
           .listen((amp) {
-        if (amp.current > _speechThreshold) {
+        final isSilent = amp.current <= _speechThreshold;
+        print('[RegVoice] amp=${amp.current.toStringAsFixed(1)} dBFS | silent=$isSilent | hasSpoken=$_hasSpoken | consecutive=$_consecutiveAboveThreshold');
+
+        if (!isSilent) {
           _consecutiveAboveThreshold++;
-          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
+          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech && !_hasSpoken) {
             _hasSpoken = true;
+            print('[RegVoice] ✅ Speech confirmed after $_consecutiveAboveThreshold consecutive samples');
           }
         } else {
           _consecutiveAboveThreshold = 0;
+          if (!_hasSpoken) {
+            print('[RegVoice] ⏳ Silent — waiting for user to start speaking');
+          }
         }
       });
 
       final startedAt = DateTime.now();
+      print('[RegVoice] 🎙 Recording started');
       emit(currentState.copyWith(
         isRecording: true,
         errorMessage: null,
@@ -209,9 +219,11 @@ class RegistrationVoiceBloc
     _amplitudeSubscription = null;
 
     try {
+      print('[RegVoice] ⏹ Recording stopped — validating');
       final path = await _recorder.stop();
 
       if (path == null || path.isEmpty) {
+        print('[RegVoice] ❌ Validation failed: no file path returned');
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording failed. Please try again.',
@@ -222,6 +234,7 @@ class RegistrationVoiceBloc
 
       final file = File(path);
       if (!await file.exists()) {
+        print('[RegVoice] ❌ Validation failed: file not found at $path');
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording file not found. Please try again.',
@@ -231,7 +244,9 @@ class RegistrationVoiceBloc
       }
 
       final fileSize = await file.length();
+      print('[RegVoice] 📁 File size: ${fileSize} bytes');
       if (fileSize == 0) {
+        print('[RegVoice] ❌ Validation failed: file is empty');
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Recording is empty. Please try again.',
@@ -244,7 +259,9 @@ class RegistrationVoiceBloc
       final startedAt = currentState.recordingStartedAt;
       if (startedAt != null) {
         final durationSec = DateTime.now().difference(startedAt).inSeconds;
+        print('[RegVoice] ⏱ Duration: ${durationSec}s (min: ${kMinRecordingSeconds}s)');
         if (durationSec < kMinRecordingSeconds) {
+          print('[RegVoice] ❌ Validation failed: too short (${durationSec}s < ${kMinRecordingSeconds}s)');
           emit(currentState.copyWith(
             isRecording: false,
             errorMessage: 'Please speak for at least $kMinRecordingSeconds seconds.',
@@ -255,7 +272,9 @@ class RegistrationVoiceBloc
       }
 
       // 2) Check if user spoke (amplitude above threshold during recording)
+      print('[RegVoice] 🗣 hasSpoken=$_hasSpoken');
       if (!_hasSpoken) {
+        print('[RegVoice] ❌ Validation failed: no speech detected above threshold');
         emit(currentState.copyWith(
           isRecording: false,
           errorMessage: 'Please speak something.',
@@ -265,6 +284,7 @@ class RegistrationVoiceBloc
       }
 
       // 3) Validation passed: save path and enable Next
+      print('[RegVoice] ✅ Validation passed — recording accepted');
       final updatedPaths = List<String>.from(currentState.recordedFilePaths);
       updatedPaths[currentState.currentImageIndex] = path;
 
@@ -347,19 +367,27 @@ class RegistrationVoiceBloc
       _consecutiveAboveThreshold = 0;
       _amplitudeSubscription?.cancel();
       _amplitudeSubscription = _recorder
-          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .onAmplitudeChanged(const Duration(milliseconds: 500))
           .listen((amp) {
-        if (amp.current > _speechThreshold) {
+        final isSilent = amp.current <= _speechThreshold;
+        print('[RegVoice] amp=${amp.current.toStringAsFixed(1)} dBFS | silent=$isSilent | hasSpoken=$_hasSpoken | consecutive=$_consecutiveAboveThreshold');
+
+        if (!isSilent) {
           _consecutiveAboveThreshold++;
-          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech) {
+          if (_consecutiveAboveThreshold >= _minConsecutiveForSpeech && !_hasSpoken) {
             _hasSpoken = true;
+            print('[RegVoice] ✅ Speech confirmed after $_consecutiveAboveThreshold consecutive samples');
           }
         } else {
           _consecutiveAboveThreshold = 0;
+          if (!_hasSpoken) {
+            print('[RegVoice] ⏳ Silent — waiting for user to start speaking');
+          }
         }
       });
 
       final startedAt = DateTime.now();
+      print('[RegVoice] 🎙 Re-recording started');
       emit(currentState.copyWith(
         isRecording: true,
         isTTSPlaying: false,

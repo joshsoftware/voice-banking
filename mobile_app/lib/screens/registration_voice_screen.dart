@@ -93,7 +93,7 @@ class _RegistrationVoiceScreenState extends State<RegistrationVoiceScreen> {
                         SnackBar(
                           content: Text(translatedMessage),
                           backgroundColor: Colors.red,
-                          duration: const Duration(seconds: 3),
+                          duration: const Duration(seconds: 2),
                         ),
                       );
                     }
