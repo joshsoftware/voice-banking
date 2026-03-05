@@ -1147,6 +1147,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
 
   Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
     final button = _buildClickToSpeakButton(state, context);
+    final loc = AppLocalizations.of(context)!;
     if (state is! Idle && state is! VoiceLockout && state is! VoiceError) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -1156,11 +1157,11 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             margin: const EdgeInsets.only(right: 6),
             decoration: BoxDecoration(
-              color: Colors.grey[600],
+              color: Colors.grey[800],
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              'Tap to stop',
+              loc.tapToStop,
               style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
             ),
           ),
