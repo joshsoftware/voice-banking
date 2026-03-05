@@ -335,7 +335,7 @@ class AppLocalizationsPa extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ';
+  String get somethingWentWrong => 'ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ!';
 
   @override
   String get imageNotAvailable => 'ਚਿੱਤਰ ਉਪਲਬਧ ਨਹੀਂ ਹੈ';

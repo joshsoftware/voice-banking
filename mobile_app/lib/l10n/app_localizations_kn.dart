@@ -335,7 +335,7 @@ class AppLocalizationsKn extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'ಏನೋ ತಪ್ಪಾಗಿದೆ';
+  String get somethingWentWrong => 'ಏನೋ ತಪ್ಪಾಗಿದೆ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!';
 
   @override
   String get imageNotAvailable => 'ಚಿತ್ರ ಲಭ್ಯವಿಲ್ಲ';

@@ -738,7 +738,7 @@ abstract class AppLocalizations {
   /// No description provided for @somethingWentWrong.
   ///
   /// In en, this message translates to:
-  /// **'Something went wrong'**
+  /// **'Something went wrong, please try again!'**
   String get somethingWentWrong;
 
   /// No description provided for @imageNotAvailable.

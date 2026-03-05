@@ -335,7 +335,7 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'कुछ गलत हो गया';
+  String get somethingWentWrong => 'कुछ गलत हो गया, कृपया पुनः प्रयास करें!';
 
   @override
   String get imageNotAvailable => 'छवि उपलब्ध नहीं है';

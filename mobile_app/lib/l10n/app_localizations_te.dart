@@ -335,7 +335,7 @@ class AppLocalizationsTe extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'ఏదో తప్పు జరిగింది';
+  String get somethingWentWrong => 'ఏదో తప్పు జరిగింది, దయచేసి మళ్లీ ప్రయత్నించండి!';
 
   @override
   String get imageNotAvailable => 'చిత్రం అందుబాటులో లేదు';

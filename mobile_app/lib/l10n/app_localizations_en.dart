@@ -335,7 +335,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => 'Something went wrong, please try again!';
 
   @override
   String get imageNotAvailable => 'Image not available';

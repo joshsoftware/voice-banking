@@ -335,7 +335,7 @@ class AppLocalizationsGu extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'કંઈક ખોટું થયું';
+  String get somethingWentWrong => 'કંઈક ખોટું થયું, કૃપા કરીને ફરી પ્રયાસ કરો!';
 
   @override
   String get imageNotAvailable => 'છબી ઉપલબ્ધ નથી';

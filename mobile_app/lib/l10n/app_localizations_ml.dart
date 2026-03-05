@@ -335,7 +335,7 @@ class AppLocalizationsMl extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'എന്തോ തെറ്റ് സംഭവിച്ചു';
+  String get somethingWentWrong => 'എന്തോ തെറ്റ് സംഭവിച്ചു, ദയവായി വീണ്ടും ശ്രമിക്കുക!';
 
   @override
   String get imageNotAvailable => 'ചിത്രം ലഭ്യമല്ല';

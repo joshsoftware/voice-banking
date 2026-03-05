@@ -335,7 +335,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get somethingWentWrong => 'কিছু ভুল হয়েছে';
+  String get somethingWentWrong => 'কিছু ভুল হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন!';
 
   @override
   String get imageNotAvailable => 'ছবি পাওয়া যায়নি';
