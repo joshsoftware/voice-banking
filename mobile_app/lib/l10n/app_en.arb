@@ -104,7 +104,7 @@
   "unknownState": "Unknown state",
   "uploadingVoiceRecordings": "Uploading voice recordings...",
   "imageNumber": "Image {number}",
-  "somethingWentWrong": "Something went wrong",
+  "somethingWentWrong": "Something went wrong, please try again!",
   "imageNotAvailable": "Image not available",
   "stepOfTotal": "Step {current} of {total}",
   "describeImageInstruction": "Please describe what you see in this image in up to {seconds} seconds. Speak clearly and describe the main elements.",

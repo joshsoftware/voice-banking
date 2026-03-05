@@ -103,7 +103,7 @@
   "unknownState": "அறியப்படாத நிலை",
   "uploadingVoiceRecordings": "குரல் பதிவுகள் பதிவேற்றப்படுகின்றன...",
   "imageNumber": "படம் {number}",
-  "somethingWentWrong": "ஏதோ தவறு நடந்தது",
+  "somethingWentWrong": "ஏதோ தவறு நடந்தது, தயவுசெய்து மீண்டும் முயற்சிக்கவும்!",
   "imageNotAvailable": "படம் கிடைக்கவில்லை",
   "stepOfTotal": "படி {current} இன் {total}",
   "describeImageInstruction": "தயவுசெய்து இந்த படத்தில் நீங்கள் பார்க்கும் விஷயத்தை {seconds} வினாடிகளில் விவரிக்கவும்। தெளிவாக பேசுங்கள் மற்றும் முக்கிய கூறுகளை விவரிக்கவும்।",

@@ -103,7 +103,7 @@
   "unknownState": "અજ્ઞાત સ્થિતિ",
   "uploadingVoiceRecordings": "વૉઇસ રેકોર્ડિંગ અપલોડ થઈ રહી છે...",
   "imageNumber": "છબી {number}",
-  "somethingWentWrong": "કંઈક ખોટું થયું",
+  "somethingWentWrong": "કંઈક ખોટું થયું, કૃપા કરીને ફરી પ્રયાસ કરો!",
   "imageNotAvailable": "છબી ઉપલબ્ધ નથી",
   "stepOfTotal": "પગલું {current} ના {total}",
   "describeImageInstruction": "કૃપા કરીને આ છબીમાં તમે જે જુઓ છો તેનું {seconds} સેકંડમાં વર્ણન કરો। સ્પષ્ટ રીતે બોલો અને મુખ્ય તત્વોનું વર્ણન કરો।",

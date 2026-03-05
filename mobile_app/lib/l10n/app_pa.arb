@@ -103,7 +103,7 @@
   "unknownState": "ਅਣਜਾਣ ਸਥਿਤੀ",
   "uploadingVoiceRecordings": "ਵੌਇਸ ਰਿਕਾਰਡਿੰਗਾਂ ਅਪਲੋਡ ਹੋ ਰਹੀਆਂ ਹਨ...",
   "imageNumber": "ਚਿੱਤਰ {number}",
-  "somethingWentWrong": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ",
+  "somethingWentWrong": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ!",
   "imageNotAvailable": "ਚਿੱਤਰ ਉਪਲਬਧ ਨਹੀਂ ਹੈ",
   "stepOfTotal": "ਕਦਮ {current} ਦਾ {total}",
   "describeImageInstruction": "ਕਿਰਪਾ ਕਰਕੇ ਇਸ ਚਿੱਤਰ ਵਿੱਚ ਜੋ ਤੁਸੀਂ ਦੇਖ ਰਹੇ ਹੋ ਉਸਦਾ {seconds} ਸਕਿੰਟਾਂ ਵਿੱਚ ਵਰਣਨ ਕਰੋ। ਸਪੱਸ਼ਟ ਤੌਰ 'ਤੇ ਬੋਲੋ ਅਤੇ ਮੁੱਖ ਤੱਤਾਂ ਦਾ ਵਰਣਨ ਕਰੋ।",

@@ -103,7 +103,7 @@
   "unknownState": "অজানা অবস্থা",
   "uploadingVoiceRecordings": "ভয়েস রেকর্ডিং আপলোড করা হচ্ছে...",
   "imageNumber": "ছবি {number}",
-  "somethingWentWrong": "কিছু ভুল হয়েছে",
+  "somethingWentWrong": "কিছু ভুল হয়েছে, অনুগ্রহ করে আবার চেষ্টা করুন!",
   "imageNotAvailable": "ছবি পাওয়া যায়নি",
   "stepOfTotal": "ধাপ {current} এর {total}",
   "describeImageInstruction": "অনুগ্রহ করে এই ছবিতে যা দেখছেন তা {seconds} সেকেন্ডের মধ্যে বর্ণনা করুন। স্পষ্টভাবে কথা বলুন এবং মূল উপাদানগুলি বর্ণনা করুন।",

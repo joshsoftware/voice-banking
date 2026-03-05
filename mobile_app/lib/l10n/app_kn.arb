@@ -103,7 +103,7 @@
   "unknownState": "ಅಜ್ಞಾತ ಸ್ಥಿತಿ",
   "uploadingVoiceRecordings": "ಧ್ವನಿ ರೆಕಾರ್ಡಿಂಗ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
   "imageNumber": "ಚಿತ್ರ {number}",
-  "somethingWentWrong": "ಏನೋ ತಪ್ಪಾಗಿದೆ",
+  "somethingWentWrong": "ಏನೋ ತಪ್ಪಾಗಿದೆ, ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ!",
   "imageNotAvailable": "ಚಿತ್ರ ಲಭ್ಯವಿಲ್ಲ",
   "stepOfTotal": "ಹಂತ {current} ನ {total}",
   "describeImageInstruction": "ದಯವಿಟ್ಟು ಈ ಚಿತ್ರದಲ್ಲಿ ನೀವು ನೋಡುವುದನ್ನು {seconds} ಸೆಕೆಂಡುಗಳಲ್ಲಿ ವಿವರಿಸಿ। ಸ್ಪಷ್ಟವಾಗಿ ಮಾತನಾಡಿ ಮತ್ತು ಮುಖ್ಯ ಅಂಶಗಳನ್ನು ವಿವರಿಸಿ।",

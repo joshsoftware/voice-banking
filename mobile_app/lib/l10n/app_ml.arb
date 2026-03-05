@@ -103,7 +103,7 @@
   "unknownState": "അജ്ഞാത അവസ്ഥ",
   "uploadingVoiceRecordings": "വോയ്‌സ് റെക്കോർഡിംഗുകൾ അപ്‌ലോഡ് ചെയ്യുന്നു...",
   "imageNumber": "ചിത്രം {number}",
-  "somethingWentWrong": "എന്തോ തെറ്റ് സംഭവിച്ചു",
+  "somethingWentWrong": "എന്തോ തെറ്റ് സംഭവിച്ചു, ദയവായി വീണ്ടും ശ്രമിക്കുക!",
   "imageNotAvailable": "ചിത്രം ലഭ്യമല്ല",
   "stepOfTotal": "ഘട്ടം {current} ന്റെ {total}",
   "describeImageInstruction": "ദയവായി ഈ ചിത്രത്തിൽ നിങ്ങൾ കാണുന്നത് {seconds} സെക്കൻഡുകൾക്കുള്ളിൽ വിവരിക്കുക। വ്യക്തമായി സംസാരിക്കുക, പ്രധാന ഘടകങ്ങൾ വിവരിക്കുക।",

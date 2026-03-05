@@ -103,7 +103,7 @@
   "unknownState": "తెలియని స్థితి",
   "uploadingVoiceRecordings": "వాయిస్ రికార్డింగ్‌లు అప్‌లోడ్ అవుతున్నాయి...",
   "imageNumber": "చిత్రం {number}",
-  "somethingWentWrong": "ఏదో తప్పు జరిగింది",
+  "somethingWentWrong": "ఏదో తప్పు జరిగింది, దయచేసి మళ్లీ ప్రయత్నించండి!",
   "imageNotAvailable": "చిత్రం అందుబాటులో లేదు",
   "stepOfTotal": "దశ {current} లో {total}",
   "describeImageInstruction": "దయచేసి ఈ చిత్రంలో మీరు చూసే దానిని {seconds} సెకన్లలో వివరించండి। స్పష్టంగా మాట్లాడండి మరియు ప్రధాన అంశాలను వివరించండి।",

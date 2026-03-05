@@ -103,7 +103,7 @@
   "unknownState": "अज्ञात स्थिती",
   "uploadingVoiceRecordings": "व्हॉइस रेकॉर्डिंग अपलोड होत आहेत...",
   "imageNumber": "प्रतिमा {number}",
-  "somethingWentWrong": "काहीतरी चुकीचे झाले",
+  "somethingWentWrong": "काहीतरी चुकीचे झाले, कृपया पुन्हा प्रयत्न करा!",
   "imageNotAvailable": "प्रतिमा उपलब्ध नाही",
   "stepOfTotal": "चरण {current} पैकी {total}",
   "describeImageInstruction": "कृपया या प्रतिमेत आपण जे पाहत आहात ते {seconds} सेकंदात वर्णन करा। स्पष्टपणे बोला आणि मुख्य घटकांचे वर्णन करा।",
