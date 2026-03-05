@@ -4,6 +4,7 @@
   "otpPrompt": "Enter OTP",
   "micHint": "Tap the mic to speak",
   "tapToSpeak": "Tap to speak",
+  "tapToStop": "Tap to stop",
   "listening": "Listening...",
   "transcribing": "Transcribing...",
   "executing": "Processing your request...",
