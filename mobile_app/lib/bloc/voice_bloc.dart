@@ -76,6 +76,13 @@ class VoiceLockout extends VoiceState {
   VoiceLockout(this.lockoutUntil, this.message);
 }
 
+/// Emitted when an error occurs and we recover by going to Idle. Triggers snackbar + TTS.
+class VoiceError extends VoiceState {
+  final String message;
+  final String locale;
+  VoiceError(this.message, this.locale);
+}
+
 sealed class VoiceEvent {}
 
 class StartListening extends VoiceEvent {
@@ -153,6 +160,13 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
       _activeCancelToken?.cancel('New voice session started');
       _activeCancelToken = null;
 
+      // Stop any ongoing TTS (e.g. from VoiceError) when user starts fresh.
+      try {
+        await tts.stop();
+      } catch (err) {
+        print("TTS stop on StartListening: $err");
+      }
+
       try {
         final myRequestId = _activeRequestId;
         await repo.start(
@@ -167,25 +181,60 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
               add(InitialSilence(locale: e.locale));
             }
           },
-          initialSilenceDuration: const Duration(seconds: 12),
+          initialSilenceDuration: const Duration(seconds: 15),
           onSilenceReminder: () async {
             if (_activeRequestId != myRequestId) return;
+
+            // Stop the recorder before TTS so the prompt is never captured in the audio.
+            try {
+              await repo.stopWithoutTranscribe();
+            } catch (err) {
+              print("Voice Bloc - stopWithoutTranscribe on silence reminder: $err");
+            }
+
+            if (_activeRequestId != myRequestId) return;
+
             final message = TranslationService.translateResponse(
                 'empty_recording', e.locale, null);
-            if (_activeRequestId != myRequestId) return;
             try {
               await tts.speak(message, langCode: e.locale);
-            } catch (e) {
-              print("TTS Error: $e");
+            } catch (err) {
+              print("TTS Error: $err");
             }
+
             if (_activeRequestId != myRequestId) return;
+
+            // Restart recording fresh after TTS finishes so the user can speak.
+            try {
+              await repo.start(
+                onIdle: () {
+                  if (_activeRequestId == myRequestId) {
+                    add(StopListening(
+                        locale: e.locale,
+                        sessionId: e.sessionId,
+                        requestId: myRequestId));
+                  }
+                },
+                idleDuration: const Duration(seconds: 2),
+                onInitialSilence: () {
+                  if (_activeRequestId == myRequestId) {
+                    add(InitialSilence(locale: e.locale));
+                  }
+                },
+                initialSilenceDuration: const Duration(seconds: 15),
+              );
+            } catch (err) {
+              print("Voice Bloc - restart after silence reminder failed: $err");
+            }
           },
-          silenceReminderDuration: const Duration(seconds: 5),
+          silenceReminderDuration: const Duration(seconds: 10),
         );
         emit(Listening());
-      } catch (e) {
-        print("Voice Bloc Error - Permission denied: $e");
-        emit(Idle());
+      } catch (err) {
+        print("Voice Bloc Error - Permission denied: $err");
+        final message = TranslationService.translateResponse(
+            'something_went_wrong', e.locale, null);
+        emit(VoiceError(message, e.locale));
       }
     });
 
@@ -274,10 +323,18 @@ class VoiceBloc extends Bloc<VoiceEvent, VoiceState> {
           return;
         }
         print("Voice Bloc Error - Stop/transcribe failed: $err");
-        if (e.requestId == _activeRequestId) emit(Idle());
+        if (e.requestId == _activeRequestId) {
+          final message = TranslationService.translateResponse(
+              'something_went_wrong', e.locale, null);
+          emit(VoiceError(message, e.locale));
+        }
       } catch (err) {
         print("Voice Bloc Error - Stop/transcribe failed: $err");
-        if (e.requestId == _activeRequestId) emit(Idle());
+        if (e.requestId == _activeRequestId) {
+          final message = TranslationService.translateResponse(
+              'something_went_wrong', e.locale, null);
+          emit(VoiceError(message, e.locale));
+        }
       } finally {
         // Clear the cancel token if it's still ours.
         if (_activeCancelToken == cancelToken) _activeCancelToken = null;

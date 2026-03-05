@@ -686,7 +686,17 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         // Enhanced Floating Action Button
         floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
           listener: (context, state) {
-            if (state is VoiceValidationFailed) {
+            if (state is VoiceError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                  behavior: SnackBarBehavior.fixed,
+                ),
+              );
+              context.read<VoiceBloc>().tts.speak(state.message, langCode: state.locale);
+              context.read<VoiceBloc>().add(Reset());
+            } else if (state is VoiceValidationFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -1136,7 +1146,29 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
-    return _buildClickToSpeakButton(state, context);
+    final button = _buildClickToSpeakButton(state, context);
+    if (state is! Idle && state is! VoiceLockout && state is! VoiceError) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            margin: const EdgeInsets.only(right: 6),
+            decoration: BoxDecoration(
+              color: Colors.grey[600],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'Tap to stop',
+              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
+            ),
+          ),
+          button,
+        ],
+      );
+    }
+    return button;
   }
 
   Future<bool> _showAudioStorageConsentDialog(BuildContext context) async {
@@ -1195,7 +1227,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             );
             return;
           }
-          if (state is Idle) {
+          if (state is Idle || state is VoiceError) {
             // 1. Request microphone permission first
             var status = await Permission.microphone.status;
             if (!status.isGranted) {
@@ -1510,7 +1542,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                    'Error: ${e.toString()}'),
+                                                    AppLocalizations.of(context)?.somethingWentWrong ?? 'Something went wrong'),
                                                 backgroundColor: Colors.red,
                                               ),
                                             );
@@ -1667,7 +1699,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                                   .showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                      'Error: ${e.toString()}'),
+                                                    AppLocalizations.of(context)?.somethingWentWrong ?? 'Something went wrong'),
                                                   backgroundColor: Colors.red,
                                                 ),
                                               );

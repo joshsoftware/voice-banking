@@ -302,7 +302,7 @@ class VoiceRepository {
       
       _amplitudeSubscription?.cancel();
       _amplitudeSubscription = _rec
-          .onAmplitudeChanged(const Duration(milliseconds: 300))
+          .onAmplitudeChanged(const Duration(milliseconds: 500))
           .listen((amp) {
         if (amp.current > _speechThreshold) {
           _consecutiveAboveThreshold++;
