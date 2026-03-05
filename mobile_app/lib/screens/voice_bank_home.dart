@@ -445,8 +445,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         ),
                         label: Text(
                           SharedPreferencesService.isVoiceRegistered()
-                              ? "Unregister Voice"
-                              : "Register Voice",
+                              ? AppLocalizations.of(context)!.unregisterVoice
+                              : AppLocalizations.of(context)!.registerVoice,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
