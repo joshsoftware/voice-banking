@@ -141,6 +141,12 @@ abstract class AppLocalizations {
   /// **'Tap to speak'**
   String get tapToSpeak;
 
+  /// No description provided for @tapToStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to stop'**
+  String get tapToStop;
+
   /// No description provided for @listening.
   ///
   /// In en, this message translates to:

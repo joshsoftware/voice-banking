@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapToSpeak => 'Tap to speak';
 
   @override
+  String get tapToStop => 'Tap to stop';
+
+  @override
   String get listening => 'Listening...';
 
   @override

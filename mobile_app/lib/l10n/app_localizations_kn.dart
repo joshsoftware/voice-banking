@@ -24,6 +24,9 @@ class AppLocalizationsKn extends AppLocalizations {
   String get tapToSpeak => 'ಮಾತನಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ';
 
   @override
+  String get tapToStop => 'ನಿಲ್ಲಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ';
+
+  @override
   String get listening => 'ಕೇಳುತ್ತಿದೆ...';
 
   @override

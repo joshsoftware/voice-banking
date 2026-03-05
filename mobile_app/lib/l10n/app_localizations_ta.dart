@@ -24,6 +24,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get tapToSpeak => 'பேச தட்டவும்';
 
   @override
+  String get tapToStop => 'நிறுத்த தட்டவும்';
+
+  @override
   String get listening => 'கேட்டுக்கொண்டிருக்கிறது...';
 
   @override

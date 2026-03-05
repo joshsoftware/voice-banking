@@ -24,6 +24,9 @@ class AppLocalizationsMl extends AppLocalizations {
   String get tapToSpeak => 'സംസാരിക്കാൻ ടാപ്പ് ചെയ്യുക';
 
   @override
+  String get tapToStop => 'നിർത്താൻ ടാപ്പ് ചെയ്യുക';
+
+  @override
   String get listening => 'കേൾക്കുന്നു...';
 
   @override

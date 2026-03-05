@@ -24,6 +24,9 @@ class AppLocalizationsMr extends AppLocalizations {
   String get tapToSpeak => 'बोलण्यासाठी टॅप करा';
 
   @override
+  String get tapToStop => 'थांबवण्यासाठी टॅप करा';
+
+  @override
   String get listening => 'ऐकत आहे...';
 
   @override

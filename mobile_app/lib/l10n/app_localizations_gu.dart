@@ -24,6 +24,9 @@ class AppLocalizationsGu extends AppLocalizations {
   String get tapToSpeak => 'બોલવા ટેપ કરો';
 
   @override
+  String get tapToStop => 'બંધ કરવા ટેપ કરો';
+
+  @override
   String get listening => 'સાંભળી રહ્યા છીએ...';
 
   @override

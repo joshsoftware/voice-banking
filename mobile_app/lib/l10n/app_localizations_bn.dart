@@ -24,6 +24,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get tapToSpeak => 'বলতে ট্যাপ করুন';
 
   @override
+  String get tapToStop => 'বন্ধ করতে ট্যাপ করুন';
+
+  @override
   String get listening => 'শোনা হচ্ছে...';
 
   @override

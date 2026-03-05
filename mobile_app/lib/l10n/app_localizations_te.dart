@@ -24,6 +24,9 @@ class AppLocalizationsTe extends AppLocalizations {
   String get tapToSpeak => 'మాట్లాడడానికి ట్యాప్ చేయండి';
 
   @override
+  String get tapToStop => 'ఆపడానికి ట్యాప్ చేయండి';
+
+  @override
   String get listening => 'వింటోంది...';
 
   @override
