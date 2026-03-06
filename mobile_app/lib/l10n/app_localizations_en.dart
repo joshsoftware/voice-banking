@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapToSpeak => 'Tap to speak';
 
   @override
+  String get tapToStop => 'Tap to stop';
+
+  @override
   String get listening => 'Listening...';
 
   @override
@@ -313,4 +316,194 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'Please say something';
+
+  @override
+  String get voiceRegistration => 'Voice Registration';
+
+  @override
+  String get pleaseWaitForUpload => 'Please wait for upload to complete';
+
+  @override
+  String get voiceRegistrationCompleted => 'Voice registration completed successfully!';
+
+  @override
+  String get unknownState => 'Unknown state';
+
+  @override
+  String get uploadingVoiceRecordings => 'Uploading voice recordings...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'Image $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'Something went wrong, please try again!';
+
+  @override
+  String get imageNotAvailable => 'Image not available';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String describeImageInstruction(Object seconds) {
+    return 'Please describe what you see in this image in up to $seconds seconds. Speak clearly and describe the main elements.';
+  }
+
+  @override
+  String get stopRecording => 'Stop Recording';
+
+  @override
+  String get reRecord => 'Re-record';
+
+  @override
+  String get startRecording => 'Start Recording';
+
+  @override
+  String get recording => 'Recording...';
+
+  @override
+  String get stopDescription => 'Stop Description';
+
+  @override
+  String get playDescription => 'Play Description';
+
+  @override
+  String get nextStep => 'Next Step';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get pleaseWaitForDescription => 'Please wait for the description to finish playing.';
+
+  @override
+  String get microphonePermissionRequired => 'Microphone permission is required. Please enable it in Settings.';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'Failed to start recording: $error';
+  }
+
+  @override
+  String get recordingFailed => 'Recording failed. Please try again.';
+
+  @override
+  String get recordingFileNotFound => 'Recording file not found. Please try again.';
+
+  @override
+  String get recordingEmpty => 'Recording is empty. Please try again.';
+
+  @override
+  String pleaseSpeakAtLeastSeconds(Object seconds) {
+    return 'Please speak for at least $seconds seconds.';
+  }
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'Failed to stop recording: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'Please stop recording before playing the description.';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'Failed to play description: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'Failed to stop description: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'Please record your voice before proceeding.';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'Please wait for recording or description to complete.';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'Please complete all 3 recordings before submitting.';
+
+  @override
+  String get userIdNotFound => 'User ID not found. Please log in again.';
+
+  @override
+  String get recordingFilesMissing => 'One or more recording files are missing.';
+
+  @override
+  String get imageDescriptionBoardMeeting => 'A professional man gives a data presentation to colleagues in a modern, sunlit office boardroom overlooking a scenic city skyline.';
+
+  @override
+  String get imageDescriptionBoyWithDog => 'A boy wearing glasses walks a husky dog on a sunny park pathway, smiling while holding the leash.';
+
+  @override
+  String get imageDescriptionChildrenPainting => 'Five children sit on a carpet near a large window, happily painting colorful pictures together inside a bright living room.';
+
+  @override
+  String get imageDescriptionChildrenWithDog => 'Four children play joyfully with two dogs in a lush green garden, tossing a frisbee under the bright afternoon sun.';
+
+  @override
+  String get imageDescriptionConstructionSite => 'Four construction professionals in safety vests and hard hats stand on a dusty site, carefully reviewing a large architectural building blueprint.';
+
+  @override
+  String get imageDescriptionFamilyDinner => 'A happy family of four enjoys a traditional Indian dinner at a restaurant, sharing food and laughter in a warm atmosphere.';
+
+  @override
+  String get imageDescriptionHoliCelebration => 'A joyful group of family and friends celebrate Holi, laughing together amidst a vibrant explosion of colorful powders in the air.';
+
+  @override
+  String get imageDescriptionLadyPainting => 'A young woman focuses on painting a beautiful yellow landscape on a canvas in her sun-drenched, cozy home art studio.';
+
+  @override
+  String get imageDescriptionMomAndSon => 'A mother helps her young son cook at the stove, standing on a wooden stool in a bright, modern white kitchen.';
+
+  @override
+  String get imageDescriptionPeopleDiwaliCelebration => 'People in traditional attire celebrate Diwali on a decorated street with vibrant lanterns, glowing diyas, and a spectacular firework display overhead.';
+
+  @override
+  String get imageDescriptionTajMahal => 'A group of young friends in denim jackets stands on a rooftop, holding coffee and smiling with the Taj Mahal behind.';
+
+  @override
+  String get imageDescriptionVillageScene => 'An elderly farmer sits atop a wooden bullock cart pulled by two white oxen, carrying a large harvest during a golden sunset.';
+
+  @override
+  String get imageDescriptionWomenDiwaliCelebration => 'A woman in pink traditional clothing carefully creates a beautiful, colorful rangoli on the ground surrounded by glowing oil lamps.';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get registerVoice => 'Register Voice';
+
+  @override
+  String get unregisterVoice => 'Unregister Voice';
+
+  @override
+  String get resetVoice => 'Reset Voice';
+
+  @override
+  String get resetVoiceConfirm => 'This will delete your voice profile. You will need to complete voice registration again. Continue?';
+
+  @override
+  String get resetVoiceSuccess => 'Voice reset successfully. Please complete registration again.';
+
+  @override
+  String get resetVoiceError => 'Failed to reset voice. Please try again.';
+
+  @override
+  String get audioStorageConsentTitle => 'Audio Storage Consent';
+
+  @override
+  String get audioStorageConsentMessage => 'To use voice banking, we need to store your voice recordings in our system for authentication and processing. Do you consent to storing your audio with us?';
+
+  @override
+  String get acceptConsent => 'I Accept';
+
+  @override
+  String get declineConsent => 'I Decline';
 }

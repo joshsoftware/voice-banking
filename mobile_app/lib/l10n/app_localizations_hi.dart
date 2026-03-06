@@ -24,6 +24,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tapToSpeak => 'बोलने के लिए टैप करें';
 
   @override
+  String get tapToStop => 'रोकने के लिए टैप करें';
+
+  @override
   String get listening => 'सुन रहा हूँ...';
 
   @override
@@ -313,4 +316,194 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get pleaseSaySomething => 'कृपया कुछ बोलें';
+
+  @override
+  String get voiceRegistration => 'वॉइस पंजीकरण';
+
+  @override
+  String get pleaseWaitForUpload => 'कृपया अपलोड पूरा होने की प्रतीक्षा करें';
+
+  @override
+  String get voiceRegistrationCompleted => 'वॉइस पंजीकरण सफलतापूर्वक पूरा हो गया!';
+
+  @override
+  String get unknownState => 'अज्ञात स्थिति';
+
+  @override
+  String get uploadingVoiceRecordings => 'वॉइस रिकॉर्डिंग अपलोड हो रही है...';
+
+  @override
+  String imageNumber(Object number) {
+    return 'छवि $number';
+  }
+
+  @override
+  String get somethingWentWrong => 'कुछ गलत हो गया, कृपया पुनः प्रयास करें!';
+
+  @override
+  String get imageNotAvailable => 'छवि उपलब्ध नहीं है';
+
+  @override
+  String stepOfTotal(Object current, Object total) {
+    return 'चरण $current का $total';
+  }
+
+  @override
+  String describeImageInstruction(Object seconds) {
+    return 'कृपया इस छवि में जो आप देख रहे हैं उसका $seconds सेकंड में वर्णन करें। स्पष्ट रूप से बोलें और मुख्य तत्वों का वर्णन करें।';
+  }
+
+  @override
+  String get stopRecording => 'रिकॉर्डिंग रोकें';
+
+  @override
+  String get reRecord => 'पुनः रिकॉर्ड करें';
+
+  @override
+  String get startRecording => 'रिकॉर्डिंग शुरू करें';
+
+  @override
+  String get recording => 'रिकॉर्डिंग हो रही है...';
+
+  @override
+  String get stopDescription => 'वर्णन रोकें';
+
+  @override
+  String get playDescription => 'वर्णन चलाएं';
+
+  @override
+  String get nextStep => 'अगला चरण';
+
+  @override
+  String get register => 'पंजीकरण करें';
+
+  @override
+  String get pleaseWaitForDescription => 'कृपया वर्णन समाप्त होने की प्रतीक्षा करें।';
+
+  @override
+  String get microphonePermissionRequired => 'माइक्रोफोन अनुमति आवश्यक है। कृपया इसे सेटिंग्स में सक्षम करें।';
+
+  @override
+  String failedToStartRecording(Object error) {
+    return 'रिकॉर्डिंग शुरू करने में विफल: $error';
+  }
+
+  @override
+  String get recordingFailed => 'रिकॉर्डिंग विफल हो गई। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get recordingFileNotFound => 'रिकॉर्डिंग फ़ाइल नहीं मिली। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get recordingEmpty => 'रिकॉर्डिंग खाली है। कृपया पुनः प्रयास करें।';
+
+  @override
+  String pleaseSpeakAtLeastSeconds(Object seconds) {
+    return 'कृपया कम से कम $seconds सेकंड बोलें।';
+  }
+
+  @override
+  String failedToStopRecording(Object error) {
+    return 'रिकॉर्डिंग रोकने में विफल: $error';
+  }
+
+  @override
+  String get pleaseStopRecordingBeforePlay => 'कृपया वर्णन चलाने से पहले रिकॉर्डिंग रोकें।';
+
+  @override
+  String failedToPlayDescription(Object error) {
+    return 'वर्णन चलाने में विफल: $error';
+  }
+
+  @override
+  String failedToStopDescription(Object error) {
+    return 'वर्णन रोकने में विफल: $error';
+  }
+
+  @override
+  String get pleaseRecordBeforeProceeding => 'कृपया आगे बढ़ने से पहले अपनी आवाज़ रिकॉर्ड करें।';
+
+  @override
+  String get pleaseWaitForRecordingOrDescription => 'कृपया रिकॉर्डिंग या वर्णन पूरा होने की प्रतीक्षा करें।';
+
+  @override
+  String get pleaseCompleteAllRecordings => 'कृपया सबमिट करने से पहले सभी 3 रिकॉर्डिंग पूरी करें।';
+
+  @override
+  String get userIdNotFound => 'उपयोगकर्ता ID नहीं मिला। कृपया फिर से लॉग इन करें।';
+
+  @override
+  String get recordingFilesMissing => 'एक या अधिक रिकॉर्डिंग फ़ाइलें गायब हैं।';
+
+  @override
+  String get imageDescriptionBoardMeeting => 'एक पेशेवर व्यक्ति आधुनिक, धूप से भरी ऑफिस बोर्डरूम में शहर के नज़ारे वाली खिड़की के सामने सहकर्मियों को डेटा प्रस्तुति दे रहा है।';
+
+  @override
+  String get imageDescriptionBoyWithDog => 'चश्मे वाला एक लड़का धूप वाले पार्क के रास्ते पर हस्की कुत्ते को पट्टा पकड़कर चलाते हुए मुस्कुरा रहा है।';
+
+  @override
+  String get imageDescriptionChildrenPainting => 'पाँच बच्चे बड़ी खिड़की के पास कालीन पर बैठकर उज्ज्वल बैठक में मिलकर रंगीन चित्र खुशी-खुशी पेंट कर रहे हैं।';
+
+  @override
+  String get imageDescriptionChildrenWithDog => 'चार बच्चे हरी-भरी बगीचे में दो कुत्तों के साथ खुशी से खेल रहे हैं, धूप दोपहर में फ्रिसबी उछाल रहे हैं।';
+
+  @override
+  String get imageDescriptionConstructionSite => 'चार निर्माण पेशेवर सुरक्षा वस्त्र और हार्ड हेट पहने धूल भरी साइट पर बड़ी वास्तुशिल्प निर्माण ब्लूप्रिंट की सावधानी से समीक्षा कर रहे हैं।';
+
+  @override
+  String get imageDescriptionFamilyDinner => 'खुशहाल चार सदस्यों वाला परिवार रेस्तराँ में पारंपरिक भारतीय रात्रिभोज का आनंद ले रहा है, गर्म माहौल में खाना और हँसी बाँट रहा है।';
+
+  @override
+  String get imageDescriptionHoliCelebration => 'परिवार और दोस्तों का खुशनुमा समूह होली मना रहा है, हवा में रंगीन पाउडर के ज़ोरदार उड़ाव के बीच साथ हँस रहा है।';
+
+  @override
+  String get imageDescriptionLadyPainting => 'एक युवती अपने धूप भरे, आरामदायक घर के आर्ट स्टूडियो में कैनवस पर सुंदर पीला लैंडस्केप पेंट करने पर ध्यान दे रही है।';
+
+  @override
+  String get imageDescriptionMomAndSon => 'एक माँ अपने छोटे बेटे को चूल्हे पर खाना बनाने में मदद कर रही है, उज्ज्वल आधुनिक सफेद रसोई में लकड़ी के स्टूल पर खड़े होकर।';
+
+  @override
+  String get imageDescriptionPeopleDiwaliCelebration => 'पारंपरिक पोशाक में लोग सजी हुई गली पर दीवाली मना रहे हैं, जगमगाते दीये, रंगीन लालटेन और ऊपर शानदार आतिशबाज़ी के साथ।';
+
+  @override
+  String get imageDescriptionTajMahal => 'डेनिम जैकेट पहने युवा दोस्तों का समूह छत पर खड़ा है, कॉफी पकड़े ताज महल पीछे मुस्कुरा रहे हैं।';
+
+  @override
+  String get imageDescriptionVillageScene => 'एक बुजुर्ग किसान सुनहरी सूर्यास्त के दौरान बड़ी फसल लादे लकड़ी की बैलगाड़ी पर बैठा है, जिसे दो सफेद बैल खींच रहे हैं।';
+
+  @override
+  String get imageDescriptionWomenDiwaliCelebration => 'गुलाबी पारंपरिक पोशाक वाली एक महिला जगमगाते तेल के दीयों से घिरी ज़मीन पर सुंदर रंगीन रंगोली बना रही है।';
+
+  @override
+  String get skip => 'छोड़ें';
+
+  @override
+  String get registerVoice => 'वॉयस पंजीकृत करें';
+
+  @override
+  String get unregisterVoice => 'वॉयस पंजीकरण रद्द करें';
+
+  @override
+  String get resetVoice => 'वॉयस रीसेट करें';
+
+  @override
+  String get resetVoiceConfirm => 'यह आपकी वॉयस प्रोफ़ाइल हटा देगा। आपको फिर से वॉयस पंजीकरण पूरा करना होगा। जारी रखें?';
+
+  @override
+  String get resetVoiceSuccess => 'वॉयस सफलतापूर्वक रीसेट हो गया। कृपया पुनः पंजीकरण पूरा करें।';
+
+  @override
+  String get resetVoiceError => 'वॉयस रीसेट करने में विफल। कृपया पुनः प्रयास करें।';
+
+  @override
+  String get audioStorageConsentTitle => 'ऑडियो संग्रहण सहमति';
+
+  @override
+  String get audioStorageConsentMessage => 'वॉयस बैंकिंग उपयोग करने के लिए, हमें प्रमाणीकरण और प्रसंस्करण के लिए आपके वॉयस रिकॉर्डिंग सिस्टम में संग्रहित करने की आवश्यकता है। क्या आप अपना ऑडियो हमारे साथ संग्रहित करने की सहमति देते हैं?';
+
+  @override
+  String get acceptConsent => 'मैं स्वीकार करता/करती हूं';
+
+  @override
+  String get declineConsent => 'मैं अस्वीकार करता/करती हूं';
 }

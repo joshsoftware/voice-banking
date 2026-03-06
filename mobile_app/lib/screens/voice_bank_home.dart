@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/language_toggle_widget.dart';
@@ -192,6 +193,65 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
     );
   }
 
+  Future<void> _resetVoice(BuildContext context) async {
+    final loc = AppLocalizations.of(context)!;
+    final customerId = SharedPreferencesService.getCustomerId();
+    if (customerId == null || customerId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.resetVoiceError),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.resetVoice),
+          content: Text(loc.resetVoiceConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(loc.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(loc.resetVoice),
+              style: TextButton.styleFrom(foregroundColor: Colors.orange[700]),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true) return;
+    try {
+      final bloc = context.read<VoiceBloc>();
+      await bloc.repo.deleteVoiceprint(customerId);
+      await SharedPreferencesService.setVoiceRegistered(false);
+      if (!mounted) return;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final snackBar = SnackBar(
+        content: Text(loc.resetVoiceSuccess),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.fixed,
+      );
+      scaffoldMessenger.showSnackBar(snackBar);
+      setState(() {}); // Refresh UI so Register/Unregister button updates
+    } catch (e) {
+      if (!mounted) return;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final snackBar = SnackBar(
+        content: Text(loc.resetVoiceError),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.fixed,
+      );
+      scaffoldMessenger.showSnackBar(snackBar);
+    }
+  }
+
   void _logout() async {
     // Show confirmation dialog
     final bool? shouldLogout = await showDialog<bool>(
@@ -268,12 +328,28 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
             LanguageToggleWidget(),
             PopupMenuButton<String>(
               icon: const Icon(Icons.more_vert, color: Colors.white),
-              onSelected: (String value) {
+              onSelected: (String value) async {
                 if (value == 'logout') {
                   _logout();
+                } else if (value == 'resetVoice') {
+                  await _resetVoice(context);
                 }
               },
               itemBuilder: (BuildContext context) => [
+                if (SharedPreferencesService.isVoiceRegistered())
+                  PopupMenuItem<String>(
+                    value: 'resetVoice',
+                    child: Row(
+                      children: [
+                        Icon(Icons.voice_over_off, color: Colors.orange[700]),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.resetVoice,
+                          style: TextStyle(color: Colors.orange[700]),
+                        ),
+                      ],
+                    ),
+                  ),
                 PopupMenuItem<String>(
                   value: 'logout',
                   child: Row(
@@ -344,6 +420,42 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                         style: TextStyle(
                           fontSize: isSmallScreen ? 14 : 16,
                           color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Register Voice / Unregister Voice button
+                      TextButton.icon(
+                        onPressed: () async {
+                          final isRegistered =
+                              SharedPreferencesService.isVoiceRegistered();
+                          if (isRegistered) {
+                            await _resetVoice(context);
+                          } else {
+                            await Navigator.pushNamed(
+                                context, '/RegistrationVoice');
+                            if (mounted) setState(() {});
+                          }
+                        },
+                        icon: Icon(
+                          SharedPreferencesService.isVoiceRegistered()
+                              ? Icons.voice_over_off
+                              : Icons.mic,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        label: Text(
+                          SharedPreferencesService.isVoiceRegistered()
+                              ? AppLocalizations.of(context)!.unregisterVoice
+                              : AppLocalizations.of(context)!.registerVoice,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                         ),
                       ),
                     ],
@@ -574,7 +686,32 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         // Enhanced Floating Action Button
         floatingActionButton: BlocListener<VoiceBloc, VoiceState>(
           listener: (context, state) {
-            if (state is ShowTransactionsDialog) {
+            if (state is VoiceError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                  behavior: SnackBarBehavior.fixed,
+                ),
+              );
+              context.read<VoiceBloc>().tts.speak(state.message, langCode: state.locale);
+              context.read<VoiceBloc>().add(Reset());
+            } else if (state is VoiceValidationFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            } else if (state is VoiceLockout) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.orange,
+                  duration: const Duration(seconds: 5),
+                ),
+              );
+            } else if (state is ShowTransactionsDialog) {
               _showTransactionsDialog(
                   context, state.message, state.transactions, state.sessionId);
             } else if (state is ShowOtpDialog) {
@@ -926,6 +1063,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
       return Colors.orange[600]!;
     } else if (state is Executing) {
       return Colors.purple[600]!;
+    } else if (state is VoiceLockout) {
+      return Colors.orange[800]!;
     } else {
       return Colors.blue[600]!;
     }
@@ -934,6 +1073,8 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonIcon(VoiceState state) {
     if (state is Listening) {
       return const Icon(Icons.stop, color: Colors.white);
+    } else if (state is VoiceLockout) {
+      return const Icon(Icons.lock_clock, color: Colors.white);
     } else if (state is Transcribing) {
       return const SizedBox(
         width: 20,
@@ -960,6 +1101,15 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   Widget _buildButtonLabel(VoiceState state, BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
+    if (state is VoiceLockout) {
+      return Text(
+        'Locked',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
     if (state is Listening || state is ShowBeneficiariesDialog) {
       return Text(
         loc.listening,
@@ -996,7 +1146,61 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
   }
 
   Widget _buildAnimatedVoiceButton(VoiceState state, BuildContext context) {
-    return _buildClickToSpeakButton(state, context);
+    final button = _buildClickToSpeakButton(state, context);
+    final loc = AppLocalizations.of(context)!;
+    if (state is! Idle && state is! VoiceLockout && state is! VoiceError) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            margin: const EdgeInsets.only(right: 6),
+            decoration: BoxDecoration(
+              color: Colors.grey[800],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              loc.tapToStop,
+              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
+            ),
+          ),
+          button,
+        ],
+      );
+    }
+    return button;
+  }
+
+  Future<bool> _showAudioStorageConsentDialog(BuildContext context) async {
+    final loc = AppLocalizations.of(context)!;
+    final accepted = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(loc.audioStorageConsentTitle),
+          content: Text(loc.audioStorageConsentMessage),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await SharedPreferencesService.setAudioStorageConsent(false);
+                if (dialogContext.mounted) Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(loc.declineConsent),
+            ),
+            TextButton(
+              onPressed: () async {
+                await SharedPreferencesService.setAudioStorageConsent(true);
+                if (dialogContext.mounted) Navigator.of(dialogContext).pop(true);
+              },
+              child: Text(loc.acceptConsent),
+            ),
+          ],
+        );
+      },
+    );
+    return accepted ?? false;
   }
 
   Widget _buildClickToSpeakButton(VoiceState state, BuildContext context) {
@@ -1012,9 +1216,39 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
         ],
       ),
       child: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           final bloc = context.read<VoiceBloc>();
-          if (state is Idle) {
+          final loc = AppLocalizations.of(context)!;
+          if (state is VoiceLockout) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.orange,
+              ),
+            );
+            return;
+          }
+          if (state is Idle || state is VoiceError) {
+            // 1. Request microphone permission first
+            var status = await Permission.microphone.status;
+            if (!status.isGranted) {
+              status = await Permission.microphone.request();
+            }
+            if (!status.isGranted || !context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(loc.microphonePermissionRequired),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+              return;
+            }
+            // 2. Show consent dialog if not already consented
+            if (!SharedPreferencesService.hasAudioStorageConsent()) {
+              final accepted = await _showAudioStorageConsentDialog(context);
+              if (!accepted || !context.mounted) return;
+            }
+            // 3. Start voice session (repo will skip verification if voice not registered)
             final sessionId = const Uuid().v4();
             bloc.add(StartListening(
               locale: Localizations.localeOf(context).languageCode,
@@ -1309,7 +1543,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                    'Error: ${e.toString()}'),
+                                                    AppLocalizations.of(context)?.somethingWentWrong ?? 'Something went wrong'),
                                                 backgroundColor: Colors.red,
                                               ),
                                             );
@@ -1466,7 +1700,7 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                                   .showSnackBar(
                                                 SnackBar(
                                                   content: Text(
-                                                      'Error: ${e.toString()}'),
+                                                    AppLocalizations.of(context)?.somethingWentWrong ?? 'Something went wrong'),
                                                   backgroundColor: Colors.red,
                                                 ),
                                               );
@@ -1726,11 +1960,12 @@ class _VoiceBankHomeState extends State<VoiceBankHome> {
                                   sessionId: sessionId,
                                   locale: currentLocale,
                                   beneficiaryName: name,
+                                  cancelToken: bloc.activeCancelToken,
                                 );
 
                                 // Process the response through the voice bloc
                                 bloc.add(
-                                    GotTranscript(response, currentLocale));
+                                    GotTranscript(response, currentLocale, bloc.activeRequestId));
                               } catch (error) {
                                 print(
                                     "Error selecting duplicate beneficiary: $error");

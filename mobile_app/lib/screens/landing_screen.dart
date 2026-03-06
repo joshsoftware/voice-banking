@@ -103,7 +103,7 @@ class _LandingScreenState extends State<LandingScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: const Color(0xFF667eea),
-        actions: [LanguageToggleWidget()],
+        leading: LanguageToggleWidget(),
       ),
       body: Container(
         decoration: BoxDecoration(
